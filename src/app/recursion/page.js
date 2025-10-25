@@ -720,7 +720,8 @@ function BacktrackingSection() {
         <h2 className="text-3xl font-bold text-white mb-4">Backtracking</h2>
         <p className="text-gray-300 text-lg mb-6">
           Backtracking is a refined recursion technique where we explore all
-          possibilities by making choices, and "backtrack" (undo) bad choices.
+          possibilities by making choices, and &quot;backtrack&quot; (undo) bad
+          choices.
         </p>
 
         <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-6 mb-6">

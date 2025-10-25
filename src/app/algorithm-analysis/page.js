@@ -389,7 +389,7 @@ export default function AlgorithmAnalysis() {
                 </table>
               </div>
               <p className="text-gray-500 text-xs mt-4">
-                * ∞ means "way too many to compute in reasonable time"
+                * ∞ means &quot;way too many to compute in reasonable time&quot;
               </p>
             </div>
           </div>
@@ -656,7 +656,7 @@ function filterEven(arr) {
               </h2>
               <p className="text-gray-300 mb-6">
                 Analyze the time and space complexity of these code snippets.
-                Click "Show Answer" to check!
+                Click &quot;Show Answer&quot; to check!
               </p>
 
               <PracticeProblem

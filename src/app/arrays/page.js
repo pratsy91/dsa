@@ -229,7 +229,7 @@ arr1.shift();                   // Remove from start: [1,2,3,4,5]`}
 
           <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
             <h3 className="text-xl font-semibold text-white mb-3">
-              ⚡ Kadane's Algorithm
+              ⚡ Kadane&apos;s Algorithm
             </h3>
             <p className="text-gray-300 text-sm mb-3">
               Find maximum sum subarray in O(n) time.

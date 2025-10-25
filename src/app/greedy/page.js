@@ -136,8 +136,8 @@ function FundamentalsSection() {
               contains optimal solutions to subproblems
             </li>
             <li>
-              • <strong>No Backtracking:</strong> Once a choice is made, it's
-              never reconsidered
+              • <strong>No Backtracking:</strong> Once a choice is made,
+              it&apos;s never reconsidered
             </li>
             <li>
               • <strong>Top-Down Approach:</strong> Problems are solved by
@@ -187,7 +187,7 @@ function FundamentalsSection() {
           Greedy Algorithm Template
         </h2>
         <p className="text-gray-300 mb-6">
-          Here's a general template for implementing greedy algorithms:
+          Here&apos;s a general template for implementing greedy algorithms:
         </p>
 
         <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
@@ -758,8 +758,8 @@ function AdvancedSection() {
               Graph Algorithms
             </h4>
             <p className="text-gray-300 text-sm">
-              Prim's MST, Kruskal's MST, Dijkstra's shortest path, topological
-              sorting.
+              Prim&apos;s MST, Kruskal&apos;s MST, Dijkstra&apos;s shortest
+              path, topological sorting.
             </p>
           </div>
         </div>

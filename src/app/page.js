@@ -24,8 +24,8 @@ export default function Home() {
             Welcome to Your DSA Journey! 🚀
           </h2>
           <p className="text-gray-300 text-lg mb-4">
-            Before diving into data structures, let's build a strong foundation
-            by understanding how to analyze algorithms.
+            Before diving into data structures, let&apos;s build a strong
+            foundation by understanding how to analyze algorithms.
           </p>
           <p className="text-gray-400">
             Algorithm analysis helps you understand how efficient your code is
@@ -118,7 +118,7 @@ export default function Home() {
             <li className="flex items-start gap-3">
               <span className="text-green-400 text-xl">✓</span>
               <span>
-                <strong>Foundation for Everything:</strong> You'll use this
+                <strong>Foundation for Everything:</strong> You&apos;ll use this
                 knowledge in every data structure and algorithm
               </span>
             </li>
@@ -842,7 +842,8 @@ export default function Home() {
                 Master graph data structures and algorithms: BFS, DFS, shortest
                 paths (Dijkstra, Bellman-Ford), minimum spanning trees (Prim,
                 Kruskal), cycle detection, topological sorting, and advanced
-                algorithms like Kosaraju's, articulation points, and bridges.
+                algorithms like Kosaraju&apos;s, articulation points, and
+                bridges.
               </p>
 
               <div className="flex items-center justify-between">
@@ -1118,14 +1119,14 @@ export default function Home() {
                   </h3>
                   <p className="text-gray-400">
                     Find/Union Operations, Union by Rank, Path Compression &
-                    Kruskal's Algorithm
+                    Kruskal&apos;s Algorithm
                   </p>
                 </div>
               </div>
 
               <p className="text-gray-300 mb-4">
                 Master Disjoint Set data structure: Introduction, Find/Union
-                operations, Union by Rank, Path Compression, and Kruskal's
+                operations, Union by Rank, Path Compression, and Kruskal&apos;s
                 Algorithm for MST.
               </p>
 

@@ -5716,8 +5716,8 @@ function DetectionSection() {
           Loop Detection & Removal
         </h2>
         <p className="text-gray-300 mb-6">
-          Detect and remove loops in linked lists using Floyd's cycle detection
-          algorithm.
+          Detect and remove loops in linked lists using Floyd&apos;s cycle
+          detection algorithm.
         </p>
       </div>
 

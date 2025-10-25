@@ -124,9 +124,9 @@ function IntroductionSection() {
         </h3>
         <p className="text-gray-300 mb-4">
           A Segment Tree is a data structure that allows efficient range queries
-          and range updates on an array. It's particularly useful for problems
-          involving range sum, range minimum/maximum, and other range-based
-          operations.
+          and range updates on an array. It&apos;s particularly useful for
+          problems involving range sum, range minimum/maximum, and other
+          range-based operations.
         </p>
 
         <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-6">

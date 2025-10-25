@@ -150,8 +150,8 @@ function ConceptsSection() {
               different paths
             </li>
             <li>
-              • <strong>Backtracking:</strong> Undo choices when path doesn't
-              work
+              • <strong>Backtracking:</strong> Undo choices when path
+              doesn&apos;t work
             </li>
           </ul>
         </div>

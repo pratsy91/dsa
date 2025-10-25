@@ -350,7 +350,7 @@ console.log(findGCD([15, 25, 30]));  // 5`}
         </h2>
         <p className="text-gray-300 mb-6">
           Used when dealing with large numbers. Common in problems asking for
-          "result modulo 10^9 + 7".
+          &quot;result modulo 10^9 + 7&quot;.
         </p>
 
         <TheoryBlock title="Modular Properties">

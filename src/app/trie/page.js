@@ -121,9 +121,10 @@ function IntroductionSection() {
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
         <h3 className="text-2xl font-bold text-white mb-4">What is a Trie?</h3>
         <p className="text-gray-300 mb-4">
-          A Trie (pronounced "try") is a tree-like data structure that is used
-          to store a collection of strings. It's also known as a prefix tree or
-          digital tree. The name "Trie" comes from the word "retrieval."
+          A Trie (pronounced &quot;try&quot;) is a tree-like data structure that
+          is used to store a collection of strings. It&apos;s also known as a
+          prefix tree or digital tree. The name &quot;Trie&quot; comes from the
+          word &quot;retrieval.&quot;
         </p>
 
         <div className="bg-green-900/20 border border-green-500/30 rounded-lg p-6">

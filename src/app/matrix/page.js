@@ -72,9 +72,9 @@ function FundamentalsSection() {
         </h2>
         <p className="text-gray-300 text-lg mb-6">
           A 2D array (matrix) is a data structure that represents a collection
-          of elements arranged in rows and columns. It's essentially an array of
-          arrays, where each element can be accessed using two indices: row and
-          column.
+          of elements arranged in rows and columns. It&apos;s essentially an
+          array of arrays, where each element can be accessed using two indices:
+          row and column.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">

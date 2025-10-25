@@ -118,8 +118,8 @@ function FundamentalsSection() {
         </h2>
         <p className="text-gray-300 mb-6">
           A Binary Heap is a complete binary tree that satisfies the heap
-          property. It's commonly used to implement priority queues and heap
-          sort.
+          property. It&apos;s commonly used to implement priority queues and
+          heap sort.
         </p>
 
         <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-6">
@@ -154,10 +154,12 @@ function FundamentalsSection() {
             Array Representation:
           </h4>
           <div className="bg-gray-900 rounded p-3 font-mono text-sm">
-            <div className="text-green-400">// For node at index i:</div>
-            <div className="text-blue-400">// Parent: Math.floor((i-1)/2)</div>
-            <div className="text-blue-400">// Left Child: 2*i + 1</div>
-            <div className="text-blue-400">// Right Child: 2*i + 2</div>
+            <div className="text-green-400">{/* For node at index i: */}</div>
+            <div className="text-blue-400">
+              {/* Parent: Math.floor((i-1)/2) */}
+            </div>
+            <div className="text-blue-400">{/* Left Child: 2*i + 1 */}</div>
+            <div className="text-blue-400">{/* Right Child: 2*i + 2 */}</div>
           </div>
         </div>
       </div>
@@ -2065,7 +2067,7 @@ function AdvancedSection() {
           </div>
           <div className="bg-gray-700 rounded-lg p-4">
             <h4 className="text-lg font-semibold text-white mb-2">
-              Dijkstra's Algorithm
+              Dijkstra&apos;s Algorithm
             </h4>
             <p className="text-gray-300 text-sm">
               Use min heap to find shortest paths in weighted graphs.

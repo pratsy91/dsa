@@ -23,7 +23,8 @@ export default function DisjointSetsPage() {
           </h1>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto">
             Master Disjoint Set data structure: Introduction, Find/Union
-            operations, Union by Rank, Path Compression, and Kruskal's Algorithm
+            operations, Union by Rank, Path Compression, and Kruskal&apos;s
+            Algorithm
           </p>
         </div>
 
@@ -165,7 +166,7 @@ function IntroductionSection() {
           </h4>
           <ul className="list-disc list-inside text-gray-300 space-y-2">
             <li>
-              <strong>Kruskal's Algorithm:</strong> Minimum Spanning Tree
+              <strong>Kruskal&apos;s Algorithm:</strong> Minimum Spanning Tree
             </li>
             <li>
               <strong>Connected Components:</strong> Graph connectivity
@@ -1485,7 +1486,7 @@ console.log("Results match:", components1 === dfsComponents);`}
               Graph Algorithms
             </h4>
             <ul className="space-y-1 text-gray-300 text-sm">
-              <li>• Kruskal's MST Algorithm</li>
+              <li>• Kruskal&apos;s MST Algorithm</li>
               <li>• Connected Components</li>
               <li>• Cycle Detection</li>
               <li>• Bipartite Graph Checking</li>
@@ -1839,7 +1840,7 @@ console.log("\\nResult:", result3);`}
             </h4>
             <ul className="space-y-2 text-gray-300">
               <li>
-                • <strong>MST Algorithms:</strong> Kruskal's algorithm
+                • <strong>MST Algorithms:</strong> Kruskal&apos;s algorithm
               </li>
               <li>
                 • <strong>Cycle Detection:</strong> In undirected graphs
