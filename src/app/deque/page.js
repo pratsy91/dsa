@@ -136,7 +136,8 @@ function FundamentalsSection() {
 
         <TheoryBlock title="Deque Implementation in JavaScript">
           <CodeBlock
-            code={`// Deque Implementation using Array
+            code={{
+              JavaScript: `// Deque Implementation using Array
 
 class Deque {
   constructor() {
@@ -158,20 +159,17 @@ class Deque {
       this.items[this.front] = element;
       this.rear++;
     }
-    console.log(\`Added to front: \${element}\`);
   }
   
   // Add element to rear
   addRear(element) {
     this.rear++;
     this.items[this.rear] = element;
-    console.log(\`Added to rear: \${element}\`);
   }
   
   // Remove element from front
   removeFront() {
     if (this.isEmpty()) {
-      console.log("Deque is empty");
       return null;
     }
     
@@ -184,14 +182,12 @@ class Deque {
       this.rear = -1;
     }
     
-    console.log(\`Removed from front: \${element}\`);
     return element;
   }
   
   // Remove element from rear
   removeRear() {
     if (this.isEmpty()) {
-      console.log("Deque is empty");
       return null;
     }
     
@@ -204,14 +200,12 @@ class Deque {
       this.rear = -1;
     }
     
-    console.log(\`Removed from rear: \${element}\`);
     return element;
   }
   
   // Get front element
   getFront() {
     if (this.isEmpty()) {
-      console.log("Deque is empty");
       return null;
     }
     return this.items[this.front];
@@ -220,7 +214,6 @@ class Deque {
   // Get rear element
   getRear() {
     if (this.isEmpty()) {
-      console.log("Deque is empty");
       return null;
     }
     return this.items[this.rear];
@@ -235,20 +228,6 @@ class Deque {
   size() {
     return this.isEmpty() ? 0 : this.rear - this.front + 1;
   }
-  
-  // Display deque
-  display() {
-    if (this.isEmpty()) {
-      console.log("Deque is empty");
-      return;
-    }
-    
-    let result = "Deque: ";
-    for (let i = this.front; i <= this.rear; i++) {
-      result += this.items[i] + " ";
-    }
-    console.log(result);
-  }
 }
 
 // Usage example
@@ -256,11 +235,124 @@ const deque = new Deque();
 deque.addRear(10);
 deque.addRear(20);
 deque.addFront(5);
-deque.display(); // "Deque: 5 10 20"
-console.log(deque.getFront()); // 5
-console.log(deque.getRear()); // 20
-deque.removeFront(); // 5
-deque.display(); // "Deque: 10 20"`}
+console.log("Front:", deque.getFront()); // 5
+console.log("Rear:", deque.getRear()); // 20
+deque.removeFront();
+console.log("Front:", deque.getFront()); // 10`,
+              Java: `import java.util.*;
+
+// Deque Implementation using ArrayList
+class Deque {
+    private List<Integer> items;
+    private int front;
+    private int rear;
+    
+    public Deque() {
+        this.items = new ArrayList<>();
+        this.front = 0;
+        this.rear = -1;
+    }
+    
+    // Add element to front
+    public void addFront(int element) {
+        if (front > 0) {
+            front--;
+            if (front < items.size()) {
+                items.set(front, element);
+            } else {
+                items.add(0, element);
+            }
+        } else {
+            // Shift all elements to make room
+            items.add(0, element);
+            rear++;
+        }
+    }
+    
+    // Add element to rear
+    public void addRear(int element) {
+        rear++;
+        if (rear < items.size()) {
+            items.set(rear, element);
+        } else {
+            items.add(element);
+        }
+    }
+    
+    // Remove element from front
+    public Integer removeFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        
+        int element = items.get(front);
+        front++;
+        
+        // Reset if empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        return element;
+    }
+    
+    // Remove element from rear
+    public Integer removeRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        
+        int element = items.get(rear);
+        rear--;
+        
+        // Reset if empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        return element;
+    }
+    
+    // Get front element
+    public Integer getFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.get(front);
+    }
+    
+    // Get rear element
+    public Integer getRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.get(rear);
+    }
+    
+    // Check if empty
+    public boolean isEmpty() {
+        return front > rear;
+    }
+    
+    // Get size
+    public int size() {
+        return isEmpty() ? 0 : rear - front + 1;
+    }
+    
+    public static void main(String[] args) {
+        Deque deque = new Deque();
+        deque.addRear(10);
+        deque.addRear(20);
+        deque.addFront(5);
+        System.out.println("Front: " + deque.getFront()); // 5
+        System.out.println("Rear: " + deque.getRear()); // 20
+        deque.removeFront();
+        System.out.println("Front: " + deque.getFront()); // 10
+    }
+}`,
+            }}
           />
         </TheoryBlock>
       </div>
@@ -330,7 +422,8 @@ function BasicSection() {
         title="1. Basic Deque Operations"
         difficulty="Easy"
         description="Implement all basic deque operations: addFront, addRear, removeFront, removeRear, getFront, getRear, isEmpty, and size."
-        solution={`// Basic Deque Operations
+        solutions={{
+          JavaScript: `// Basic Deque Operations
 
 class Deque {
   constructor() {
@@ -474,15 +567,172 @@ deque.display(); // Deque: 10
 
 console.log("Is empty:", deque.isEmpty()); // false
 deque.clear();
-console.log("Is empty:", deque.isEmpty()); // true`}
+console.log("Is empty:", deque.isEmpty()); // true`,
+          Java: `import java.util.*;
+
+public class BasicDeque {
+    private List<Integer> items;
+    private int front;
+    private int rear;
+    
+    public BasicDeque() {
+        this.items = new ArrayList<>();
+        this.front = 0;
+        this.rear = -1;
+    }
+    
+    // Add element to front
+    public void addFront(int element) {
+        if (front > 0) {
+            front--;
+            if (front < items.size()) {
+                items.set(front, element);
+            } else {
+                items.add(0, element);
+            }
+        } else {
+            items.add(0, element);
+            rear++;
+        }
+    }
+    
+    // Add element to rear
+    public void addRear(int element) {
+        rear++;
+        if (rear < items.size()) {
+            items.set(rear, element);
+        } else {
+            items.add(element);
+        }
+    }
+    
+    // Remove element from front
+    public Integer removeFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        int element = items.get(front);
+        front++;
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        return element;
+    }
+    
+    // Remove element from rear
+    public Integer removeRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        int element = items.get(rear);
+        rear--;
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        return element;
+    }
+    
+    public Integer getFront() {
+        return isEmpty() ? null : items.get(front);
+    }
+    
+    public Integer getRear() {
+        return isEmpty() ? null : items.get(rear);
+    }
+    
+    public boolean isEmpty() {
+        return front > rear;
+    }
+    
+    public int size() {
+        return isEmpty() ? 0 : rear - front + 1;
+    }
+    
+    public static void main(String[] args) {
+        BasicDeque deque = new BasicDeque();
+        deque.addRear(10);
+        deque.addRear(20);
+        deque.addFront(5);
+        System.out.println("Front: " + deque.getFront()); // 5
+        System.out.println("Rear: " + deque.getRear()); // 20
+        System.out.println("Size: " + deque.size()); // 3
+    }
+}`,
+        }}
         explanation="Implement deque using array with front and rear pointers. AddFront shifts elements or moves front pointer. AddRear increments rear pointer. Time: O(1) for addRear, O(n) for addFront, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Support insertion/removal at both ends plus peek/isEmpty/size using a contiguous buffer.",
+              details: [
+                "Array-based deque is simplest but addFront may require shifting",
+                "Ensure state resets when deque becomes empty",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Deque is a generalization of stack/queue where both ends act as entry/exit points.",
+              keywords: [
+                "double-ended",
+                "front pointer",
+                "rear pointer",
+                "array deque",
+              ],
+              details: [
+                "Keeping front/rear indices and adjusting them per operation",
+                "Potential optimization: convert to circular array later",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Dynamic array plus two indices to represent active range.",
+              details: [
+                "front index points to first element",
+                "rear index to last",
+                "Array stores elements sequentially from front..rear",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement operations using pointer arithmetic.",
+              details: [
+                "addFront: if front>0, decrement front; else shift entire range to right, update rear",
+                "addRear: ++rear; assign value",
+                "removeFront: return arr[front++] and reset when front>rear",
+                "removeRear: return arr[rear--] and reset when empty",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Guard underflow and note O(n) shifts when front==0.",
+              details: [
+                "Use helper to reset front=0,rear=-1 when deque empties",
+                "For production, prefer circular array/doubly linked list to avoid shifts",
+                "All other operations remain O(1)",
+              ],
+            },
+          ],
+          pattern: "Array-Based Double-Ended Queue",
+          complexity: {
+            time: "O(1) amortized (O(n) worst-case addFront when shifting)",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="2. Circular Deque Implementation"
         difficulty="Medium"
         description="Implement a circular deque with fixed size that efficiently uses space."
-        solution={`// Circular Deque Implementation
+        solutions={{
+          JavaScript: `// Circular Deque Implementation
 
 class CircularDeque {
   constructor(capacity) {
@@ -631,15 +881,174 @@ console.log("Trying to add when full:");
 cDeque.addFront(5);
 cDeque.addRear(6);
 cDeque.addFront(7);
-cDeque.display(); // Circular Deque: 7 5 1 2 6`}
+cDeque.display(); // Circular Deque: 7 5 1 2 6`,
+          Java: `public class CircularDeque {
+    private int capacity;
+    private int[] items;
+    private int front;
+    private int rear;
+    private int size;
+    
+    public CircularDeque(int capacity) {
+        this.capacity = capacity;
+        this.items = new int[capacity];
+        this.front = 0;
+        this.rear = 0;
+        this.size = 0;
+    }
+    
+    public boolean isFull() {
+        return size == capacity;
+    }
+    
+    public boolean addFront(int element) {
+        if (isFull()) {
+            return false;
+        }
+        if (isEmpty()) {
+            items[front] = element;
+        } else {
+            front = (front - 1 + capacity) % capacity;
+            items[front] = element;
+        }
+        size++;
+        return true;
+    }
+    
+    public boolean addRear(int element) {
+        if (isFull()) {
+            return false;
+        }
+        items[rear] = element;
+        rear = (rear + 1) % capacity;
+        size++;
+        return true;
+    }
+    
+    public Integer removeFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        int element = items[front];
+        front = (front + 1) % capacity;
+        size--;
+        return element;
+    }
+    
+    public Integer removeRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        rear = (rear - 1 + capacity) % capacity;
+        int element = items[rear];
+        size--;
+        return element;
+    }
+    
+    public Integer getFront() {
+        return isEmpty() ? null : items[front];
+    }
+    
+    public Integer getRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        int rearIndex = (rear - 1 + capacity) % capacity;
+        return items[rearIndex];
+    }
+    
+    public boolean isEmpty() {
+        return size == 0;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+    
+    public static void main(String[] args) {
+        CircularDeque cDeque = new CircularDeque(5);
+        cDeque.addFront(1);
+        cDeque.addRear(2);
+        cDeque.addFront(3);
+        System.out.println("Front: " + cDeque.getFront()); // 3
+        System.out.println("Rear: " + cDeque.getRear()); // 2
+    }
+}`,
+        }}
         explanation="Use circular array with modulo arithmetic. Front and rear wrap around using (index ± 1) % capacity. Check full condition: size === capacity. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "We need a fixed-capacity deque where both ends can grow/shrink without shifting elements.",
+              details: [
+                "Define what should happen when structure is full or empty",
+                "Clarify APIs: add/remove front & rear, peek, size checks",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "A circular buffer lets front/rear wrap around the array, reusing freed slots.",
+              keywords: [
+                "circular buffer",
+                "mod arithmetic",
+                "wrap-around",
+                "front/rear pointers",
+              ],
+              details: [
+                "Maintain `front`, `rear`, and `size` so we know when deque is full",
+                "Indices advance with `(index ± 1 + capacity) % capacity`",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use a fixed-size array plus three integers (`front`, `rear`, `size`).",
+              details: [
+                "Array holds values",
+                "`front` points to current first element",
+                "`rear` is next insertion position at the back",
+                "`size` distinguishes full vs empty when `front == rear`",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Implement each operation with constant-time pointer updates.",
+              details: [
+                "addFront: decrement front circularly, place value, ++size",
+                "addRear: place value at rear, increment rear modulo capacity",
+                "removeFront/removeRear: adjust pointers, decrement size, return element",
+                "Getters read from `front` or `(rear-1)` modulo capacity",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Guard edge cases (full/empty) and keep operations symmetric.",
+              details: [
+                "Check `size === capacity` before inserts; check `size === 0` before removals",
+                "Expose helper to compute previous index `(idx-1+cap)%cap`",
+                "Thoroughly test wrap-around transitions (front passing through 0)",
+              ],
+            },
+          ],
+          pattern: "Circular Deque via Fixed-Length Ring Buffer",
+          complexity: {
+            time: "O(1) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="3. Deque using Linked List"
         difficulty="Medium"
         description="Implement deque using doubly linked list for efficient operations at both ends."
-        solution={`// Deque using Doubly Linked List
+        solutions={{
+          JavaScript: `// Deque using Doubly Linked List
 
 class DequeNode {
   constructor(data) {
@@ -832,8 +1241,173 @@ deque.displayReverse(); // Deque (reverse): 20 <-> 10 <-> 5 <-> null
 
 console.log("Is empty:", deque.isEmpty()); // false
 deque.clear();
-console.log("Is empty:", deque.isEmpty()); // true`}
+console.log("Is empty:", deque.isEmpty()); // true`,
+          Java: `class DequeNode {
+    int data;
+    DequeNode next;
+    DequeNode prev;
+    
+    DequeNode(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+
+public class DequeLinkedList {
+    private DequeNode front;
+    private DequeNode rear;
+    private int size;
+    
+    public DequeLinkedList() {
+        this.front = null;
+        this.rear = null;
+        this.size = 0;
+    }
+    
+    public void addFront(int element) {
+        DequeNode newNode = new DequeNode(element);
+        if (isEmpty()) {
+            front = rear = newNode;
+        } else {
+            newNode.next = front;
+            front.prev = newNode;
+            front = newNode;
+        }
+        size++;
+    }
+    
+    public void addRear(int element) {
+        DequeNode newNode = new DequeNode(element);
+        if (isEmpty()) {
+            front = rear = newNode;
+        } else {
+            newNode.prev = rear;
+            rear.next = newNode;
+            rear = newNode;
+        }
+        size++;
+    }
+    
+    public Integer removeFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        int element = front.data;
+        if (front == rear) {
+            front = rear = null;
+        } else {
+            front = front.next;
+            front.prev = null;
+        }
+        size--;
+        return element;
+    }
+    
+    public Integer removeRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        int element = rear.data;
+        if (front == rear) {
+            front = rear = null;
+        } else {
+            rear = rear.prev;
+            rear.next = null;
+        }
+        size--;
+        return element;
+    }
+    
+    public Integer getFront() {
+        return isEmpty() ? null : front.data;
+    }
+    
+    public Integer getRear() {
+        return isEmpty() ? null : rear.data;
+    }
+    
+    public boolean isEmpty() {
+        return front == null;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+    
+    public static void main(String[] args) {
+        DequeLinkedList deque = new DequeLinkedList();
+        deque.addRear(10);
+        deque.addRear(20);
+        deque.addFront(5);
+        System.out.println("Front: " + deque.getFront()); // 5
+        System.out.println("Rear: " + deque.getRear()); // 20
+    }
+}`,
+        }}
         explanation="Use doubly linked list with front and rear pointers. Each node has prev and next pointers. AddFront/AddRear update pointers accordingly. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Build a deque that can grow without a preset capacity and supports constant-time updates at both ends.",
+              details: [
+                "Operations must handle empty deque gracefully",
+                "Need front/back insertion, removal, and peek APIs",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "A doubly linked list naturally supports O(1) insertion/removal at both ends via head/tail pointers.",
+              keywords: [
+                "doubly linked list",
+                "head/tail",
+                "prev/next pointers",
+                "dynamic deque",
+              ],
+              details: [
+                "Nodes link both directions so we can detach either end without traversing",
+                "Front/back operations become pointer rewires",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Define `DequeNode { value, prev, next }` and maintain `front`, `rear`, and `size` fields.",
+              details: [
+                "`front` points to first node, `rear` to last",
+                "Size counter enables O(1) length queries",
+                "No array resizing required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement each method by adjusting node links.",
+              details: [
+                "addFront: create node, set `node.next = front`, update `front.prev`, move front pointer",
+                "addRear: link after current rear and update pointer",
+                "removeFront/removeRear: detach node, update neighbor pointer, manage single-node case",
+                "Peek operations read `front.value`/`rear.value`",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description: "Handle edge cases and consider helper routines.",
+              details: [
+                "When deque becomes empty, set both pointers to null",
+                "Encapsulate node creation/deletion to avoid duplicated code",
+                "Optional sentinel nodes can simplify pointer manipulation",
+              ],
+            },
+          ],
+          pattern: "Deque via Doubly Linked List",
+          complexity: {
+            time: "O(1) per operation",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );
@@ -857,7 +1431,8 @@ function AdvancedSection() {
         title="4. Design a Data Structure with Min and Max"
         difficulty="Hard"
         description="Design a data structure that supports insert, delete, getMin, and getMax operations in O(1) time using deque."
-        solution={`// Design a Data Structure with Min and Max
+        solutions={{
+          JavaScript: `// Design a Data Structure with Min and Max
 
 class MinMaxDeque {
   constructor() {
@@ -1101,15 +1676,129 @@ optimizedDeque.display();
 
 optimizedDeque.removeFront();
 optimizedDeque.removeRear();
-optimizedDeque.display();`}
-        explanation="Use auxiliary deques to maintain min and max elements. Min deque stores elements in increasing order, max deque in decreasing order. Remove elements when they're no longer min/max. Time: O(1) amortized, Space: O(n)."
+optimizedDeque.display();`,
+          Java: `import java.util.*;
+
+public class MinMaxDeque {
+    private Deque<Integer> deque;
+    private Deque<Integer> minDeque;
+    private Deque<Integer> maxDeque;
+    
+    public MinMaxDeque() {
+        this.deque = new LinkedList<>();
+        this.minDeque = new LinkedList<>();
+        this.maxDeque = new LinkedList<>();
+    }
+    
+    public void insert(int element) {
+        deque.offerLast(element);
+        
+        // Maintain min deque (increasing order)
+        while (!minDeque.isEmpty() && minDeque.peekLast() > element) {
+            minDeque.pollLast();
+        }
+        minDeque.offerLast(element);
+        
+        // Maintain max deque (decreasing order)
+        while (!maxDeque.isEmpty() && maxDeque.peekLast() < element) {
+            maxDeque.pollLast();
+        }
+        maxDeque.offerLast(element);
+    }
+    
+    public Integer getMin() {
+        return deque.isEmpty() ? null : minDeque.peekFirst();
+    }
+    
+    public Integer getMax() {
+        return deque.isEmpty() ? null : maxDeque.peekFirst();
+    }
+    
+    public boolean isEmpty() {
+        return deque.isEmpty();
+    }
+    
+    public static void main(String[] args) {
+        MinMaxDeque mmDeque = new MinMaxDeque();
+        mmDeque.insert(5);
+        mmDeque.insert(3);
+        mmDeque.insert(8);
+        mmDeque.insert(1);
+        System.out.println("Min: " + mmDeque.getMin()); // 1
+        System.out.println("Max: " + mmDeque.getMax()); // 8
+    }
+}`,
+        }}
+        explanation="Use auxiliary deques to maintain min and max elements. Min deque stays increasing, max deque decreasing. Time: O(1) amortized per operation, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Design a deque that can return both minimum and maximum in O(1) alongside normal add/remove operations.",
+              details: [
+                "Need to support insertions/removals at ends and queries getMin()/getMax() quickly",
+                "Elements may repeat; structure must handle duplicates",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Use monotonic deques to track candidate mins and maxes as elements flow in/out.",
+              keywords: [
+                "monotonic deque",
+                "min/max maintenance",
+                "auxiliary structures",
+              ],
+              details: [
+                "Maintain two deques: one nondecreasing (for mins) and one nonincreasing (for maxes)",
+                "Pop from back while violating order to keep only useful candidates",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Primary deque for actual values + two helper deques for min/max.",
+              details: [
+                "Each helper stores values (or indices) in monotonic order",
+                "When base deque removes a value equal to helper’s head, remove it there too",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Define how inserts and deletes update all structures.",
+              details: [
+                "On insert: push value to base deque, then adjust min/max deques (pop smaller/greater tails before appending)",
+                "On removeFront/removeRear: pop from base and sync helpers by removing matching head/tail",
+                "getMin/getMax read helper fronts",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Ensure amortized O(1) by popping each element at most once.",
+              details: [
+                "Carefully handle duplicates by checking equality when removing",
+                "Consider storing indices instead of values if you also need to support random deletions",
+                "Write tests covering alternating inserts/removals to verify invariants",
+              ],
+            },
+          ],
+          pattern: "Min/Max Monotonic Deques",
+          complexity: {
+            time: "O(1) amortized per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="5. Maximums of all subarrays of size k"
         difficulty="Hard"
         description="Find the maximum element in every subarray of size k using deque."
-        solution={`// Maximums of all subarrays of size k
+        solutions={{
+          JavaScript: `// Maximums of all subarrays of size k
 
 function maxOfSubarrays(arr, k) {
   const result = [];
@@ -1221,15 +1910,121 @@ console.log("Window size:", k2);
 console.log("Result:", maxOfSubarrays(arr2, k2)); // [10, 10, 10, 15, 15, 90, 90]
 
 console.log("\\n=== Detailed Example ===");
-maxOfSubarraysDetailed([1, 3, -1, -3, 5, 3, 6, 7], 3);`}
-        explanation="Use deque to store indices of elements in decreasing order. Remove elements outside window and smaller than current element. Front of deque always contains index of maximum element. Time: O(n), Space: O(k)."
+maxOfSubarraysDetailed([1, 3, -1, -3, 5, 3, 6, 7], 3);`,
+          Java: `import java.util.*;
+
+public class MaxOfSubarrays {
+    public static List<Integer> maxOfSubarrays(int[] arr, int k) {
+        List<Integer> result = new ArrayList<>();
+        Deque<Integer> deque = new LinkedList<>(); // Store indices
+        
+        // Process first window
+        for (int i = 0; i < k; i++) {
+            // Remove elements smaller than current element
+            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
+                deque.pollLast();
+            }
+            deque.offerLast(i);
+        }
+        
+        // Process remaining windows
+        for (int i = k; i < arr.length; i++) {
+            // Add maximum of previous window
+            result.add(arr[deque.peekFirst()]);
+            
+            // Remove elements outside current window
+            while (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+                deque.pollFirst();
+            }
+            
+            // Remove elements smaller than current element
+            while (!deque.isEmpty() && arr[deque.peekLast()] <= arr[i]) {
+                deque.pollLast();
+            }
+            
+            deque.offerLast(i);
+        }
+        
+        // Add maximum of last window
+        result.add(arr[deque.peekFirst()]);
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        List<Integer> result = maxOfSubarrays(arr, k);
+        System.out.println("Result: " + result); // [3, 3, 5, 5, 6, 7]
+    }
+}`,
+        }}
+        explanation="Use deque to store indices of elements in decreasing order. Remove elements outside the window and smaller than current element. Front of deque holds the current max. Time: O(n), Space: O(k)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Given an array and window size k, output the maximum for every contiguous subarray of length k.",
+              details: [
+                "Brute force would be O(n·k); need linear-time solution",
+                "Window slides one step at a time",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Sliding-window optimization using a monotonic deque to keep potential maxima.",
+              keywords: ["sliding window", "monotonic deque", "window maximum"],
+              details: [
+                "Maintain indices in decreasing order of values",
+                "Front of deque always corresponds to current maximum",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description: "Use a deque storing indices rather than values.",
+              details: [
+                "Indices help detect when an element falls out of the window",
+                "Deque length never exceeds k",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Process array in one pass while updating deque.",
+              details: [
+                "For each index i:",
+                "  - Remove indices from front if they are < i-k+1 (outside window)",
+                "  - Pop from back while arr[back] ≤ arr[i] to keep deque decreasing",
+                "  - Push i to back",
+                "  - Starting from i ≥ k-1, record arr[deque[0]] as current max",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Ensure amortized O(1) operations and handle corner cases.",
+              details: [
+                "Each index enters/exits deque at most once → O(n) total",
+                "Consider edge cases k=1 or k>n",
+                "Return list of maxima with length n-k+1",
+              ],
+            },
+          ],
+          pattern: "Monotonic Deque for Window Maximum",
+          complexity: {
+            time: "O(n)",
+            space: "O(k)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="6. First Circular Tour"
         difficulty="Hard"
         description="Find the first petrol pump from where a truck can complete a circular tour using deque."
-        solution={`// First Circular Tour
+        solutions={{
+          JavaScript: `// First Circular Tour
 
 function firstCircularTour(petrol, distance) {
   const n = petrol.length;
@@ -1381,8 +2176,104 @@ console.log("Distance:", distance3);
 console.log("Result:", firstCircularTour(petrol3, distance3)); // 3
 
 console.log("\\n=== Detailed Example ===");
-firstCircularTourDetailed([4, 6, 7, 4], [6, 5, 3, 5]);`}
-        explanation="Use two pointers: start and end. If current petrol becomes negative, move start pointer. If we can complete a full circle, return start. If start reaches 0 again, no solution exists. Time: O(n), Space: O(1)."
+firstCircularTourDetailed([4, 6, 7, 4], [6, 5, 3, 5]);`,
+          Java: `public class FirstCircularTour {
+    public static int firstCircularTour(int[] petrol, int[] distance) {
+        int n = petrol.length;
+        int start = 0;
+        int end = 1;
+        int currentPetrol = petrol[start] - distance[start];
+        
+        while (start != end || currentPetrol < 0) {
+            // If current petrol is negative, we can't reach next station
+            while (currentPetrol < 0 && start != end) {
+                currentPetrol -= petrol[start] - distance[start];
+                start = (start + 1) % n;
+                
+                // If we've tried all stations
+                if (start == 0) {
+                    return -1;
+                }
+            }
+            
+            // Add current station
+            currentPetrol += petrol[end] - distance[end];
+            end = (end + 1) % n;
+        }
+        
+        return start;
+    }
+    
+    public static void main(String[] args) {
+        int[] petrol = {4, 6, 7, 4};
+        int[] distance = {6, 5, 3, 5};
+        System.out.println("Result: " + firstCircularTour(petrol, distance)); // 1
+    }
+}`,
+        }}
+        explanation="Use two pointers: start and end. Track current petrol balance; when it drops below zero, move start forward and reset balance. If start wraps to 0 without success, no solution exists. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Given petrol and distance arrays, find first station index from which a truck can complete the circle exactly once.",
+              details: [
+                "`petrol[i]` liters available, `distance[i]` needed to next station",
+                "We need total petrol ≥ total distance, else answer is -1",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "This is a circular array / greedy problem; a simple two-pointer sweep suffices.",
+              keywords: [
+                "circular tour",
+                "two-pointer",
+                "greedy",
+                "running balance",
+              ],
+              details: [
+                "Move `end` forward accumulating (petrol-distance)",
+                "If balance falls negative, shift `start` past the failing station",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use indices `start`, `end`, and an integer `currentPetrol` to track net fuel in tank.",
+              details: [
+                "Optionally maintain a deque of candidate stations for debug/visualization, but indices suffice",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Greedy sweep around the circle once.",
+              details: [
+                "Initialize `start = 0`, `end = 1`, `current = petrol[0]-dist[0]`",
+                "While `start != end` or `current < 0`: if current < 0, subtract start’s net petrol and advance start",
+                "Otherwise add next station (advance end, add petrol[end]-dist[end])",
+                "If start wraps to 0 after adjustment, no solution → return -1",
+                "When loop ends, `start` is the answer",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Verify feasibility first (sum of petrol ≥ sum of distance).",
+              details: [
+                "Avoid infinite loops by stopping when start returns to origin",
+                "Handle edge cases like single station, zero capacity",
+                "Time O(n) because each station is visited at most twice",
+              ],
+            },
+          ],
+          pattern: "Circular Two-Pointer/Gready Tour",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
     </div>
   );
@@ -1405,7 +2296,8 @@ function ApplicationsSection() {
         title="7. Sliding Window Minimum"
         difficulty="Medium"
         description="Find the minimum element in every subarray of size k using deque."
-        solution={`// Sliding Window Minimum
+        solutions={{
+          JavaScript: `// Sliding Window Minimum
 
 function minOfSubarrays(arr, k) {
   const result = [];
@@ -1450,15 +2342,122 @@ const k1 = 3;
 console.log("=== Testing Min of Subarrays ===");
 console.log("Array:", arr1);
 console.log("Window size:", k1);
-console.log("Result:", minOfSubarrays(arr1, k1)); // [-1, -3, -3, -3, 3, 3]`}
+console.log("Result:", minOfSubarrays(arr1, k1)); // [-1, -3, -3, -3, 3, 3]`,
+          Java: `import java.util.*;
+
+public class SlidingWindowMinimum {
+    public static List<Integer> minOfSubarrays(int[] arr, int k) {
+        List<Integer> result = new ArrayList<>();
+        Deque<Integer> deque = new LinkedList<>(); // Store indices
+        
+        // Process first window
+        for (int i = 0; i < k; i++) {
+            // Remove elements greater than current element
+            while (!deque.isEmpty() && arr[deque.peekLast()] >= arr[i]) {
+                deque.pollLast();
+            }
+            deque.offerLast(i);
+        }
+        
+        // Process remaining windows
+        for (int i = k; i < arr.length; i++) {
+            // Add minimum of previous window
+            result.add(arr[deque.peekFirst()]);
+            
+            // Remove elements outside current window
+            while (!deque.isEmpty() && deque.peekFirst() <= i - k) {
+                deque.pollFirst();
+            }
+            
+            // Remove elements greater than current element
+            while (!deque.isEmpty() && arr[deque.peekLast()] >= arr[i]) {
+                deque.pollLast();
+            }
+            
+            deque.offerLast(i);
+        }
+        
+        // Add minimum of last window
+        result.add(arr[deque.peekFirst()]);
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        int[] arr = {1, 3, -1, -3, 5, 3, 6, 7};
+        int k = 3;
+        List<Integer> result = minOfSubarrays(arr, k);
+        System.out.println("Result: " + result); // [-1, -3, -3, -3, 3, 3]
+    }
+}`,
+        }}
         explanation="Use deque to store indices of elements in increasing order. Remove elements outside window and greater than current element. Front of deque always contains index of minimum element. Time: O(n), Space: O(k)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Compute minima for every contiguous subarray of size k in linear time.",
+              details: [
+                "Window slides one step per iteration",
+                "Need output of length n - k + 1",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Use a monotonic deque storing indices such that values are increasing from front to back.",
+              keywords: ["sliding window", "monotonic deque", "window minimum"],
+              details: [
+                "Front keeps smallest value index for current window",
+                "Drop indices of larger elements since they can’t become future minima",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Deque (double-ended queue) containing indices, not raw values.",
+              details: [
+                "Indices allow O(1) eviction when falling out of window (i - k)",
+                "Deque size bounded by k",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Single pass maintaining invariants.",
+              details: [
+                "For each index i:",
+                "  • Remove deque[0] if it’s outside window",
+                "  • Pop from back while arr[back] ≥ arr[i]",
+                "  • Push i",
+                "  • When i ≥ k-1, append arr[deque[0]] to result",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Mirror the window-maximum solution but reverse comparisons.",
+              details: [
+                "Each index enters/exits deque once → O(n)",
+                "Edge cases: k == 1 (return original array), k > n (invalid/empty)",
+                "Optional: reuse same helper for max/min by parameterizing comparator",
+              ],
+            },
+          ],
+          pattern: "Monotonic Deque for Sliding-Window Minimum",
+          complexity: {
+            time: "O(n)",
+            space: "O(k)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="8. Deque in BFS"
         difficulty="Medium"
         description="Use deque for efficient BFS traversal with level-by-level processing."
-        solution={`// Deque in BFS
+        solutions={{
+          JavaScript: `// Deque in BFS
 
 function bfsWithDeque(graph, start) {
   const visited = new Set();
@@ -1521,15 +2520,108 @@ const graph = {
 };
 
 console.log("=== Testing BFS with Deque ===");
-console.log("BFS traversal:", bfsWithDeque(graph, 'A'));`}
+console.log("BFS traversal:", bfsWithDeque(graph, 'A'));`,
+          Java: `import java.util.*;
+
+public class BFSWithDeque {
+    public static List<String> bfsWithDeque(Map<String, List<String>> graph, String start) {
+        Set<String> visited = new HashSet<>();
+        Deque<String> deque = new LinkedList<>();
+        List<String> result = new ArrayList<>();
+        
+        visited.add(start);
+        deque.offerLast(start);
+        
+        while (!deque.isEmpty()) {
+            String current = deque.pollFirst();
+            result.add(current);
+            
+            for (String neighbor : graph.getOrDefault(current, new ArrayList<>())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    deque.offerLast(neighbor);
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        Map<String, List<String>> graph = new HashMap<>();
+        graph.put("A", Arrays.asList("B", "C"));
+        graph.put("B", Arrays.asList("A", "D", "E"));
+        graph.put("C", Arrays.asList("A", "F"));
+        
+        List<String> result = bfsWithDeque(graph, "A");
+        System.out.println("BFS traversal: " + result); // [A, B, C, D, E, F]
+    }
+}`,
+        }}
         explanation="Use deque for FIFO processing in BFS. Add neighbors to rear, process from front. Maintains level-by-level traversal order. Time: O(V + E), Space: O(V)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Perform breadth-first traversal on a graph/tree starting from a given node.",
+              details: [
+                "Need to visit neighbors layer by layer",
+                "Track visited nodes to avoid repetition in graphs",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Classic BFS uses FIFO queue semantics; deque provides the same behavior with additional flexibility.",
+              keywords: ["BFS", "queue", "level order", "visited set"],
+              details: [
+                "Process node, then enqueue its unvisited neighbors",
+                "Deque pop from front / push to rear replicates queue behavior",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description: "Use a deque plus a visited set (or boolean array).",
+              details: [
+                "Deque enables O(1) push/pop at both ends",
+                "Visited structure prevents cycles",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Standard BFS loop.",
+              details: [
+                "Initialize: mark start visited, enqueue it",
+                "While deque not empty: dequeue front node, record result, enqueue all unvisited neighbors",
+                "For trees: optionally capture level size to produce level-order lists",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Keep interfaces generic so BFS works for graphs or binary trees.",
+              details: [
+                "For graphs, adjacency list representation is typical",
+                "For 0-1 BFS or bidirectional searches, deque allows adding to front/back with priority",
+                "Complexity O(V+E); ensure data structures sized accordingly",
+              ],
+            },
+          ],
+          pattern: "Breadth-First Traversal via Deque",
+          complexity: {
+            time: "O(V + E)",
+            space: "O(V)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="9. Deque in Palindrome Checking"
         difficulty="Easy"
         description="Use deque to check if a string is a palindrome efficiently."
-        solution={`// Deque in Palindrome Checking
+        solutions={{
+          JavaScript: `// Deque in Palindrome Checking
 
 function isPalindromeDeque(str) {
   const deque = [];
@@ -1585,8 +2677,104 @@ const str3 = "level";
 console.log("=== Testing Palindrome with Deque ===");
 console.log(\`"\${str1}" is palindrome:\`, isPalindromeDeque(str1)); // true
 console.log(\`"\${str2}" is palindrome:\`, isPalindromeDeque(str2)); // false
-console.log(\`"\${str3}" is palindrome:\`, isPalindromeDeque(str3)); // true`}
-        explanation="Use deque to store characters, then compare front and rear elements. Remove characters from both ends while they match. Time: O(n), Space: O(n)."
+console.log(\`"\${str3}" is palindrome:\`, isPalindromeDeque(str3)); // true`,
+          Java: `import java.util.*;
+
+public class PalindromeDeque {
+    public static boolean isPalindromeDeque(String str) {
+        Deque<Character> deque = new LinkedList<>();
+        
+        // Add all characters to deque
+        for (char c : str.toLowerCase().toCharArray()) {
+            if (Character.isLetterOrDigit(c)) {
+                deque.offerLast(c);
+            }
+        }
+        
+        // Check palindrome by comparing front and rear
+        while (deque.size() > 1) {
+            if (!deque.pollFirst().equals(deque.pollLast())) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    public static void main(String[] args) {
+        String str1 = "A man a plan a canal Panama";
+        String str2 = "race a car";
+        String str3 = "level";
+        
+        System.out.println("\"" + str1 + "\" is palindrome: " + isPalindromeDeque(str1)); // true
+        System.out.println("\"" + str2 + "\" is palindrome: " + isPalindromeDeque(str2)); // false
+        System.out.println("\"" + str3 + "\" is palindrome: " + isPalindromeDeque(str3)); // true
+    }
+}`,
+        }}
+        explanation="Use deque to store normalized characters, then compare front and rear elements while they match. Time: O(n), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Determine whether a string is a palindrome when considering only alphanumeric characters (case-insensitive).",
+              details: [
+                "Clarify if punctuation/spacing should be ignored",
+                "Decide whether to treat uppercase/lowercase as equal",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Compare symmetric characters from both ends simultaneously.",
+              keywords: [
+                "palindrome",
+                "two-pointer",
+                "deque",
+                "front/rear comparison",
+              ],
+              details: [
+                "Deque models the string with easy front and back removals",
+                "Equivalent to two-pointer scan but shows deque utility",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use a deque to store normalized characters in order.",
+              details: [
+                "Preprocess string: lowercase + filter alphanumerics",
+                "Push characters to deque (or build array then treat as deque)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Repeatedly pop from front and rear, comparing characters.",
+              details: [
+                "While deque length > 1:",
+                "  • left = deque.shift(), right = deque.pop()",
+                "  • If left !== right → not palindrome",
+                "Return true when loop completes",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Edge cases: empty string or single char should return true.",
+              details: [
+                "Two-pointer string indices can replace explicit deque for O(1) space",
+                "For streaming scenarios, deque operations highlight symmetric consumption",
+              ],
+            },
+          ],
+          pattern: "Two-End Comparison via Deque",
+          complexity: {
+            time: "O(n)",
+            space: "O(n) (O(1) if using direct pointers)",
+          },
+        }}
       />
     </div>
   );
@@ -1602,11 +2790,35 @@ function TheoryBlock({ title, children }) {
   );
 }
 
-function CodeBlock({ code }) {
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
   return (
     <div className="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
       <pre className="text-sm text-green-400">
-        <code>{code}</code>
+        <code>{displayedCode}</code>
       </pre>
     </div>
   );
@@ -1617,9 +2829,19 @@ function ProblemBlock({
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   const difficultyColors = {
     Easy: "bg-green-500/20 text-green-400",
@@ -1647,16 +2869,36 @@ function ProblemBlock({
         {showSolution ? "Hide Solution" : "Show Solution"}
       </button>
 
-      {showSolution && (
+      {showSolution && codeData && (
+        <div>
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {activeTab === "solution" && (
         <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4">
-            <h4 className="text-lg font-medium text-white mb-2">
-              JavaScript Solution:
-            </h4>
-            <pre className="whitespace-pre-wrap text-sm text-gray-200">
-              <code>{solution}</code>
-            </pre>
-          </div>
+          <CodeBlock code={codeData} defaultLanguage="JavaScript" />
           <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
             <p className="text-purple-200">
               <strong>💡 Explanation:</strong>
@@ -1664,6 +2906,104 @@ function ProblemBlock({
               {explanation}
             </p>
           </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-xl p-6 border border-purple-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Applying the systematic 5-step framework to master this deque problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-purple-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-purple-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-purple-500/20 text-purple-200 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-blue-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
         </div>
       )}
     </div>

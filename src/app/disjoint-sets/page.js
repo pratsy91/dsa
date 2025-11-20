@@ -59,15 +59,145 @@ export default function DisjointSetsPage() {
   );
 }
 
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
+      <pre className="text-green-400 text-sm">
+        <code>{displayedCode}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-xl p-6 border border-blue-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework to solve this problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProblemBlock({
   title,
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
   duration,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData = solutions || (solution ? { JavaScript: solution } : null);
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -104,17 +234,50 @@ function ProblemBlock({
 
       <p className="text-gray-300 mb-4">{description}</p>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{solution}</code>
-            </pre>
-          </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <h4 className="text-blue-200 font-semibold mb-2">Explanation:</h4>
-            <p className="text-blue-100 text-sm">{explanation}</p>
-          </div>
+      {showSolution && codeData && (
+        <div>
+          {/* Tabs */}
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-blue-400 border-b-2 border-blue-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-blue-400 border-b-2 border-blue-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {/* Tab Content */}
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <CodeBlock code={codeData} />
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-200 font-semibold mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-100 text-sm">{explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
         </div>
       )}
     </div>
@@ -232,7 +395,8 @@ function IntroductionSection() {
         difficulty="Medium"
         description="Basic implementation of Disjoint Set data structure with find and union operations."
         duration="10 min, 17 sec"
-        solution={`// Disjoint Set (Union-Find) - Introduction
+        solutions={{
+          JavaScript: `// Disjoint Set (Union-Find) - Introduction
 
 class DisjointSet {
   constructor(n) {
@@ -352,8 +516,213 @@ console.log("Find(4):", ds.find(4));
 console.log("\\n--- Testing Connected Operations ---");
 console.log("Connected(0, 3):", ds.connected(0, 3));
 console.log("Connected(0, 4):", ds.connected(0, 4));
-console.log("Connected(1, 2):", ds.connected(1, 2));`}
+console.log("Connected(1, 2):", ds.connected(1, 2));`,
+          Java: `// Disjoint Set (Union-Find) - Introduction
+
+class DisjointSet {
+    private int[] parent;
+    private int[] rank;
+    private int count; // Number of disjoint sets
+    
+    public DisjointSet(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        count = n;
+        
+        System.out.println("=== Initializing Disjoint Set ===");
+        System.out.println("Number of elements: " + n);
+        
+        // Initialize each element as its own parent
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+        
+        System.out.print("Parent array: ");
+        printArray(parent);
+        System.out.print("Rank array: ");
+        printArray(rank);
+        System.out.println("Initial count of sets: " + count);
+    }
+    
+    // Find the root of element x
+    public int find(int x) {
+        System.out.println("\\nFinding root of element " + x);
+        
+        // If x is not its own parent, find root recursively
+        if (parent[x] != x) {
+            System.out.println("  " + x + " is not root, parent is " + parent[x]);
+            parent[x] = find(parent[x]); // Path compression
+            System.out.println("  After path compression, parent of " + x + " is " + parent[x]);
+        }
+        
+        System.out.println("  Root of " + x + " is " + parent[x]);
+        return parent[x];
+    }
+    
+    // Union two sets containing x and y
+    public void union(int x, int y) {
+        System.out.println("\\n=== Union(" + x + ", " + y + ") ===");
+        
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        System.out.println("Root of " + x + " is " + rootX);
+        System.out.println("Root of " + y + " is " + rootY);
+        
+        // If already in same set, no union needed
+        if (rootX == rootY) {
+            System.out.println("Elements are already in the same set, no union needed");
+            return;
+        }
+        
+        // Union by rank: attach smaller tree to larger tree
+        if (rank[rootX] < rank[rootY]) {
+            System.out.println("Rank of " + rootX + " (" + rank[rootX] + ") < rank of " + rootY + " (" + rank[rootY] + ")");
+            parent[rootX] = rootY;
+            System.out.println("Setting parent of " + rootX + " to " + rootY);
+        } else if (rank[rootX] > rank[rootY]) {
+            System.out.println("Rank of " + rootX + " (" + rank[rootX] + ") > rank of " + rootY + " (" + rank[rootY] + ")");
+            parent[rootY] = rootX;
+            System.out.println("Setting parent of " + rootY + " to " + rootX);
+        } else {
+            System.out.println("Ranks are equal, attaching " + rootY + " to " + rootX);
+            parent[rootY] = rootX;
+            rank[rootX]++;
+            System.out.println("Incrementing rank of " + rootX + " to " + rank[rootX]);
+        }
+        
+        count--;
+        System.out.println("Number of sets after union: " + count);
+    }
+    
+    // Check if two elements are in the same set
+    public boolean connected(int x, int y) {
+        System.out.println("\\nChecking if " + x + " and " + y + " are connected");
+        boolean result = find(x) == find(y);
+        System.out.println("Result: " + result);
+        return result;
+    }
+    
+    // Get number of disjoint sets
+    public int getCount() {
+        System.out.println("\\nNumber of disjoint sets: " + count);
+        return count;
+    }
+    
+    // Print current state
+    public void printState() {
+        System.out.println("\\n=== Current State ===");
+        System.out.print("Parent array: ");
+        printArray(parent);
+        System.out.print("Rank array: ");
+        printArray(rank);
+        System.out.println("Number of sets: " + count);
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Test the Disjoint Set
+public class DisjointSetTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Disjoint Set ===");
+        
+        DisjointSet ds = new DisjointSet(5);
+        ds.printState();
+        
+        System.out.println("\\n--- Testing Union Operations ---");
+        ds.union(0, 1);
+        ds.printState();
+        
+        ds.union(2, 3);
+        ds.printState();
+        
+        ds.union(1, 2);
+        ds.printState();
+        
+        System.out.println("\\n--- Testing Find Operations ---");
+        System.out.println("Find(0): " + ds.find(0));
+        System.out.println("Find(3): " + ds.find(3));
+        System.out.println("Find(4): " + ds.find(4));
+        
+        System.out.println("\\n--- Testing Connected Operations ---");
+        System.out.println("Connected(0, 3): " + ds.connected(0, 3));
+        System.out.println("Connected(0, 4): " + ds.connected(0, 4));
+        System.out.println("Connected(1, 2): " + ds.connected(1, 2));
+    }
+}`,
+        }}
         explanation="Disjoint Set uses a parent array where each element points to its parent. The find operation uses path compression to flatten the tree structure. Union by rank ensures the tree remains balanced. Time complexity is nearly constant with optimizations."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Disjoint Set (Union-Find) data structure. Support operations: find (which set an element belongs to), union (merge two sets), and connected (check if two elements are in same set).",
+              details: [
+                "Each element initially in its own set",
+                "Find: return root of element's set",
+                "Union: merge two sets by connecting roots",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Tree structure: parent array where parent[i] points to parent of i. Root has parent[i] = i. Find: traverse up to root. Union: connect roots of two sets.",
+              keywords: [
+                "disjoint set",
+                "union-find",
+                "parent array",
+                "tree structure",
+              ],
+              details: [
+                "Parent array: represents tree structure",
+                "Root: element that points to itself",
+                "Path compression: flatten tree during find",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Parent array parent[n] where parent[i] = parent of i. Rank array rank[n] for union by rank optimization. Count variable for number of sets.",
+              details: [
+                "Parent array: O(n) space",
+                "Rank array: O(n) space for optimization",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Find: if parent[x] != x, recursively find(parent[x]) and set parent[x] = result (path compression). Union: find roots of x and y. If roots different, connect smaller rank to larger rank.",
+              details: [
+                "Find: O(α(n)) with path compression",
+                "Union: O(α(n)) with union by rank",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(α(n)) per operation where α is inverse Ackermann function (nearly constant). Space O(n). Path compression and union by rank are key optimizations.",
+              details: [
+                "Nearly constant time per operation",
+                "Essential for Kruskal's algorithm and connectivity problems",
+              ],
+            },
+          ],
+          pattern: "Disjoint Set (Union-Find)",
+          complexity: {
+            time: "O(α(n)) per operation",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );
@@ -369,7 +738,8 @@ function BasicOperationsSection() {
         difficulty="Medium"
         description="Implement and understand the core find and union operations in disjoint sets."
         duration="8 min, 11 sec"
-        solution={`// Find and Union Operations on Disjoint Sets
+        solutions={{
+          JavaScript: `// Find and Union Operations on Disjoint Sets
 
 class UnionFind {
   constructor(n) {
@@ -545,8 +915,275 @@ const naiveUf = new NaiveUnionFind(6);
 naiveUf.union(0, 1);
 naiveUf.union(2, 3);
 naiveUf.union(1, 2);
-console.log("Naive connected(0, 3):", naiveUf.connected(0, 3));`}
+console.log("Naive connected(0, 3):", naiveUf.connected(0, 3));`,
+          Java: `// Find and Union Operations on Disjoint Sets
+
+import java.util.*;
+
+class UnionFind {
+    private int[] parent;
+    private int[] size;
+    private int count;
+    
+    public UnionFind(int n) {
+        parent = new int[n];
+        size = new int[n];
+        count = n;
+        
+        System.out.println("=== Initializing Union-Find ===");
+        System.out.println("Number of elements: " + n);
+        
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+        
+        System.out.print("Parent array: ");
+        printArray(parent);
+        System.out.print("Size array: ");
+        printArray(size);
+    }
+    
+    // Find with path compression
+    public int find(int x) {
+        System.out.println("\\nFinding root of element " + x);
+        List<Integer> path = new ArrayList<>();
+        path.add(x);
+        
+        // Find root
+        int current = x;
+        while (parent[current] != current) {
+            System.out.println("  " + current + " -> " + parent[current]);
+            current = parent[current];
+            path.add(current);
+        }
+        
+        int root = current;
+        System.out.println("  Root found: " + root);
+        
+        // Path compression: make all nodes point directly to root
+        for (int node : path) {
+            if (parent[node] != root) {
+                System.out.println("  Compressing path: " + node + " -> " + root);
+                parent[node] = root;
+            }
+        }
+        
+        return root;
+    }
+    
+    // Union by size
+    public void union(int x, int y) {
+        System.out.println("\\n=== Union(" + x + ", " + y + ") ===");
+        
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX == rootY) {
+            System.out.println("Elements are already connected");
+            return;
+        }
+        
+        // Union by size: attach smaller tree to larger tree
+        if (size[rootX] < size[rootY]) {
+            System.out.println("Size of " + rootX + " (" + size[rootX] + ") < size of " + rootY + " (" + size[rootY] + ")");
+            parent[rootX] = rootY;
+            size[rootY] += size[rootX];
+            System.out.println("Attaching " + rootX + " to " + rootY);
+            System.out.println("New size of " + rootY + ": " + size[rootY]);
+        } else {
+            System.out.println("Size of " + rootX + " (" + size[rootX] + ") >= size of " + rootY + " (" + size[rootY] + ")");
+            parent[rootY] = rootX;
+            size[rootX] += size[rootY];
+            System.out.println("Attaching " + rootY + " to " + rootX);
+            System.out.println("New size of " + rootX + ": " + size[rootX]);
+        }
+        
+        count--;
+        System.out.println("Number of components: " + count);
+    }
+    
+    // Check connectivity
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+    
+    // Get component count
+    public int getCount() {
+        return count;
+    }
+    
+    // Get size of component containing x
+    public int getSize(int x) {
+        int root = find(x);
+        return size[root];
+    }
+    
+    // Print current state
+    public void printState() {
+        System.out.println("\\n=== Current State ===");
+        System.out.print("Parent: ");
+        printArray(parent);
+        System.out.print("Size: ");
+        printArray(size);
+        System.out.println("Components: " + count);
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Alternative: Naive implementation without optimizations
+class NaiveUnionFind {
+    private int[] parent;
+    private int count;
+    
+    public NaiveUnionFind(int n) {
+        parent = new int[n];
+        count = n;
+        
+        System.out.println("\\n=== Naive Union-Find (No Optimizations) ===");
+        
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+    }
+    
+    public int find(int x) {
+        System.out.println("\\nNaive find(" + x + ")");
+        while (parent[x] != x) {
+            System.out.println("  " + x + " -> " + parent[x]);
+            x = parent[x];
+        }
+        System.out.println("  Root: " + x);
+        return x;
+    }
+    
+    public void union(int x, int y) {
+        System.out.println("\\nNaive union(" + x + ", " + y + ")");
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX != rootY) {
+            parent[rootX] = rootY;
+            count--;
+            System.out.println("  Unioned " + rootX + " to " + rootY);
+        }
+    }
+    
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+}
+
+// Test cases
+public class UnionFindOperationsTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Union-Find Operations ===");
+        
+        UnionFind uf = new UnionFind(6);
+        uf.printState();
+        
+        System.out.println("\\n--- Test Case 1: Basic Unions ---");
+        uf.union(0, 1);
+        uf.printState();
+        
+        uf.union(2, 3);
+        uf.printState();
+        
+        uf.union(4, 5);
+        uf.printState();
+        
+        System.out.println("\\n--- Test Case 2: Cross Unions ---");
+        uf.union(1, 2);
+        uf.printState();
+        
+        System.out.println("\\n--- Test Case 3: Connectivity Tests ---");
+        System.out.println("Connected(0, 3): " + uf.connected(0, 3));
+        System.out.println("Connected(0, 4): " + uf.connected(0, 4));
+        System.out.println("Connected(4, 5): " + uf.connected(4, 5));
+        
+        System.out.println("\\n--- Test Case 4: Component Sizes ---");
+        System.out.println("Size of component containing 0: " + uf.getSize(0));
+        System.out.println("Size of component containing 4: " + uf.getSize(4));
+        
+        System.out.println("\\n--- Comparison with Naive Implementation ---");
+        NaiveUnionFind naiveUf = new NaiveUnionFind(6);
+        naiveUf.union(0, 1);
+        naiveUf.union(2, 3);
+        naiveUf.union(1, 2);
+        System.out.println("Naive connected(0, 3): " + naiveUf.connected(0, 3));
+    }
+}`,
+        }}
         explanation="The find operation uses path compression to flatten the tree structure, making future finds faster. Union by size ensures the tree remains balanced. This gives us nearly constant time complexity for both operations."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Find and Union operations with optimizations. Find: locate root of element's set. Union: merge two sets. Support size tracking.",
+              details: [
+                "Find: return root with path compression",
+                "Union: merge sets by connecting roots",
+                "Track size of each component",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Path compression: during find, make all nodes point directly to root. Union by size: attach smaller tree to larger tree. This keeps tree balanced.",
+              keywords: [
+                "path compression",
+                "union by size",
+                "optimization",
+                "tree balancing",
+              ],
+              details: [
+                "Path compression: flatten tree during find",
+                "Union by size: keep tree balanced",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Parent array parent[n], size array size[n] to track component sizes. Root has parent[i] = i.",
+              details: [
+                "Parent array: tree structure",
+                "Size array: track component sizes",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Find: if parent[x] != x, recursively find(parent[x]) and set parent[x] = result. Union: find roots of x and y. If roots different, attach smaller size tree to larger, update size.",
+              details: [
+                "Find: O(α(n)) with path compression",
+                "Union: O(α(n)) with union by size",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(α(n)) per operation. Space O(n). Path compression and union by size ensure nearly constant time complexity.",
+              details: [
+                "Optimizations are essential for efficiency",
+                "Nearly constant time per operation",
+              ],
+            },
+          ],
+          pattern: "Union-Find with Optimizations",
+          complexity: {
+            time: "O(α(n)) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
@@ -610,7 +1247,8 @@ function OptimizationsSection() {
         difficulty="Medium"
         description="Implement union by rank optimization to keep the tree balanced and improve performance."
         duration="7 min, 40 sec"
-        solution={`// Union by Rank Optimization
+        solutions={{
+          JavaScript: `// Union by Rank Optimization
 
 class UnionFindRank {
   constructor(n) {
@@ -778,8 +1416,263 @@ console.log("Connected(2, 5):", ufRank.connected(2, 5));
 
 console.log("\\n--- Performance Comparison ---");
 console.log("Union by Rank - Final ranks:", ufRank.rank);
-console.log("Union by Rank - Component count:", ufRank.getCount());`}
+console.log("Union by Rank - Component count:", ufRank.getCount());`,
+          Java: `// Union by Rank Optimization
+
+class UnionFindRank {
+    private int[] parent;
+    private int[] rank;
+    private int count;
+    
+    public UnionFindRank(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        count = n;
+        
+        System.out.println("=== Union-Find with Union by Rank ===");
+        System.out.println("Number of elements: " + n);
+        
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            rank[i] = 0; // Initially all trees have rank 0
+        }
+        
+        System.out.print("Parent array: ");
+        printArray(parent);
+        System.out.print("Rank array: ");
+        printArray(rank);
+    }
+    
+    // Find with path compression
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+    
+    // Union by rank
+    public void union(int x, int y) {
+        System.out.println("\\n=== Union by Rank(" + x + ", " + y + ") ===");
+        
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        System.out.println("Root of " + x + " is " + rootX + " (rank: " + rank[rootX] + ")");
+        System.out.println("Root of " + y + " is " + rootY + " (rank: " + rank[rootY] + ")");
+        
+        if (rootX == rootY) {
+            System.out.println("Elements are already in the same set");
+            return;
+        }
+        
+        // Union by rank: attach tree with smaller rank to tree with larger rank
+        if (rank[rootX] < rank[rootY]) {
+            System.out.println("Rank of " + rootX + " (" + rank[rootX] + ") < rank of " + rootY + " (" + rank[rootY] + ")");
+            parent[rootX] = rootY;
+            System.out.println("Attaching " + rootX + " to " + rootY);
+            System.out.println("Rank of " + rootY + " remains " + rank[rootY]);
+        } else if (rank[rootX] > rank[rootY]) {
+            System.out.println("Rank of " + rootX + " (" + rank[rootX] + ") > rank of " + rootY + " (" + rank[rootY] + ")");
+            parent[rootY] = rootX;
+            System.out.println("Attaching " + rootY + " to " + rootX);
+            System.out.println("Rank of " + rootX + " remains " + rank[rootX]);
+        } else {
+            System.out.println("Ranks are equal (" + rank[rootX] + "), attaching " + rootY + " to " + rootX);
+            parent[rootY] = rootX;
+            rank[rootX]++;
+            System.out.println("Incrementing rank of " + rootX + " to " + rank[rootX]);
+        }
+        
+        count--;
+        System.out.println("Number of components: " + count);
+    }
+    
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+    
+    public int getCount() {
+        return count;
+    }
+    
+    // Get the rank of the tree containing x
+    public int getRank(int x) {
+        int root = find(x);
+        return rank[root];
+    }
+    
+    public void printState() {
+        System.out.println("\\n=== Current State ===");
+        System.out.print("Parent: ");
+        printArray(parent);
+        System.out.print("Rank: ");
+        printArray(rank);
+        System.out.println("Components: " + count);
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Comparison: Union by Size vs Union by Rank
+class UnionFindSize {
+    private int[] parent;
+    private int[] size;
+    private int count;
+    
+    public UnionFindSize(int n) {
+        parent = new int[n];
+        size = new int[n];
+        count = n;
+        
+        System.out.println("\\n=== Union-Find with Union by Size ===");
+        
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+    
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+    
+    public void union(int x, int y) {
+        int rootX = find(x);
+        int rootY = find(y);
+        
+        if (rootX == rootY) return;
+        
+        if (size[rootX] < size[rootY]) {
+            parent[rootX] = rootY;
+            size[rootY] += size[rootX];
+        } else {
+            parent[rootY] = rootX;
+            size[rootX] += size[rootY];
+        }
+        
+        count--;
+    }
+    
+    public boolean connected(int x, int y) {
+        return find(x) == find(y);
+    }
+}
+
+// Test cases
+public class UnionByRankTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Union by Rank ===");
+        
+        UnionFindRank ufRank = new UnionFindRank(8);
+        ufRank.printState();
+        
+        System.out.println("\\n--- Test Case 1: Building Balanced Tree ---");
+        ufRank.union(0, 1);
+        ufRank.printState();
+        
+        ufRank.union(2, 3);
+        ufRank.printState();
+        
+        ufRank.union(4, 5);
+        ufRank.printState();
+        
+        ufRank.union(6, 7);
+        ufRank.printState();
+        
+        System.out.println("\\n--- Test Case 2: Merging Equal Rank Trees ---");
+        ufRank.union(0, 2);
+        ufRank.printState();
+        
+        ufRank.union(4, 6);
+        ufRank.printState();
+        
+        System.out.println("\\n--- Test Case 3: Merging Different Rank Trees ---");
+        ufRank.union(0, 4);
+        ufRank.printState();
+        
+        System.out.println("\\n--- Test Case 4: Final Connectivity ---");
+        System.out.println("Connected(0, 7): " + ufRank.connected(0, 7));
+        System.out.println("Connected(1, 3): " + ufRank.connected(1, 3));
+        System.out.println("Connected(2, 5): " + ufRank.connected(2, 5));
+        
+        System.out.println("\\n--- Performance Comparison ---");
+        System.out.println("Union by Rank - Component count: " + ufRank.getCount());
+    }
+}`,
+        }}
         explanation="Union by rank keeps the tree balanced by always attaching the tree with smaller rank to the tree with larger rank. When ranks are equal, we choose arbitrarily and increment the rank. This ensures the tree height is O(log n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Union by Rank optimization. Rank represents approximate height of tree. Always attach smaller rank tree to larger rank tree to keep tree balanced.",
+              details: [
+                "Rank: approximate height of tree",
+                "Smaller rank → attach to larger rank",
+                "Equal ranks: choose arbitrarily, increment rank",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Rank array tracks tree height. During union, compare ranks. Attach smaller rank tree to larger rank tree. If ranks equal, increment rank of resulting tree.",
+              keywords: [
+                "union by rank",
+                "tree balancing",
+                "rank array",
+                "height optimization",
+              ],
+              details: [
+                "Rank: upper bound on tree height",
+                "Keeps tree balanced: O(log n) height",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Parent array parent[n] and rank array rank[n]. Initially rank[i] = 0 for all i.",
+              details: [
+                "Parent array: tree structure",
+                "Rank array: track tree heights",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Union: find roots of x and y. If roots different: if rank[rootX] < rank[rootY], attach rootX to rootY. Else if rank[rootX] > rank[rootY], attach rootY to rootX. Else attach arbitrarily and increment rank.",
+              details: [
+                "Always attach smaller to larger",
+                "Increment rank only when ranks equal",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(α(n)) per operation with path compression. Space O(n). Union by rank ensures O(log n) tree height without path compression, O(α(n)) with path compression.",
+              details: [
+                "Union by rank: essential optimization",
+                "Works well with path compression",
+              ],
+            },
+          ],
+          pattern: "Union by Rank",
+          complexity: {
+            time: "O(α(n)) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -979,6 +1872,67 @@ console.log("\\n--- Test Case 5: Performance Impact ---");
 console.log("With path compression - all elements point to root after finds");
 console.log("Without path compression - elements may form long chains");`}
         explanation="Path compression flattens the tree structure during find operations by making every node point directly to the root. This dramatically improves the performance of future find operations. Combined with union by rank, it gives us nearly constant time complexity."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Path Compression optimization. During find operation, make all nodes on path point directly to root, flattening the tree structure.",
+              details: [
+                "Path compression: flatten tree during find",
+                "All nodes on path point directly to root",
+                "Dramatically improves future find operations",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recursive find: if parent[x] != x, recursively find(parent[x]) and set parent[x] = result. This makes all nodes on path point directly to root.",
+              keywords: [
+                "path compression",
+                "tree flattening",
+                "recursive find",
+                "optimization",
+              ],
+              details: [
+                "Recursive find: flatten tree during traversal",
+                "One-time cost for future benefits",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Parent array parent[n]. Recursive find function that updates parent pointers during traversal.",
+              details: [
+                "Parent array: tree structure",
+                "Recursive find: update during traversal",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Find: if parent[x] == x, return x. Else recursively find(parent[x]), set parent[x] = result, return result. This flattens the path.",
+              details: [
+                "Recursive: update parent during return",
+                "All nodes on path point to root after find",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(α(n)) per operation. Space O(n) + O(h) recursion stack where h is tree height. Combined with union by rank, gives nearly constant time complexity.",
+              details: [
+                "Path compression: key optimization",
+                "Works best with union by rank",
+              ],
+            },
+          ],
+          pattern: "Path Compression",
+          complexity: {
+            time: "O(α(n)) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
@@ -1257,6 +2211,70 @@ console.log("Prim's MST weight:", primResult.weight);
 console.log("Kruskal's MST weight:", result1.weight);
 console.log("Weights match:", primResult.weight === result1.weight);`}
         explanation="Kruskal's algorithm finds the Minimum Spanning Tree by sorting all edges by weight and greedily adding the lightest edge that doesn't create a cycle. Union-Find efficiently detects cycles. Time complexity is O(E log E) due to sorting."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Find Minimum Spanning Tree (MST) of weighted graph. MST connects all vertices with minimum total weight. No cycles allowed.",
+              details: [
+                "Greedy algorithm: add lightest edges first",
+                "Must not create cycles",
+                "Must connect all vertices",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Sort all edges by weight. Process edges in order: if adding edge doesn't create cycle (vertices not already connected), add to MST. Union-Find efficiently checks connectivity.",
+              keywords: [
+                "kruskal's algorithm",
+                "MST",
+                "greedy",
+                "union-find",
+                "cycle detection",
+              ],
+              details: [
+                "Sort edges: O(E log E)",
+                "Union-Find: check if vertices connected",
+                "Add edge if not connected",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Union-Find data structure to track connected components. List of edges sorted by weight.",
+              details: [
+                "Union-Find: track connectivity",
+                "Sorted edges: process in order",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Sort edges by weight. For each edge (u, v, weight): if find(u) != find(v), add edge to MST and union(u, v). Continue until MST has V-1 edges.",
+              details: [
+                "Sort: O(E log E)",
+                "Process edges: O(E) operations",
+                "Union-Find: O(α(V)) per operation",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(E log E) - dominated by sorting. Space O(V) for Union-Find. More efficient than Prim's for sparse graphs.",
+              details: [
+                "Union-Find makes cycle detection efficient",
+                "Greedy approach guarantees optimal MST",
+              ],
+            },
+          ],
+          pattern: "Kruskal's Algorithm (MST)",
+          complexity: {
+            time: "O(E log E)",
+            space: "O(V)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1473,6 +2491,67 @@ console.log("Union-Find components:", components1);
 console.log("DFS components:", dfsComponents);
 console.log("Results match:", components1 === dfsComponents);`}
         explanation="Union-Find efficiently finds connected components by processing edges and merging sets. Each union operation reduces the component count. The final count gives us the number of connected components. Time complexity is O(E α(V)) where E is edges and V is vertices."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Count number of connected components in undirected graph. Initially, each vertex is its own component. Edges connect vertices.",
+              details: [
+                "Each vertex starts as separate component",
+                "Edges merge components",
+                "Count final number of components",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Process all edges: for each edge (u, v), if u and v are not connected, union them (merge components). Each union reduces component count by 1.",
+              keywords: [
+                "connected components",
+                "union-find",
+                "graph connectivity",
+                "component counting",
+              ],
+              details: [
+                "Process edges: merge components",
+                "Track count: decrement on union",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Union-Find data structure with count variable. Initially count = V (number of vertices).",
+              details: [
+                "Union-Find: track connectivity",
+                "Count: number of components",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Initialize Union-Find with V components. For each edge (u, v): if find(u) != find(v), union(u, v) and decrement count. Return count.",
+              details: [
+                "Process all edges: O(E)",
+                "Union-Find operations: O(α(V)) each",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(E α(V)) - process E edges, each union is O(α(V)). Space O(V). More efficient than DFS/BFS for dynamic connectivity.",
+              details: [
+                "Union-Find: efficient for connectivity",
+                "Better than DFS/BFS for multiple queries",
+              ],
+            },
+          ],
+          pattern: "Union-Find (Connected Components)",
+          complexity: {
+            time: "O(E α(V))",
+            space: "O(V)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
@@ -1634,6 +2713,64 @@ const edges3 = [[1, 2], [2, 3]];
 const redundant3 = rc3.findRedundantConnection(edges3);
 console.log("Redundant edge:", redundant3);`}
         explanation="To find redundant connections, we process edges one by one. If adding an edge creates a cycle (both vertices are already connected), that edge is redundant. Union-Find efficiently detects cycles in O(α(n)) time per operation."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Find redundant edge in graph. Redundant edge creates a cycle (connects two vertices already in same component). Return first redundant edge found.",
+              details: [
+                "Redundant edge: creates cycle",
+                "Both vertices already connected",
+                "Return first redundant edge",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Process edges in order. For each edge (u, v): if find(u) == find(v), edge is redundant (creates cycle). Otherwise union(u, v).",
+              keywords: [
+                "redundant connection",
+                "cycle detection",
+                "union-find",
+                "graph connectivity",
+              ],
+              details: [
+                "Cycle detection: check if vertices connected",
+                "Union-Find: efficient cycle detection",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Union-Find data structure to track connectivity. Process edges in given order.",
+              details: [
+                "Union-Find: track connected components",
+                "Process edges: maintain order",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Initialize Union-Find. For each edge (u, v): if find(u) == find(v), return edge (redundant). Else union(u, v). Continue until redundant edge found.",
+              details: ["Check connectivity: O(α(n))", "Union: O(α(n))"],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(E α(n)) where E is number of edges. Space O(n). Union-Find efficiently detects cycles in nearly constant time.",
+              details: [
+                "Efficient cycle detection",
+                "Better than DFS for this problem",
+              ],
+            },
+          ],
+          pattern: "Union-Find (Cycle Detection)",
+          complexity: {
+            time: "O(E α(n))",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1806,6 +2943,68 @@ for (let [row, col] of positions3) {
 
 console.log("\\nResult:", result3);`}
         explanation="For each land addition, we check all 4 neighboring cells. If a neighbor is land and not already connected, we merge the islands using Union-Find. The island count starts at 1 for each new land and decreases by 1 for each successful union operation."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Dynamic island counting: add land cells one by one, return island count after each addition. Islands are connected land cells (4-directional).",
+              details: [
+                "Start with empty grid",
+                "Add land cells incrementally",
+                "Count islands after each addition",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "For each new land: increment island count. Check 4 neighbors: if neighbor is land and not connected, union them and decrement count. Return count.",
+              keywords: [
+                "dynamic islands",
+                "union-find",
+                "incremental",
+                "4-directional connectivity",
+              ],
+              details: [
+                "New land: +1 to count",
+                "Merge with neighbors: -1 per merge",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Union-Find for connectivity. Grid to track land cells. Map 2D coordinates to 1D indices for Union-Find.",
+              details: [
+                "Union-Find: track island connectivity",
+                "Grid: track land/water",
+                "Coordinate mapping: 2D to 1D",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "For each new land at (r, c): mark grid[r][c] = 1, increment count. For each neighbor (nr, nc): if grid[nr][nc] == 1 and not connected, union current and neighbor, decrement count. Return count.",
+              details: [
+                "Check 4 neighbors: up, down, left, right",
+                "Union: merge islands",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(k α(mn)) where k is number of operations, m×n is grid size. Space O(mn). Union-Find efficiently handles dynamic connectivity.",
+              details: [
+                "Efficient for incremental updates",
+                "Better than BFS/DFS for dynamic problems",
+              ],
+            },
+          ],
+          pattern: "Union-Find (Dynamic Connectivity)",
+          complexity: {
+            time: "O(k α(mn))",
+            space: "O(mn)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">

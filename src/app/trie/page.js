@@ -58,14 +58,150 @@ export default function TriePage() {
   );
 }
 
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
+      <pre className="text-green-400 text-sm">
+        <code>{displayedCode}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-xl p-6 border border-blue-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework to solve this problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProblemBlock({
   title,
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -94,17 +230,50 @@ function ProblemBlock({
 
       <p className="text-gray-300 mb-4">{description}</p>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{solution}</code>
-            </pre>
-          </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <h4 className="text-blue-200 font-semibold mb-2">Explanation:</h4>
-            <p className="text-blue-100 text-sm">{explanation}</p>
-          </div>
+      {showSolution && codeData && (
+        <div>
+          {/* Tabs */}
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-green-400 border-b-2 border-green-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-green-400 border-b-2 border-green-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {/* Tab Content */}
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <CodeBlock code={codeData} defaultLanguage="JavaScript" />
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-200 font-semibold mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-100 text-sm">{explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
         </div>
       )}
     </div>
@@ -214,7 +383,8 @@ function IntroductionSection() {
         title="Trie Data Structure (Introduction)"
         difficulty="Easy"
         description="Basic implementation of Trie data structure with node definition and fundamental concepts."
-        solution={`// Trie Data Structure - Introduction
+        solutions={{
+          JavaScript: `// Trie Data Structure - Introduction
 
 class TrieNode {
   constructor() {
@@ -359,8 +529,229 @@ console.log("Starts with 'care':", trie.startsWith("care"));
 console.log("Starts with 'xyz':", trie.startsWith("xyz"));
 
 // Print all words
-trie.printAllWords();`}
+trie.printAllWords();`,
+          Java: `// Trie Data Structure - Introduction
+
+import java.util.*;
+
+class TrieNode {
+    Map<Character, TrieNode> children;
+    boolean isEndOfWord;
+    int count;
+    
+    TrieNode() {
+        children = new HashMap<>();
+        isEndOfWord = false;
+        count = 0;
+    }
+}
+
+class Trie {
+    private TrieNode root;
+    
+    Trie() {
+        root = new TrieNode();
+        System.out.println("Trie initialized with root node");
+    }
+    
+    // Insert a word into the trie
+    public void insert(String word) {
+        System.out.println("\\n=== Inserting word: '" + word + "' ===");
+        
+        TrieNode current = root;
+        System.out.println("Starting from root node");
+        
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            System.out.println("\\nProcessing character: '" + ch + "' (position " + i + ")");
+            
+            // If character doesn't exist, create new node
+            if (!current.children.containsKey(ch)) {
+                current.children.put(ch, new TrieNode());
+                System.out.println("  Created new node for character '" + ch + "'");
+            } else {
+                System.out.println("  Found existing node for character '" + ch + "'");
+            }
+            
+            // Move to child node
+            current = current.children.get(ch);
+            System.out.println("  Moved to child node");
+        }
+        
+        // Mark end of word
+        current.isEndOfWord = true;
+        current.count++;
+        System.out.println("  Marked end of word. Count: " + current.count);
+    }
+    
+    // Search for a word in the trie
+    public boolean search(String word) {
+        System.out.println("\\n=== Searching for word: '" + word + "' ===");
+        
+        TrieNode current = root;
+        System.out.println("Starting from root node");
+        
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+            System.out.println("\\nProcessing character: '" + ch + "' (position " + i + ")");
+            
+            if (!current.children.containsKey(ch)) {
+                System.out.println("  Character '" + ch + "' not found, word doesn't exist");
+                return false;
+            }
+            
+            current = current.children.get(ch);
+            System.out.println("  Found character '" + ch + "', moved to child node");
+        }
+        
+        boolean found = current.isEndOfWord;
+        System.out.println("  Reached end of path. isEndOfWord: " + found);
+        return found;
+    }
+    
+    // Check if any word starts with given prefix
+    public boolean startsWith(String prefix) {
+        System.out.println("\\n=== Checking prefix: '" + prefix + "' ===");
+        
+        TrieNode current = root;
+        System.out.println("Starting from root node");
+        
+        for (int i = 0; i < prefix.length(); i++) {
+            char ch = prefix.charAt(i);
+            System.out.println("\\nProcessing character: '" + ch + "' (position " + i + ")");
+            
+            if (!current.children.containsKey(ch)) {
+                System.out.println("  Character '" + ch + "' not found, prefix doesn't exist");
+                return false;
+            }
+            
+            current = current.children.get(ch);
+            System.out.println("  Found character '" + ch + "', moved to child node");
+        }
+        
+        System.out.println("  Prefix found");
+        return true;
+    }
+    
+    // Print all words in the trie
+    public List<String> printAllWords() {
+        System.out.println("\\n=== Printing all words in trie ===");
+        List<String> words = new ArrayList<>();
+        printAllWordsHelper(root, "", words);
+        System.out.println("All words: " + String.join(", ", words));
+        return words;
+    }
+    
+    private void printAllWordsHelper(TrieNode node, String currentWord, List<String> words) {
+        if (node.isEndOfWord) {
+            words.add(currentWord);
+            System.out.println("  Found word: '" + currentWord + "'");
+        }
+        
+        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+            printAllWordsHelper(entry.getValue(), currentWord + entry.getKey(), words);
+        }
+    }
+}
+
+// Test the Trie
+public class TrieTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Trie Data Structure ===");
+        Trie trie = new Trie();
+        
+        // Insert words
+        trie.insert("cat");
+        trie.insert("car");
+        trie.insert("card");
+        trie.insert("care");
+        trie.insert("careful");
+        trie.insert("carefully");
+        
+        // Search words
+        System.out.println("\\n=== Testing Search ===");
+        System.out.println("Search 'cat': " + trie.search("cat"));
+        System.out.println("Search 'car': " + trie.search("car"));
+        System.out.println("Search 'care': " + trie.search("care"));
+        System.out.println("Search 'careful': " + trie.search("careful"));
+        System.out.println("Search 'carefully': " + trie.search("carefully"));
+        System.out.println("Search 'carpet': " + trie.search("carpet"));
+        
+        // Test prefix search
+        System.out.println("\\n=== Testing Prefix Search ===");
+        System.out.println("Starts with 'ca': " + trie.startsWith("ca"));
+        System.out.println("Starts with 'car': " + trie.startsWith("car"));
+        System.out.println("Starts with 'care': " + trie.startsWith("care"));
+        System.out.println("Starts with 'xyz': " + trie.startsWith("xyz"));
+        
+        // Print all words
+        trie.printAllWords();
+    }
+}`,
+        }}
         explanation="Trie is a tree-like data structure where each node represents a character. The root to leaf path represents a complete word. Common prefixes are shared, making it efficient for string operations."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement basic Trie data structure with insert, search, and startsWith operations. Trie stores strings efficiently by sharing common prefixes.",
+              details: [
+                "Each node represents a character",
+                "Root to leaf path represents a complete word",
+                "Common prefixes are shared among words",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Tree structure: root node, each node has children (characters). Insert: traverse/create path. Search: traverse path, check end marker.",
+              keywords: [
+                "trie",
+                "prefix tree",
+                "tree structure",
+                "string operations",
+              ],
+              details: [
+                "Node structure: children map/array, isEndOfWord flag",
+                "Operations: insert, search, startsWith",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "TrieNode class with children (map or array of size 26 for lowercase letters) and isEndOfWord boolean. Root node to start.",
+              details: [
+                "Map representation: flexible, supports any characters",
+                "Array representation: fixed size, faster for lowercase letters",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Insert: traverse path character by character, create nodes if missing, mark last node as end. Search: traverse path, return true if path exists and last node is end. StartsWith: traverse path, return true if path exists.",
+              details: [
+                "Insert: O(m) where m is word length",
+                "Search: O(m) where m is word length",
+                "StartsWith: O(m) where m is prefix length",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m) for all operations where m is word/prefix length. Space O(ALPHABET_SIZE × N × M) where N is number of words, M is average length. Can optimize space with compressed tries.",
+              details: [
+                "Efficient for prefix matching and autocomplete",
+                "Space efficient when strings share common prefixes",
+              ],
+            },
+          ],
+          pattern: "Trie Data Structure",
+          complexity: {
+            time: "O(m) per operation",
+            space: "O(ALPHABET_SIZE × N × M)",
+          },
+        }}
       />
     </div>
   );
@@ -397,9 +788,9 @@ function RepresentationSection() {
           <h4 className="text-xl font-semibold text-blue-200 mb-3">
             Memory Representation:
           </h4>
-          <div className="bg-gray-900 rounded-lg p-4">
-            <pre className="text-green-400 text-sm">
-              {`// Array-based representation (for fixed alphabet)
+          <CodeBlock
+            code={{
+              JavaScript: `// Array-based representation (for fixed alphabet)
 class TrieNode {
   constructor() {
     this.children = new Array(26).fill(null); // For lowercase a-z
@@ -413,9 +804,32 @@ class TrieNode {
     this.children = {}; // Map of character to child nodes
     this.isEndOfWord = false;
   }
-}`}
-            </pre>
-          </div>
+}`,
+              Java: `// Array-based representation (for fixed alphabet)
+class TrieNode {
+    TrieNode[] children;
+    boolean isEndOfWord;
+    
+    TrieNode() {
+        children = new TrieNode[26]; // For lowercase a-z
+        isEndOfWord = false;
+    }
+}
+
+// Hash map-based representation (for any characters)
+import java.util.*;
+
+class TrieNode {
+    Map<Character, TrieNode> children;
+    boolean isEndOfWord;
+    
+    TrieNode() {
+        children = new HashMap<>();
+        isEndOfWord = false;
+    }
+}`,
+            }}
+          />
         </div>
       </div>
 
@@ -679,6 +1093,69 @@ trie.getWordFrequency("xyz");
 // Test total words
 trie.getTotalWords();`}
         explanation="Complete Trie implementation with hash map representation, detailed logging for each operation, frequency tracking, prefix counting, and comprehensive search functionality."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement complete Trie with advanced features: frequency tracking, prefix counting, word retrieval, and comprehensive operations.",
+              details: [
+                "Track frequency of each word",
+                "Count words with given prefix",
+                "Retrieve all words with prefix",
+                "Support multiple operations efficiently",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Enhanced TrieNode with frequency and prefixCount fields. Operations: insert (update counts), search (return frequency), getWordsWithPrefix (DFS from prefix node).",
+              keywords: [
+                "trie",
+                "frequency tracking",
+                "prefix counting",
+                "DFS traversal",
+              ],
+              details: [
+                "Node structure: children, isEndOfWord, frequency, prefixCount",
+                "Insert: increment frequency and prefixCount",
+                "Prefix search: navigate to prefix node, collect all words",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "TrieNode with Map<Character, TrieNode> children, boolean isEndOfWord, int frequency, int prefixCount. Root node to start.",
+              details: [
+                "Map representation for flexible character support",
+                "Additional fields for enhanced functionality",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Insert: traverse path, increment prefixCount at each node, increment frequency at end node. GetWordsWithPrefix: navigate to prefix node, DFS to collect all words. GetPrefixCount: navigate to prefix node, return prefixCount.",
+              details: [
+                "Insert: O(m) time, update counts at each level",
+                "Prefix operations: O(m) to navigate + O(k) to collect words",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m) for insert/search, O(m + k) for prefix operations where k is number of words with prefix. Space O(ALPHABET_SIZE × N × M). Enhanced features add minimal overhead.",
+              details: [
+                "Frequency tracking enables ranking and suggestions",
+                "Prefix counting enables efficient autocomplete",
+              ],
+            },
+          ],
+          pattern: "Enhanced Trie with Frequency Tracking",
+          complexity: {
+            time: "O(m) for basic ops, O(m + k) for prefix ops",
+            space: "O(ALPHABET_SIZE × N × M)",
+          },
+        }}
       />
     </div>
   );
@@ -991,6 +1468,67 @@ console.log("\\n--- Testing Non-existent Word Deletion ---");
 trie.delete("xyz");
 trie.printAllWords();`}
         explanation="Trie deletion requires careful handling to avoid removing nodes that are part of other words. The algorithm recursively deletes nodes only when they have no children and don't represent the end of another word."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Delete a word from Trie. Must be careful not to remove nodes that are part of other words. Only delete nodes that are not needed.",
+              details: [
+                "Example: delete 'help' from trie containing 'help' and 'helping'",
+                "Should not delete nodes shared with 'helping'",
+                "Only delete nodes unique to 'help'",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recursive deletion: traverse to word end, mark as not end, recursively delete nodes from leaf to root. Only delete if node has no children and is not end of another word.",
+              keywords: [
+                "trie deletion",
+                "recursive",
+                "backtracking",
+                "node cleanup",
+              ],
+              details: [
+                "Bottom-up deletion: delete from leaf to root",
+                "Check conditions before deleting each node",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Recursive helper function. Check if word exists first, then delete recursively.",
+              details: [
+                "Base case: reached end of word",
+                "Recursive case: delete child, then check if current node can be deleted",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "If word doesn't exist, return false. Traverse to end of word. Mark end node as not end. Recursively: if current node has no children and is not end, delete it and return true. Otherwise return false.",
+              details: [
+                "Delete from leaf to root (post-order)",
+                "Only delete if node is not needed by other words",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m) where m is word length. Space O(m) for recursion stack. Can optimize to iterative with stack to avoid recursion overhead.",
+              details: [
+                "Efficient deletion maintains trie structure",
+                "Iterative version uses O(1) space",
+              ],
+            },
+          ],
+          pattern: "Trie Deletion (Recursive)",
+          complexity: {
+            time: "O(m)",
+            space: "O(m) recursive, O(1) iterative",
+          },
+        }}
       />
     </div>
   );
@@ -1218,6 +1756,66 @@ console.log("\\n--- Test Case 3 ---");
 countDistinctRows(matrix3);
 countDistinctRowsSet(matrix3);`}
         explanation="Using Trie to count distinct rows in binary matrix: each row is treated as a string of 0s and 1s. Trie efficiently stores and checks for duplicate rows. Time: O(m×n), Space: O(m×n) where m=rows, n=columns."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Count distinct rows in binary matrix. Each row is a sequence of 0s and 1s. Need to identify unique rows efficiently.",
+              details: [
+                "Example: matrix with rows [1,0,1], [1,0,1], [0,1,0] → 2 distinct rows",
+                "Treat each row as a string of bits",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Treat each row as a string (0s and 1s). Insert rows into Trie. If row already exists, it's duplicate. Count distinct rows.",
+              keywords: [
+                "trie",
+                "binary matrix",
+                "distinct rows",
+                "string matching",
+              ],
+              details: [
+                "Each row is a string of characters '0' and '1'",
+                "Trie efficiently checks if row exists",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Trie with nodes having children for '0' and '1'. Mark end of row with isEndOfRow flag. Counter for distinct rows.",
+              details: [
+                "Binary trie: only two children per node",
+                "Track if row is new or duplicate",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "For each row: traverse/create path in Trie bit by bit. If row ends at existing node, it's duplicate. If new path created, increment distinct count. Mark end of row.",
+              details: [
+                "Insert each row into Trie",
+                "Count only rows that create new paths",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m×n) - process each element once. Space O(m×n) for Trie. More space-efficient than storing all rows when many duplicates exist.",
+              details: [
+                "Trie shares common prefixes, saving space",
+                "Alternative: use Set with row strings for simpler code",
+              ],
+            },
+          ],
+          pattern: "Trie for Distinctness Checking",
+          complexity: {
+            time: "O(m×n)",
+            space: "O(m×n)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
@@ -1451,6 +2049,62 @@ const words3 = ["aaa"];
 console.log("\\n--- Test Case 3 ---");
 findWords(board3, words3);`}
         explanation="Word search using Trie: build trie from dictionary words, then use DFS to explore all paths in the grid. Trie allows early termination when no valid path exists. Time: O(m×n×4^L), Space: O(W×L) where W=words, L=max word length."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Find all words from dictionary that exist in 2D grid. Words can be formed by moving horizontally/vertically to adjacent cells. Each cell can be used only once per word.",
+              details: [
+                "Example: grid with 'a','b','c', dictionary=['abc','abd']",
+                "Words can be found in any direction",
+                "Each cell can be used once per word",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Build Trie from dictionary words. For each cell in grid, DFS to explore all paths. Use Trie to check if current path is valid prefix. Early termination when no valid path exists.",
+              keywords: ["trie", "DFS", "backtracking", "2D grid search"],
+              details: [
+                "Trie enables early pruning of invalid paths",
+                "DFS explores all possible paths from each cell",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Trie built from dictionary. Visited matrix to track used cells. DFS with backtracking.",
+              details: [
+                "Trie: efficient prefix checking",
+                "Visited array: mark cells used in current path",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Build Trie from dictionary. For each cell: DFS starting from that cell. In DFS: if current path forms word, add to result. If Trie path doesn't exist, backtrack. Mark cell as visited, explore 4 directions, unmark cell.",
+              details: [
+                "Trie allows early termination",
+                "Backtracking: mark/unmark cells",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m×n×4^L) worst case where L is max word length. Space O(W×L) for Trie, O(m×n) for visited. Trie optimization: remove found words from Trie to avoid duplicates.",
+              details: [
+                "Trie significantly reduces search space",
+                "Early termination improves practical performance",
+              ],
+            },
+          ],
+          pattern: "Trie + DFS (2D Grid Search)",
+          complexity: {
+            time: "O(m×n×4^L)",
+            space: "O(W×L)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1628,6 +2282,66 @@ const strings5 = ["", "b"];
 console.log("\\n--- Test Case 5 ---");
 longestCommonPrefix(strings5);`}
         explanation="Longest common prefix using Trie: insert all strings, then traverse from root until we find a node with multiple children or end of word. Time: O(S) where S is sum of all characters, Space: O(S)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Find longest common prefix among all strings. Prefix is shared by all strings from the beginning.",
+              details: [
+                "Example: ['flower','flow','flight'] → 'fl'",
+                "If no common prefix, return empty string",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Insert all strings into Trie. Traverse from root, following common path. Stop when node has multiple children (divergence) or end of word marker.",
+              keywords: [
+                "trie",
+                "common prefix",
+                "prefix matching",
+                "string comparison",
+              ],
+              details: [
+                "Common prefix = shared path from root",
+                "Divergence = multiple children or end of word",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Trie with all strings inserted. Traverse from root, track path length, stop at divergence.",
+              details: [
+                "Trie naturally shares common prefixes",
+                "Track current path to build result",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Insert all strings into Trie. Start at root. While current node has exactly one child and is not end of word: move to child, append character to prefix. Return prefix when node has multiple children or is end of word.",
+              details: [
+                "Single child = common character",
+                "Multiple children = divergence, prefix ends",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(S) where S is sum of all characters (insert all strings). Space O(S) for Trie. Alternative: compare strings directly O(N×M) where N is number of strings, M is min length.",
+              details: [
+                "Trie approach is efficient for many strings",
+                "Direct comparison is simpler for few strings",
+              ],
+            },
+          ],
+          pattern: "Trie for Common Prefix",
+          complexity: {
+            time: "O(S)",
+            space: "O(S)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1873,6 +2587,69 @@ console.log("End of input, suggestions: " + suggestions.join(", "));
 // Print all words after learning
 autoComplete.printAllWords();`}
         explanation="Auto-complete system using Trie: store words with frequencies, navigate to prefix node, collect all words from that node, sort by frequency and return top suggestions. Supports learning by updating frequencies."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement auto-complete system: given user input prefix, suggest top words that start with prefix. Rank suggestions by frequency (popularity).",
+              details: [
+                "Example: input 'hel' → suggest ['hello','help','helping']",
+                "Suggestions sorted by frequency (most popular first)",
+                "Support learning: update frequency when word is selected",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Trie stores words with frequency. For prefix: navigate to prefix node, DFS to collect all words from that node, sort by frequency, return top k.",
+              keywords: [
+                "trie",
+                "autocomplete",
+                "frequency ranking",
+                "prefix search",
+              ],
+              details: [
+                "Store frequency in TrieNode",
+                "Navigate to prefix, then collect words",
+                "Sort and return top suggestions",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Trie with frequency in each node. AutoComplete class that maintains current input and provides suggestions.",
+              details: [
+                "TrieNode: children, isEndOfWord, frequency",
+                "AutoComplete: trie, currentInput string",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Insert words with initial frequency. For suggestions: navigate to prefix node, DFS from that node to collect all words with frequencies, sort by frequency descending, return top k. For learning: when word selected, increment its frequency in Trie.",
+              details: [
+                "Navigate: O(m) where m is prefix length",
+                "Collect: O(k) where k is words with prefix",
+                "Sort: O(k log k)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(m + k log k) for suggestions where m is prefix length, k is candidates. Space O(W×L) for Trie. Can optimize with caching frequently accessed prefixes.",
+              details: [
+                "Efficient for real-time autocomplete",
+                "Learning feature improves suggestions over time",
+              ],
+            },
+          ],
+          pattern: "Trie for Autocomplete",
+          complexity: {
+            time: "O(m + k log k)",
+            space: "O(W×L)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">

@@ -58,14 +58,150 @@ export default function BacktrackingPage() {
   );
 }
 
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-purple-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
+      <pre className="text-green-400 text-sm">
+        <code>{displayedCode}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-xl p-6 border border-blue-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework to solve this problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProblemBlock({
   title,
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -94,17 +230,50 @@ function ProblemBlock({
 
       <p className="text-gray-300 mb-4">{description}</p>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{solution}</code>
-            </pre>
-          </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <h4 className="text-blue-200 font-semibold mb-2">Explanation:</h4>
-            <p className="text-blue-100 text-sm">{explanation}</p>
-          </div>
+      {showSolution && codeData && (
+        <div>
+          {/* Tabs */}
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {/* Tab Content */}
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <CodeBlock code={codeData} defaultLanguage="JavaScript" />
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-200 font-semibold mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-100 text-sm">{explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
         </div>
       )}
     </div>
@@ -160,9 +329,9 @@ function ConceptsSection() {
           <h4 className="text-lg font-semibold text-white mb-3">
             Backtracking Algorithm Template:
           </h4>
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{`// General Backtracking Template
+          <CodeBlock
+            code={{
+              JavaScript: `// General Backtracking Template
 
 function backtrack(problem, currentSolution, step) {
   // Base case: check if we have a complete solution
@@ -211,9 +380,77 @@ function generateChoices(problem, solution, step) {
 function processSolution(solution) {
   // Process a complete valid solution
   console.log("Solution found:", solution);
-}`}</code>
-            </pre>
-          </div>
+}`,
+              Java: `import java.util.*;
+
+// General Backtracking Template
+public class BacktrackingTemplate {
+    // General backtracking method
+    public static void backtrack(List<Object> problem, List<Object> currentSolution, int step) {
+        // Base case: check if we have a complete solution
+        if (isComplete(currentSolution)) {
+            if (isValid(currentSolution)) {
+                processSolution(currentSolution);
+            }
+            return;
+        }
+        
+        // Generate all possible choices for current step
+        List<Object> choices = generateChoices(problem, currentSolution, step);
+        
+        // Try each choice
+        for (Object choice : choices) {
+            // Make the choice
+            if (currentSolution.size() <= step) {
+                currentSolution.add(choice);
+            } else {
+                currentSolution.set(step, choice);
+            }
+            
+            // Check if this choice is valid so far
+            if (isValid(currentSolution, step)) {
+                // Recursively explore with this choice
+                backtrack(problem, currentSolution, step + 1);
+            }
+            
+            // Backtrack: undo the choice
+            if (currentSolution.size() > step) {
+                currentSolution.set(step, null); // or remove the choice
+            }
+        }
+    }
+    
+    // Helper functions to implement based on problem
+    private static boolean isComplete(List<Object> solution) {
+        // Check if solution is complete
+        return true; // Implement based on problem
+    }
+    
+    private static boolean isValid(List<Object> solution, Integer step) {
+        // Check if current partial solution is valid
+        return true; // Implement based on problem
+    }
+    
+    private static List<Object> generateChoices(List<Object> problem, List<Object> solution, int step) {
+        // Generate all possible choices for current step
+        return new ArrayList<>(); // Implement based on problem
+    }
+    
+    private static void processSolution(List<Object> solution) {
+        // Process a complete valid solution
+        System.out.println("Solution found: " + solution);
+    }
+    
+    public static void main(String[] args) {
+        List<Object> problem = new ArrayList<>();
+        List<Object> currentSolution = new ArrayList<>();
+        
+        System.out.println("Backtracking Template Example");
+        backtrack(problem, currentSolution, 0);
+    }
+}`,
+            }}
+          />
         </div>
 
         <div className="mt-6 bg-gray-700 rounded-lg p-4">
@@ -312,7 +549,8 @@ function RatMazeSection() {
         title="Rat in a Maze - Basic Implementation"
         difficulty="Medium"
         description="Find a path for a rat to reach the destination in a maze. The rat can move in 4 directions: up, down, left, right."
-        solution={`// Rat in a Maze Problem
+        solutions={{
+          JavaScript: `// Rat in a Maze Problem
 
 function ratInMaze(maze) {
   console.log("=== Rat in a Maze Problem ===");
@@ -442,15 +680,227 @@ console.log("\\n--- Test Case 2 ---");
 ratInMaze([...maze2]);
 
 console.log("\\n--- Finding All Paths for Maze 1 ---");
-findAllPaths([...maze1]);`}
+findAllPaths([...maze1]);`,
+          Java: `import java.util.*;
+
+public class RatInMaze {
+    // Rat in a Maze Problem
+    public static int[][] ratInMaze(int[][] maze) {
+        System.out.println("=== Rat in a Maze Problem ===");
+        System.out.println("Maze:");
+        for (int[] row : maze) {
+            System.out.println(Arrays.toString(row));
+        }
+        
+        int n = maze.length;
+        int[][] solution = new int[n][n];
+        int[][] directions = {
+            {-1, 0}, // Up
+            {1, 0},  // Down
+            {0, -1}, // Left
+            {0, 1}   // Right
+        };
+        
+        System.out.println("\\nStarting from (0,0) to reach (" + (n-1) + "," + (n-1) + ")");
+        
+        if (solveMaze(maze, solution, 0, 0, n, directions)) {
+            System.out.println("\\n=== Solution Found ===");
+            System.out.println("Path matrix:");
+            for (int[] row : solution) {
+                System.out.println(Arrays.toString(row));
+            }
+            return solution;
+        } else {
+            System.out.println("\\n=== No Solution Found ===");
+            return null;
+        }
+    }
+    
+    private static boolean isValid(int[][] maze, int x, int y, int n) {
+        return x >= 0 && x < n && y >= 0 && y < n && maze[x][y] == 1;
+    }
+    
+    private static boolean solveMaze(int[][] maze, int[][] solution, int x, int y, int n, int[][] directions) {
+        System.out.println("\\nTrying position (" + x + "," + y + ")");
+        
+        // Base case: reached destination
+        if (x == n - 1 && y == n - 1) {
+            solution[x][y] = 1;
+            System.out.println("✓ Reached destination!");
+            return true;
+        }
+        
+        // Check if current position is valid
+        if (!isValid(maze, x, y, n)) {
+            System.out.println("✗ Invalid position (" + x + "," + y + ")");
+            return false;
+        }
+        
+        // Mark current position as part of solution path
+        solution[x][y] = 1;
+        System.out.println("✓ Marked (" + x + "," + y + ") as part of path");
+        
+        // Try all 4 directions
+        for (int[] dir : directions) {
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+            
+            System.out.println("  Trying direction: (" + dir[0] + "," + dir[1] + ") -> (" + newX + "," + newY + ")");
+            
+            if (solveMaze(maze, solution, newX, newY, n, directions)) {
+                return true;
+            }
+        }
+        
+        // If no direction works, backtrack
+        solution[x][y] = 0;
+        System.out.println("✗ Backtracking from (" + x + "," + y + ")");
+        return false;
+    }
+    
+    // Alternative: Find all possible paths
+    public static List<List<String>> findAllPaths(int[][] maze) {
+        System.out.println("\\n=== Finding All Possible Paths ===");
+        
+        int n = maze.length;
+        List<List<String>> allPaths = new ArrayList<>();
+        List<String> currentPath = new ArrayList<>();
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        findPaths(maze, allPaths, currentPath, 0, 0, n, directions);
+        
+        System.out.println("Total paths found: " + allPaths.size());
+        return allPaths;
+    }
+    
+    private static void findPaths(int[][] maze, List<List<String>> allPaths, 
+                                   List<String> currentPath, int x, int y, int n, int[][] directions) {
+        if (x == n - 1 && y == n - 1) {
+            allPaths.add(new ArrayList<>(currentPath));
+            System.out.println("Found path: " + String.join(" -> ", currentPath));
+            return;
+        }
+        
+        if (!isValid(maze, x, y, n)) return;
+        
+        currentPath.add("(" + x + "," + y + ")");
+        
+        // Try all 4 directions
+        for (int[] dir : directions) {
+            findPaths(maze, allPaths, currentPath, x + dir[0], y + dir[1], n, directions);
+        }
+        
+        currentPath.remove(currentPath.size() - 1); // Backtrack
+    }
+    
+    private static boolean isValid(int[][] maze, int x, int y, int n) {
+        return x >= 0 && x < n && y >= 0 && y < n && maze[x][y] == 1;
+    }
+    
+    public static void main(String[] args) {
+        int[][] maze1 = {
+            {1, 0, 0, 0},
+            {1, 1, 0, 1},
+            {0, 1, 0, 0},
+            {1, 1, 1, 1}
+        };
+        
+        int[][] maze2 = {
+            {1, 1, 1},
+            {1, 0, 1},
+            {0, 1, 1}
+        };
+        
+        System.out.println("=== Testing Rat in a Maze ===");
+        System.out.println("\\n--- Test Case 1 ---");
+        ratInMaze(copyMaze(maze1));
+        
+        System.out.println("\\n--- Test Case 2 ---");
+        ratInMaze(copyMaze(maze2));
+        
+        System.out.println("\\n--- Finding All Paths for Maze 1 ---");
+        findAllPaths(copyMaze(maze1));
+    }
+    
+    private static int[][] copyMaze(int[][] maze) {
+        int[][] copy = new int[maze.length][];
+        for (int i = 0; i < maze.length; i++) {
+            copy[i] = Arrays.copyOf(maze[i], maze[i].length);
+        }
+        return copy;
+    }
+}`,
+        }}
         explanation="Backtracking approach: try all 4 directions from current position, mark path as you go, backtrack if no valid path found. Time: O(4^(n²)), Space: O(n²)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Find a path from top-left (0,0) to bottom-right (n-1,n-1) in a maze where 1 = open cell, 0 = blocked cell.",
+              details: [
+                "Rat can move in 4 directions: up, down, left, right",
+                "Must stay within maze boundaries",
+                "Return solution matrix showing the path (1 = path, 0 = not in path)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking: explore all possible paths, mark current cell, try all directions, backtrack if dead end.",
+              keywords: [
+                "backtracking",
+                "recursive exploration",
+                "path finding",
+                "maze traversal",
+              ],
+              details: [
+                "State space tree: each node represents a position, children are 4 directions",
+                "Prune paths that go out of bounds or hit blocked cells",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "2D solution matrix to track path; maze matrix for input; recursion stack for backtracking.",
+              details: [
+                "Solution matrix initialized to all zeros",
+                "Mark cells as 1 when part of path, 0 when backtracking",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Base case: if (x,y) == (n-1,n-1), mark and return true. If invalid cell, return false. Mark current cell, try all 4 directions recursively. If all fail, unmark and return false.",
+              details: [
+                "Try directions in order: up, down, left, right",
+                "Return immediately on first valid path found",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time complexity is exponential O(4^(n²)) in worst case. Space O(n²) for solution matrix and recursion stack.",
+              details: [
+                "Can optimize with visited array to avoid revisiting cells",
+                "For finding all paths, don't return early; collect all solutions",
+              ],
+            },
+          ],
+          pattern: "Backtracking Path Finding",
+          complexity: {
+            time: "O(4^(n²)) worst case",
+            space: "O(n²)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Rat in a Maze - Optimized with Visited Array"
         difficulty="Medium"
         description="Optimized version that uses a visited array to avoid revisiting the same cell multiple times."
-        solution={`// Rat in a Maze - Optimized Version
+        solutions={{
+          JavaScript: `// Rat in a Maze - Optimized Version
 
 function ratInMazeOptimized(maze) {
   console.log("=== Rat in a Maze - Optimized Version ===");
@@ -608,8 +1058,253 @@ const maze = [
 console.log("=== Testing Optimized Rat in a Maze ===");
 ratInMazeOptimized([...maze]);
 countPaths([...maze]);
-shortestPathLength([...maze]);`}
+shortestPathLength([...maze]);`,
+          Java: `import java.util.*;
+
+public class RatInMazeOptimized {
+    // Rat in a Maze - Optimized Version
+    public static int[][] ratInMazeOptimized(int[][] maze) {
+        System.out.println("=== Rat in a Maze - Optimized Version ===");
+        System.out.println("Maze:");
+        for (int[] row : maze) {
+            System.out.println(Arrays.toString(row));
+        }
+        
+        int n = maze.length;
+        int[][] solution = new int[n][n];
+        boolean[][] visited = new boolean[n][n];
+        int[][] directions = {
+            {-1, 0}, // Up
+            {1, 0},  // Down
+            {0, -1}, // Left
+            {0, 1}   // Right
+        };
+        
+        if (solveMaze(maze, solution, visited, 0, 0, n, directions)) {
+            System.out.println("\\n=== Solution Found ===");
+            System.out.println("Path matrix:");
+            for (int[] row : solution) {
+                System.out.println(Arrays.toString(row));
+            }
+            System.out.println("Visited matrix:");
+            for (boolean[] row : visited) {
+                System.out.println(Arrays.toString(row));
+            }
+            return solution;
+        } else {
+            System.out.println("\\n=== No Solution Found ===");
+            return null;
+        }
+    }
+    
+    private static boolean isValid(int[][] maze, int x, int y, int n, boolean[][] visited) {
+        return x >= 0 && x < n && y >= 0 && y < n && 
+               maze[x][y] == 1 && !visited[x][y];
+    }
+    
+    private static boolean solveMaze(int[][] maze, int[][] solution, boolean[][] visited, 
+                                      int x, int y, int n, int[][] directions) {
+        System.out.println("\\nTrying position (" + x + "," + y + ")");
+        
+        // Base case: reached destination
+        if (x == n - 1 && y == n - 1) {
+            solution[x][y] = 1;
+            System.out.println("✓ Reached destination!");
+            return true;
+        }
+        
+        // Check if current position is valid
+        if (!isValid(maze, x, y, n, visited)) {
+            System.out.println("✗ Invalid position (" + x + "," + y + ")");
+            return false;
+        }
+        
+        // Mark current position as visited and part of solution
+        visited[x][y] = true;
+        solution[x][y] = 1;
+        System.out.println("✓ Marked (" + x + "," + y + ") as visited and part of path");
+        
+        // Try all 4 directions
+        for (int[] dir : directions) {
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+            
+            System.out.println("  Trying direction: (" + dir[0] + "," + dir[1] + ") -> (" + newX + "," + newY + ")");
+            
+            if (solveMaze(maze, solution, visited, newX, newY, n, directions)) {
+                return true;
+            }
+        }
+        
+        // If no direction works, backtrack
+        visited[x][y] = false;
+        solution[x][y] = 0;
+        System.out.println("✗ Backtracking from (" + x + "," + y + ")");
+        return false;
+    }
+    
+    // Count number of paths
+    public static int countPaths(int[][] maze) {
+        System.out.println("\\n=== Counting Number of Paths ===");
+        
+        int n = maze.length;
+        boolean[][] visited = new boolean[n][n];
+        int[] pathCount = {0};
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        countPathsRecursive(maze, visited, 0, 0, n, pathCount, directions);
+        
+        System.out.println("Total paths: " + pathCount[0]);
+        return pathCount[0];
+    }
+    
+    private static void countPathsRecursive(int[][] maze, boolean[][] visited, 
+                                            int x, int y, int n, int[] pathCount, int[][] directions) {
+        if (x == n - 1 && y == n - 1) {
+            pathCount[0]++;
+            System.out.println("Found path #" + pathCount[0]);
+            return;
+        }
+        
+        if (x < 0 || x >= n || y < 0 || y >= n || 
+            maze[x][y] == 0 || visited[x][y]) {
+            return;
+        }
+        
+        visited[x][y] = true;
+        
+        // Try all 4 directions
+        for (int[] dir : directions) {
+            countPathsRecursive(maze, visited, x + dir[0], y + dir[1], n, pathCount, directions);
+        }
+        
+        visited[x][y] = false; // Backtrack
+    }
+    
+    // Find shortest path length
+    public static int shortestPathLength(int[][] maze) {
+        System.out.println("\\n=== Finding Shortest Path Length ===");
+        
+        int n = maze.length;
+        boolean[][] visited = new boolean[n][n];
+        int[] minLength = {Integer.MAX_VALUE};
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        
+        findShortestPath(maze, visited, 0, 0, 1, n, minLength, directions);
+        
+        System.out.println("Shortest path length: " + 
+                         (minLength[0] == Integer.MAX_VALUE ? "No path" : minLength[0]));
+        return minLength[0] == Integer.MAX_VALUE ? -1 : minLength[0];
+    }
+    
+    private static void findShortestPath(int[][] maze, boolean[][] visited, 
+                                         int x, int y, int length, int n, 
+                                         int[] minLength, int[][] directions) {
+        if (x == n - 1 && y == n - 1) {
+            minLength[0] = Math.min(minLength[0], length);
+            System.out.println("Found path with length: " + length);
+            return;
+        }
+        
+        if (x < 0 || x >= n || y < 0 || y >= n || 
+            maze[x][y] == 0 || visited[x][y]) {
+            return;
+        }
+        
+        visited[x][y] = true;
+        
+        // Try all 4 directions
+        for (int[] dir : directions) {
+            findShortestPath(maze, visited, x + dir[0], y + dir[1], length + 1, n, minLength, directions);
+        }
+        
+        visited[x][y] = false; // Backtrack
+    }
+    
+    public static void main(String[] args) {
+        int[][] maze = {
+            {1, 0, 0, 0},
+            {1, 1, 0, 1},
+            {0, 1, 0, 0},
+            {1, 1, 1, 1}
+        };
+        
+        System.out.println("=== Testing Optimized Rat in a Maze ===");
+        ratInMazeOptimized(copyMaze(maze));
+        countPaths(copyMaze(maze));
+        shortestPathLength(copyMaze(maze));
+    }
+    
+    private static int[][] copyMaze(int[][] maze) {
+        int[][] copy = new int[maze.length][];
+        for (int i = 0; i < maze.length; i++) {
+            copy[i] = Arrays.copyOf(maze[i], maze[i].length);
+        }
+        return copy;
+    }
+}`,
+        }}
         explanation="Optimized version uses visited array to avoid revisiting cells, reducing redundant exploration. Still exponential time complexity but with better practical performance."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Same problem as basic version, but optimize by tracking visited cells to avoid redundant exploration.",
+              details: [
+                "Visited array prevents revisiting same cell multiple times",
+                "Improves practical performance even though worst-case complexity remains exponential",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking with memoization: use visited array to prune already-explored paths.",
+              keywords: [
+                "backtracking",
+                "visited tracking",
+                "path pruning",
+                "optimization",
+              ],
+              details: [
+                "Mark cell as visited before exploring, unmark when backtracking",
+                "Skip cells that are already visited",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "2D visited boolean array; solution matrix; recursion stack.",
+              details: [
+                "Visited array same size as maze",
+                "Initialize all cells to false",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Before exploring, check if cell is valid and not visited. Mark as visited, try directions, unmark when backtracking.",
+              details: [
+                "Visited check happens before recursive calls",
+                "Unmarking allows cell to be part of different paths if finding all paths",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Reduces redundant exploration significantly. Can also find all paths or shortest path by modifying base case and tracking path length.",
+              details: [
+                "For all paths: don't return early, collect all solutions",
+                "For shortest path: track current path length, update minimum",
+              ],
+            },
+          ],
+          pattern: "Backtracking with Visited Tracking",
+          complexity: {
+            time: "O(4^(n²)) worst case, better practical performance",
+            space: "O(n²)",
+          },
+        }}
       />
     </div>
   );
@@ -624,7 +1319,8 @@ function NQueenSection() {
         title="N Queen Problem - Basic Implementation"
         difficulty="Hard"
         description="Place N queens on an N×N chessboard such that no two queens attack each other. Queens can attack horizontally, vertically, and diagonally."
-        solution={`// N Queen Problem
+        solutions={{
+          JavaScript: `// N Queen Problem
 
 function solveNQueens(n) {
   console.log("=== N Queen Problem for N = " + n + " ===");
@@ -767,15 +1463,239 @@ console.log("\\n--- N = 4 ---");
 solveNQueens(4);
 
 console.log("\\n--- N = 8 (All Solutions) ---");
-findAllSolutions(8);`}
+findAllSolutions(8);`,
+          Java: `import java.util.*;
+
+public class NQueen {
+    // N Queen Problem
+    public static List<int[][]> solveNQueens(int n) {
+        System.out.println("=== N Queen Problem for N = " + n + " ===");
+        
+        int[][] board = new int[n][n];
+        List<int[][]> solutions = new ArrayList<>();
+        
+        if (solveNQueensRecursive(board, 0, n, solutions)) {
+            System.out.println("\\nTotal solutions found: " + solutions.size());
+            return solutions;
+        } else {
+            System.out.println("\\nNo solution found");
+            return solutions;
+        }
+    }
+    
+    private static boolean isSafe(int[][] board, int row, int col, int n) {
+        System.out.println("Checking if safe to place queen at (" + row + "," + col + ")");
+        
+        // Check column
+        for (int i = 0; i < row; i++) {
+            if (board[i][col] == 1) {
+                System.out.println("  ✗ Column " + col + " already has queen at row " + i);
+                return false;
+            }
+        }
+        
+        // Check upper left diagonal
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1) {
+                System.out.println("  ✗ Upper left diagonal has queen at (" + i + "," + j + ")");
+                return false;
+            }
+        }
+        
+        // Check upper right diagonal
+        for (int i = row, j = col; i >= 0 && j < n; i--, j++) {
+            if (board[i][j] == 1) {
+                System.out.println("  ✗ Upper right diagonal has queen at (" + i + "," + j + ")");
+                return false;
+            }
+        }
+        
+        System.out.println("  ✓ Safe to place queen at (" + row + "," + col + ")");
+        return true;
+    }
+    
+    private static boolean solveNQueensRecursive(int[][] board, int row, int n, List<int[][]> solutions) {
+        System.out.println("\\nTrying to place queen in row " + row);
+        
+        // Base case: all queens placed
+        if (row == n) {
+            System.out.println("✓ All queens placed successfully!");
+            int[][] solution = new int[n][n];
+            for (int i = 0; i < n; i++) {
+                solution[i] = Arrays.copyOf(board[i], n);
+            }
+            solutions.add(solution);
+            printBoard(board);
+            return true;
+        }
+        
+        // Try placing queen in each column of current row
+        for (int col = 0; col < n; col++) {
+            System.out.println("  Trying column " + col + " in row " + row);
+            
+            if (isSafe(board, row, col, n)) {
+                // Place queen
+                board[row][col] = 1;
+                System.out.println("  ✓ Placed queen at (" + row + "," + col + ")");
+                
+                // Recursively place queens in remaining rows
+                if (solveNQueensRecursive(board, row + 1, n, solutions)) {
+                    return true; // If we want only one solution
+                }
+                
+                // Backtrack: remove queen
+                board[row][col] = 0;
+                System.out.println("  ✗ Backtracking: removed queen from (" + row + "," + col + ")");
+            }
+        }
+        
+        System.out.println("✗ No valid position found in row " + row);
+        return false;
+    }
+    
+    private static void printBoard(int[][] board) {
+        System.out.println("\\nSolution:");
+        for (int i = 0; i < board.length; i++) {
+            System.out.println("Row " + i + ": " + Arrays.toString(board[i]));
+        }
+        System.out.println();
+    }
+    
+    // Find all solutions
+    public static List<int[][]> findAllSolutions(int n) {
+        System.out.println("\\n=== Finding All Solutions for N = " + n + " ===");
+        
+        int[][] board = new int[n][n];
+        List<int[][]> allSolutions = new ArrayList<>();
+        
+        findAllSolutionsRecursive(board, 0, n, allSolutions);
+        
+        System.out.println("All solutions:");
+        for (int i = 0; i < allSolutions.size(); i++) {
+            System.out.println("\\nSolution " + (i + 1) + ":");
+            printBoard(allSolutions.get(i));
+        }
+        
+        return allSolutions;
+    }
+    
+    private static boolean isSafeForAll(int[][] board, int row, int col, int n) {
+        // Check column
+        for (int i = 0; i < row; i++) {
+            if (board[i][col] == 1) return false;
+        }
+        
+        // Check diagonals
+        for (int i = row, j = col; i >= 0 && j >= 0; i--, j--) {
+            if (board[i][j] == 1) return false;
+        }
+        
+        for (int i = row, j = col; i >= 0 && j < n; i--, j++) {
+            if (board[i][j] == 1) return false;
+        }
+        
+        return true;
+    }
+    
+    private static void findAllSolutionsRecursive(int[][] board, int row, int n, List<int[][]> allSolutions) {
+        if (row == n) {
+            int[][] solution = new int[n][n];
+            for (int i = 0; i < n; i++) {
+                solution[i] = Arrays.copyOf(board[i], n);
+            }
+            allSolutions.add(solution);
+            return;
+        }
+        
+        for (int col = 0; col < n; col++) {
+            if (isSafeForAll(board, row, col, n)) {
+                board[row][col] = 1;
+                findAllSolutionsRecursive(board, row + 1, n, allSolutions);
+                board[row][col] = 0; // Backtrack
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("=== Testing N Queen Problem ===");
+        System.out.println("\\n--- N = 4 ---");
+        solveNQueens(4);
+        
+        System.out.println("\\n--- N = 8 (All Solutions) ---");
+        findAllSolutions(8);
+    }
+}`,
+        }}
         explanation="Backtracking approach: place queens row by row, check if current placement is safe, backtrack if no valid position found. Time: O(N!), Space: O(N²)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Place N queens on an N×N chessboard such that no two queens attack each other (not in same row, column, or diagonal).",
+              details: [
+                "Each row must have exactly one queen",
+                "Queens attack horizontally, vertically, and diagonally",
+                "Return one valid solution or all solutions",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking: place queen row by row, check safety constraints, backtrack if no valid position in current row.",
+              keywords: [
+                "backtracking",
+                "constraint satisfaction",
+                "N queens",
+                "recursive placement",
+              ],
+              details: [
+                "State space: each level represents a row, choices are columns",
+                "Prune invalid placements early (constraint checking)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "2D board matrix (0 = empty, 1 = queen); recursion stack for backtracking.",
+              details: [
+                "Can use 1D array where index = row, value = column",
+                "Safety check requires checking columns and diagonals",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "For each row, try each column: if safe, place queen and recurse to next row. If no valid column, backtrack. Base case: all rows filled.",
+              details: [
+                "Safety check: no queen in same column, no queen in same diagonal (both directions)",
+                "For all solutions: don't return early, collect all valid boards",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(N!) in worst case. Safety check is O(N) per placement. Can optimize by tracking occupied columns and diagonals with arrays.",
+              details: [
+                "Optimized version uses boolean arrays for O(1) safety checks",
+                "Diagonal tracking: main diagonal (row-col), anti-diagonal (row+col)",
+              ],
+            },
+          ],
+          pattern: "Backtracking Constraint Satisfaction",
+          complexity: {
+            time: "O(N!)",
+            space: "O(N²)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="N Queen Problem - Optimized with Column Tracking"
         difficulty="Hard"
         description="Optimized version that tracks which columns and diagonals are already occupied to avoid redundant checks."
-        solution={`// N Queen Problem - Optimized Version
+        solutions={{
+          JavaScript: `// N Queen Problem - Optimized Version
 
 function solveNQueensOptimized(n) {
   console.log("=== N Queen Problem - Optimized for N = " + n + " ===");
@@ -911,8 +1831,216 @@ console.log("\\n--- N = 4 ---");
 solveNQueensOptimized(4);
 
 console.log("\\n--- N = 8 (Count Solutions) ---");
-countNQueensSolutions(8);`}
+countNQueensSolutions(8);`,
+          Java: `import java.util.*;
+
+public class NQueenOptimized {
+    // N Queen Problem - Optimized Version
+    public static boolean solveNQueensOptimized(int n) {
+        System.out.println("=== N Queen Problem - Optimized for N = " + n + " ===");
+        
+        int[][] board = new int[n][n];
+        boolean[] colUsed = new boolean[n];
+        boolean[] diag1Used = new boolean[2 * n - 1]; // Main diagonal
+        boolean[] diag2Used = new boolean[2 * n - 1]; // Anti-diagonal
+        
+        return solveNQueensRecursive(board, 0, n, colUsed, diag1Used, diag2Used);
+    }
+    
+    private static boolean isSafe(int row, int col, int n, boolean[] colUsed, 
+                                   boolean[] diag1Used, boolean[] diag2Used) {
+        System.out.println("Checking if safe to place queen at (" + row + "," + col + ")");
+        
+        // Check column
+        if (colUsed[col]) {
+            System.out.println("  ✗ Column " + col + " already occupied");
+            return false;
+        }
+        
+        // Check main diagonal (row - col + n - 1)
+        int diag1 = row - col + n - 1;
+        if (diag1Used[diag1]) {
+            System.out.println("  ✗ Main diagonal " + diag1 + " already occupied");
+            return false;
+        }
+        
+        // Check anti-diagonal (row + col)
+        int diag2 = row + col;
+        if (diag2Used[diag2]) {
+            System.out.println("  ✗ Anti-diagonal " + diag2 + " already occupied");
+            return false;
+        }
+        
+        System.out.println("  ✓ Safe to place queen at (" + row + "," + col + ")");
+        return true;
+    }
+    
+    private static void placeQueen(int[][] board, int row, int col, int n, 
+                                    boolean[] colUsed, boolean[] diag1Used, boolean[] diag2Used) {
+        board[row][col] = 1;
+        colUsed[col] = true;
+        diag1Used[row - col + n - 1] = true;
+        diag2Used[row + col] = true;
+        System.out.println("  ✓ Placed queen at (" + row + "," + col + ")");
+    }
+    
+    private static void removeQueen(int[][] board, int row, int col, int n, 
+                                     boolean[] colUsed, boolean[] diag1Used, boolean[] diag2Used) {
+        board[row][col] = 0;
+        colUsed[col] = false;
+        diag1Used[row - col + n - 1] = false;
+        diag2Used[row + col] = false;
+        System.out.println("  ✗ Removed queen from (" + row + "," + col + ")");
+    }
+    
+    private static boolean solveNQueensRecursive(int[][] board, int row, int n, 
+                                                  boolean[] colUsed, boolean[] diag1Used, boolean[] diag2Used) {
+        System.out.println("\\nTrying to place queen in row " + row);
+        
+        if (row == n) {
+            System.out.println("✓ All queens placed successfully!");
+            printBoard(board);
+            return true;
+        }
+        
+        for (int col = 0; col < n; col++) {
+            System.out.println("  Trying column " + col + " in row " + row);
+            
+            if (isSafe(row, col, n, colUsed, diag1Used, diag2Used)) {
+                placeQueen(board, row, col, n, colUsed, diag1Used, diag2Used);
+                
+                if (solveNQueensRecursive(board, row + 1, n, colUsed, diag1Used, diag2Used)) {
+                    return true;
+                }
+                
+                removeQueen(board, row, col, n, colUsed, diag1Used, diag2Used); // Backtrack
+            }
+        }
+        
+        System.out.println("✗ No valid position found in row " + row);
+        return false;
+    }
+    
+    private static void printBoard(int[][] board) {
+        System.out.println("\\nSolution:");
+        for (int i = 0; i < board.length; i++) {
+            System.out.println("Row " + i + ": " + Arrays.toString(board[i]));
+        }
+        System.out.println();
+    }
+    
+    // Count number of solutions
+    public static int countNQueensSolutions(int n) {
+        System.out.println("\\n=== Counting Solutions for N = " + n + " ===");
+        
+        boolean[] colUsed = new boolean[n];
+        boolean[] diag1Used = new boolean[2 * n - 1];
+        boolean[] diag2Used = new boolean[2 * n - 1];
+        int[] count = {0};
+        
+        countSolutions(0, n, colUsed, diag1Used, diag2Used, count);
+        
+        System.out.println("Total solutions: " + count[0]);
+        return count[0];
+    }
+    
+    private static void countSolutions(int row, int n, boolean[] colUsed, 
+                                       boolean[] diag1Used, boolean[] diag2Used, int[] count) {
+        if (row == n) {
+            count[0]++;
+            System.out.println("Found solution #" + count[0]);
+            return;
+        }
+        
+        for (int col = 0; col < n; col++) {
+            if (!colUsed[col] && 
+                !diag1Used[row - col + n - 1] && 
+                !diag2Used[row + col]) {
+                
+                colUsed[col] = true;
+                diag1Used[row - col + n - 1] = true;
+                diag2Used[row + col] = true;
+                
+                countSolutions(row + 1, n, colUsed, diag1Used, diag2Used, count);
+                
+                colUsed[col] = false;
+                diag1Used[row - col + n - 1] = false;
+                diag2Used[row + col] = false;
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        System.out.println("=== Testing Optimized N Queen Problem ===");
+        System.out.println("\\n--- N = 4 ---");
+        solveNQueensOptimized(4);
+        
+        System.out.println("\\n--- N = 8 (Count Solutions) ---");
+        countNQueensSolutions(8);
+    }
+}`,
+        }}
         explanation="Optimized version uses arrays to track occupied columns and diagonals, reducing time complexity of safety check from O(n) to O(1). Overall time complexity remains O(N!)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Same N Queen problem, but optimize safety checking by maintaining arrays for occupied columns and diagonals.",
+              details: [
+                "Instead of checking all previous queens, use boolean arrays for O(1) lookup",
+                "Maintains same correctness but improves practical performance",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking with constraint tracking: use arrays to track which columns and diagonals are occupied.",
+              keywords: [
+                "backtracking",
+                "constraint tracking",
+                "optimization",
+                "O(1) safety check",
+              ],
+              details: [
+                "Track columns: boolean array of size N",
+                "Track diagonals: main diagonal (row-col), anti-diagonal (row+col)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Boolean arrays: colUsed[N], diag1Used[2N-1], diag2Used[2N-1]; recursion stack.",
+              details: [
+                "diag1Used tracks main diagonal: index = row - col + N - 1",
+                "diag2Used tracks anti-diagonal: index = row + col",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "For each row, try each column: if colUsed[col] and diagonals are free, mark all three, recurse, unmark when backtracking.",
+              details: [
+                "Safety check is now O(1): just check three boolean values",
+                "Update arrays when placing/removing queen",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Reduces per-placement cost from O(N) to O(1), significantly improving practical performance. Overall complexity still O(N!) but with much better constant factors.",
+              details: [
+                "Can count solutions without storing all boards",
+                "Useful for large N where storing all solutions is impractical",
+              ],
+            },
+          ],
+          pattern: "Backtracking with Constraint Tracking",
+          complexity: {
+            time: "O(N!) with O(1) per-placement checks",
+            space: "O(N)",
+          },
+        }}
       />
     </div>
   );
@@ -927,7 +2055,8 @@ function SudokuSection() {
         title="Sudoku Solver - Basic Implementation"
         difficulty="Hard"
         description="Solve a 9×9 Sudoku puzzle using backtracking. Fill empty cells with numbers 1-9 such that each row, column, and 3×3 subgrid contains all digits 1-9 exactly once."
-        solution={`// Sudoku Solver
+        solutions={{
+          JavaScript: `// Sudoku Solver
 
 function solveSudoku(board) {
   console.log("=== Sudoku Solver ===");
@@ -1094,15 +2223,258 @@ const sudokuBoard = [
 ];
 
 console.log("=== Testing Sudoku Solver ===");
-solveSudoku([...sudokuBoard]);`}
+solveSudoku([...sudokuBoard]);`,
+          Java: `import java.util.*;
+
+public class SudokuSolver {
+    // Sudoku Solver
+    public static boolean solveSudoku(int[][] board) {
+        System.out.println("=== Sudoku Solver ===");
+        System.out.println("Initial board:");
+        printBoard(board);
+        
+        if (solveSudokuRecursive(board)) {
+            System.out.println("\\n=== Solution Found ===");
+            printBoard(board);
+            return true;
+        } else {
+            System.out.println("\\n=== No Solution Found ===");
+            return false;
+        }
+    }
+    
+    private static boolean isValid(int[][] board, int row, int col, int num) {
+        System.out.println("Checking if " + num + " is valid at (" + row + "," + col + ")");
+        
+        // Check row
+        for (int x = 0; x < 9; x++) {
+            if (board[row][x] == num) {
+                System.out.println("  ✗ Number " + num + " already exists in row " + row);
+                return false;
+            }
+        }
+        
+        // Check column
+        for (int x = 0; x < 9; x++) {
+            if (board[x][col] == num) {
+                System.out.println("  ✗ Number " + num + " already exists in column " + col);
+                return false;
+            }
+        }
+        
+        // Check 3x3 subgrid
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[startRow + i][startCol + j] == num) {
+                    System.out.println("  ✗ Number " + num + " already exists in 3x3 subgrid");
+                    return false;
+                }
+            }
+        }
+        
+        System.out.println("  ✓ Number " + num + " is valid at (" + row + "," + col + ")");
+        return true;
+    }
+    
+    private static boolean solveSudokuRecursive(int[][] board) {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == 0) {
+                    System.out.println("\\nFound empty cell at (" + row + "," + col + ")");
+                    
+                    for (int num = 1; num <= 9; num++) {
+                        System.out.println("  Trying number " + num + " at (" + row + "," + col + ")");
+                        
+                        if (isValid(board, row, col, num)) {
+                            board[row][col] = num;
+                            System.out.println("  ✓ Placed " + num + " at (" + row + "," + col + ")");
+                            
+                            if (solveSudokuRecursive(board)) {
+                                return true;
+                            }
+                            
+                            board[row][col] = 0;
+                            System.out.println("  ✗ Backtracking: removed " + num + " from (" + row + "," + col + ")");
+                        }
+                    }
+                    
+                    System.out.println("✗ No valid number found for (" + row + "," + col + ")");
+                    return false;
+                }
+            }
+        }
+        
+        System.out.println("✓ Sudoku solved!");
+        return true;
+    }
+    
+    private static void printBoard(int[][] board) {
+        System.out.println("\\nSudoku Board:");
+        for (int i = 0; i < 9; i++) {
+            StringBuilder row = new StringBuilder();
+            for (int j = 0; j < 9; j++) {
+                row.append(board[i][j]).append(" ");
+                if (j == 2 || j == 5) row.append("| ");
+            }
+            System.out.println(row.toString());
+            if (i == 2 || i == 5) System.out.println("------+-------+------");
+        }
+        System.out.println();
+    }
+    
+    // Count number of solutions
+    public static int countSudokuSolutions(int[][] board) {
+        System.out.println("\\n=== Counting Sudoku Solutions ===");
+        
+        int[] count = {0};
+        countSolutions(board, count);
+        
+        System.out.println("Total solutions: " + count[0]);
+        return count[0];
+    }
+    
+    private static boolean isValidForCount(int[][] board, int row, int col, int num) {
+        // Check row
+        for (int x = 0; x < 9; x++) {
+            if (board[row][x] == num) return false;
+        }
+        
+        // Check column
+        for (int x = 0; x < 9; x++) {
+            if (board[x][col] == num) return false;
+        }
+        
+        // Check 3x3 subgrid
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[startRow + i][startCol + j] == num) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private static void countSolutions(int[][] board, int[] count) {
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == 0) {
+                    for (int num = 1; num <= 9; num++) {
+                        if (isValidForCount(board, row, col, num)) {
+                            board[row][col] = num;
+                            countSolutions(board, count);
+                            board[row][col] = 0;
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+        count[0]++;
+        System.out.println("Found solution #" + count[0]);
+    }
+    
+    public static void main(String[] args) {
+        int[][] sudokuBoard = {
+            {5, 3, 0, 0, 7, 0, 0, 0, 0},
+            {6, 0, 0, 1, 9, 5, 0, 0, 0},
+            {0, 9, 8, 0, 0, 0, 0, 6, 0},
+            {8, 0, 0, 0, 6, 0, 0, 0, 3},
+            {4, 0, 0, 8, 0, 3, 0, 0, 1},
+            {7, 0, 0, 0, 2, 0, 0, 0, 6},
+            {0, 6, 0, 0, 0, 0, 2, 8, 0},
+            {0, 0, 0, 4, 1, 9, 0, 0, 5},
+            {0, 0, 0, 0, 8, 0, 0, 7, 9}
+        };
+        
+        System.out.println("=== Testing Sudoku Solver ===");
+        solveSudoku(copyBoard(sudokuBoard));
+    }
+    
+    private static int[][] copyBoard(int[][] board) {
+        int[][] copy = new int[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            copy[i] = Arrays.copyOf(board[i], board[i].length);
+        }
+        return copy;
+    }
+}`,
+        }}
         explanation="Backtracking approach: find empty cell, try numbers 1-9, check validity, backtrack if no valid number found. Time: O(9^(empty cells)), Space: O(9×9)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Fill a 9×9 Sudoku grid such that each row, column, and 3×3 box contains digits 1-9 exactly once. Some cells are pre-filled.",
+              details: [
+                "Empty cells are represented as 0",
+                "Must satisfy three constraints: row, column, and 3×3 box",
+                "Return true if solvable, false otherwise",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking: find empty cell, try numbers 1-9, check if valid, recurse to next empty cell, backtrack if no valid number.",
+              keywords: [
+                "backtracking",
+                "constraint satisfaction",
+                "sudoku solver",
+                "recursive search",
+              ],
+              details: [
+                "State space: each empty cell has 9 choices",
+                "Prune invalid placements early (constraint checking)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "9×9 2D array for board; recursion stack for backtracking.",
+              details: [
+                "Board modified in-place during backtracking",
+                "Need helper function to find next empty cell",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Find empty cell. If none, return true (solved). For each number 1-9: if valid in row/column/box, place it and recurse. If recursion succeeds, return true. Otherwise backtrack and try next number.",
+              details: [
+                "Validity check: number not in same row, column, or 3×3 box",
+                "Box index = (row/3)*3 + col/3",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time complexity is O(9^m) where m is number of empty cells. Can optimize by selecting most constrained cell first (fewest possibilities).",
+              details: [
+                "Constraint propagation: eliminate impossible values early",
+                "For counting solutions: don't return early, explore all paths",
+              ],
+            },
+          ],
+          pattern: "Backtracking Constraint Satisfaction",
+          complexity: {
+            time: "O(9^(empty cells))",
+            space: "O(9×9)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Sudoku Solver - Optimized with Constraint Propagation"
         difficulty="Hard"
         description="Optimized version that uses constraint propagation and more efficient cell selection to reduce the search space."
-        solution={`// Sudoku Solver - Optimized Version
+        solutions={{
+          JavaScript: `// Sudoku Solver - Optimized Version
 
 function solveSudokuOptimized(board) {
   console.log("=== Sudoku Solver - Optimized Version ===");
@@ -1355,8 +2727,289 @@ solveSudokuOptimized([...sudokuBoard]);
 
 console.log("\\n=== Generating New Puzzle ===");
 const newPuzzle = generateSudoku('medium');
-solveSudokuOptimized([...newPuzzle]);`}
+solveSudokuOptimized([...newPuzzle]);`,
+          Java: `import java.util.*;
+
+public class SudokuSolverOptimized {
+    // Cell class for tracking best cell
+    static class Cell {
+        int row;
+        int col;
+        List<Integer> possibilities;
+        
+        Cell(int row, int col, List<Integer> possibilities) {
+            this.row = row;
+            this.col = col;
+            this.possibilities = possibilities;
+        }
+    }
+    
+    // Sudoku Solver - Optimized Version
+    public static boolean solveSudokuOptimized(int[][] board) {
+        System.out.println("=== Sudoku Solver - Optimized Version ===");
+        System.out.println("Initial board:");
+        printBoard(board);
+        
+        if (solveSudokuRecursive(board)) {
+            System.out.println("\\n=== Solution Found ===");
+            printBoard(board);
+            return true;
+        } else {
+            System.out.println("\\n=== No Solution Found ===");
+            return false;
+        }
+    }
+    
+    // Find the cell with minimum possible values (most constrained)
+    private static Cell findBestCell(int[][] board) {
+        int minPossibilities = 10;
+        Cell bestCell = null;
+        
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                if (board[row][col] == 0) {
+                    List<Integer> possibilities = getPossibleValues(board, row, col);
+                    if (possibilities.size() < minPossibilities) {
+                        minPossibilities = possibilities.size();
+                        bestCell = new Cell(row, col, possibilities);
+                    }
+                }
+            }
+        }
+        
+        return bestCell;
+    }
+    
+    // Get possible values for a cell
+    private static List<Integer> getPossibleValues(int[][] board, int row, int col) {
+        List<Integer> possibilities = new ArrayList<>();
+        
+        for (int num = 1; num <= 9; num++) {
+            if (isValid(board, row, col, num)) {
+                possibilities.add(num);
+            }
+        }
+        
+        return possibilities;
+    }
+    
+    private static boolean isValid(int[][] board, int row, int col, int num) {
+        // Check row
+        for (int x = 0; x < 9; x++) {
+            if (board[row][x] == num) return false;
+        }
+        
+        // Check column
+        for (int x = 0; x < 9; x++) {
+            if (board[x][col] == num) return false;
+        }
+        
+        // Check 3x3 subgrid
+        int startRow = (row / 3) * 3;
+        int startCol = (col / 3) * 3;
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[startRow + i][startCol + j] == num) return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private static boolean solveSudokuRecursive(int[][] board) {
+        Cell bestCell = findBestCell(board);
+        
+        if (bestCell == null) {
+            System.out.println("✓ Sudoku solved!");
+            return true;
+        }
+        
+        int row = bestCell.row;
+        int col = bestCell.col;
+        List<Integer> possibilities = bestCell.possibilities;
+        
+        System.out.println("\\nBest cell: (" + row + "," + col + ") with possibilities: " + possibilities);
+        
+        for (int num : possibilities) {
+            System.out.println("  Trying " + num + " at (" + row + "," + col + ")");
+            
+            board[row][col] = num;
+            
+            if (solveSudokuRecursive(board)) {
+                return true;
+            }
+            
+            board[row][col] = 0;
+            System.out.println("  ✗ Backtracking: removed " + num + " from (" + row + "," + col + ")");
+        }
+        
+        System.out.println("✗ No valid number found for (" + row + "," + col + ")");
+        return false;
+    }
+    
+    private static void printBoard(int[][] board) {
+        System.out.println("\\nSudoku Board:");
+        for (int i = 0; i < 9; i++) {
+            StringBuilder row = new StringBuilder();
+            for (int j = 0; j < 9; j++) {
+                row.append(board[i][j]).append(" ");
+                if (j == 2 || j == 5) row.append("| ");
+            }
+            System.out.println(row.toString());
+            if (i == 2 || i == 5) System.out.println("------+-------+------");
+        }
+        System.out.println();
+    }
+    
+    // Generate a valid Sudoku puzzle
+    public static int[][] generateSudoku(String difficulty) {
+        System.out.println("\\n=== Generating Sudoku Puzzle ===");
+        
+        int[][] board = new int[9][9];
+        
+        // Fill diagonal 3x3 subgrids first (they are independent)
+        fillDiagonalSubgrids(board);
+        
+        // Fill the board
+        solveSudokuRecursive(board);
+        
+        // Remove numbers based on difficulty
+        Map<String, Integer> cellsToRemove = new HashMap<>();
+        cellsToRemove.put("easy", 30);
+        cellsToRemove.put("medium", 45);
+        cellsToRemove.put("hard", 60);
+        
+        int toRemove = cellsToRemove.getOrDefault(difficulty, 45);
+        int removed = 0;
+        Random random = new Random();
+        
+        while (removed < toRemove) {
+            int row = random.nextInt(9);
+            int col = random.nextInt(9);
+            
+            if (board[row][col] != 0) {
+                board[row][col] = 0;
+                removed++;
+            }
+        }
+        
+        System.out.println("Generated " + difficulty + " difficulty puzzle:");
+        printBoard(board);
+        return board;
+    }
+    
+    private static void fillDiagonalSubgrids(int[][] board) {
+        for (int i = 0; i < 9; i += 3) {
+            fillSubgrid(board, i, i);
+        }
+    }
+    
+    private static void fillSubgrid(int[][] board, int row, int col) {
+        List<Integer> nums = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        Collections.shuffle(nums);
+        
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                board[row + i][col + j] = nums.get(index++);
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        int[][] sudokuBoard = {
+            {5, 3, 0, 0, 7, 0, 0, 0, 0},
+            {6, 0, 0, 1, 9, 5, 0, 0, 0},
+            {0, 9, 8, 0, 0, 0, 0, 6, 0},
+            {8, 0, 0, 0, 6, 0, 0, 0, 3},
+            {4, 0, 0, 8, 0, 3, 0, 0, 1},
+            {7, 0, 0, 0, 2, 0, 0, 0, 6},
+            {0, 6, 0, 0, 0, 0, 2, 8, 0},
+            {0, 0, 0, 4, 1, 9, 0, 0, 5},
+            {0, 0, 0, 0, 8, 0, 0, 7, 9}
+        };
+        
+        System.out.println("=== Testing Optimized Sudoku Solver ===");
+        solveSudokuOptimized(copyBoard(sudokuBoard));
+        
+        System.out.println("\\n=== Generating New Puzzle ===");
+        int[][] newPuzzle = generateSudoku("medium");
+        solveSudokuOptimized(copyBoard(newPuzzle));
+    }
+    
+    private static int[][] copyBoard(int[][] board) {
+        int[][] copy = new int[board.length][];
+        for (int i = 0; i < board.length; i++) {
+            copy[i] = Arrays.copyOf(board[i], board[i].length);
+        }
+        return copy;
+    }
+}`,
+        }}
         explanation="Optimized version selects the most constrained cell (fewest possibilities) first, reducing the search space and improving performance. Still exponential time complexity but with better practical performance."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Same Sudoku problem, but optimize by selecting the most constrained empty cell first (cell with fewest valid number possibilities).",
+              details: [
+                "Most constrained cell selection reduces branching factor",
+                "Constraint propagation eliminates impossible values early",
+                "Significantly improves practical performance",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Backtracking with intelligent cell selection: choose cell with minimum possibilities, reducing search space.",
+              keywords: [
+                "backtracking",
+                "constraint propagation",
+                "most constrained first",
+                "optimization",
+              ],
+              details: [
+                "Heuristic: cells with fewer possibilities lead to faster pruning",
+                "Constraint propagation: update possibilities as values are placed",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "9×9 board; helper to find most constrained cell; function to get possible values for a cell.",
+              details: [
+                "Track possible values per cell based on row/column/box constraints",
+                "Select cell with minimum possible values",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Find most constrained empty cell (fewest possibilities). If none, return true. For each possible value: place it, recurse. If recursion fails, backtrack and try next value.",
+              details: [
+                "Most constrained cell selection: iterate all empty cells, find one with minimum possibilities",
+                "Get possibilities by checking row, column, and box constraints",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Reduces search space significantly by choosing cells that lead to faster pruning. Can further optimize with constraint propagation (eliminate values from neighbors when placing a value).",
+              details: [
+                "Time complexity still exponential but with much better constant factors",
+                "Most constrained first heuristic is key optimization",
+                "Can use bit masks for faster possibility checking",
+              ],
+            },
+          ],
+          pattern: "Backtracking with Constraint Propagation",
+          complexity: {
+            time: "O(9^(empty cells)) with better practical performance",
+            space: "O(9×9)",
+          },
+        }}
       />
     </div>
   );

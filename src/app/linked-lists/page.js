@@ -419,6 +419,91 @@ traverseWithAction(head, (data, pos) => {
 // Traverse until condition
 console.log(traverseUntil(head, (data) => data === 3)); // [1, 2]`}
         explanation="Use a pointer to traverse from head to tail. Iterative: while loop with pointer update. Recursive: call function with next node. Time: O(n), Space: O(1) iterative, O(n) recursive."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Traverse linked list from head to tail",
+                "Visit each node exactly once",
+                "Process each node's data",
+                "Input: Head of linked list, Output: Processed data or traversal result",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "traverse",
+                "linked list",
+                "pointer",
+                "iteration",
+                "recursion",
+              ],
+              details: [
+                "Keywords: 'traverse', 'linked list' → Pointer-based traversal",
+                "Pattern: Start from head → Move to next → Until null",
+                "This is a 'linked list traversal' problem",
+                "Similar to: List operations, node processing",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Pointer: To track current node",
+                "O(1) space for iterative",
+                "Call stack: O(n) space for recursive",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Pointer Traversal",
+                "  - Initialize current = head",
+                "  - While current != null:",
+                "    - Process current.data",
+                "    - current = current.next",
+                "  - Time: O(n), Space: O(1) iterative",
+                "",
+                "Alternative: Recursive traversal",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list (head == null): Return early",
+                "  • Single node: Process and return",
+                "",
+                "Optimization:",
+                "  • O(n) time - visit each node once",
+                "  • O(1) space for iterative",
+                "  • Simple pointer manipulation",
+                "",
+                "Implementation:",
+                "  1. current = head",
+                "  2. While current != null:",
+                "     - Process current.data",
+                "     - current = current.next",
+                "  3. Return result",
+              ],
+            },
+          ],
+          pattern: "Linked List Traversal (Pointer-Based)",
+          complexity: {
+            time: "O(n) - Visit each node once",
+            space: "O(1) iterative, O(n) recursive",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -592,6 +677,86 @@ recursiveTraversalWithProcessing(head, (data) => {
   console.log(\`Processing: \${data * 2}\`);
 }); // Prints: 2, 4, 6`}
         explanation="Recursive traversal uses function calls instead of loops. Base case: null node. Recursive case: process current node, then call function with next node. Time: O(n), Space: O(n) for call stack."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Traverse linked list using recursion",
+                "Base case: null node",
+                "Recursive case: process node, recurse on next",
+                "Input: Head of linked list, Output: Processed data",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "recursive",
+                "traversal",
+                "base case",
+                "recursive case",
+              ],
+              details: [
+                "Keywords: 'recursive traversal' → Function calls",
+                "Pattern: Base case + recursive call",
+                "This is a 'recursive traversal' problem",
+                "Similar to: Tree traversal, recursive algorithms",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Call stack: For recursive calls",
+                "O(n) space for call stack",
+                "No additional data structures needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Recursive Traversal",
+                "  - Base case: if head == null, return",
+                "  - Process head.data",
+                "  - Recursive call: traverse(head.next)",
+                "  - Time: O(n), Space: O(n)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: Base case handles it",
+                "  • Single node: Process and recurse to null",
+                "",
+                "Optimization:",
+                "  • O(n) time - visit each node once",
+                "  • O(n) space for call stack",
+                "  • Elegant but uses more space",
+                "",
+                "Implementation:",
+                "  1. If head == null: return (base case)",
+                "  2. Process head.data",
+                "  3. Recursive call: traverse(head.next)",
+                "  4. Return result",
+              ],
+            },
+          ],
+          pattern: "Recursive Traversal (Base Case + Recursive Call)",
+          complexity: {
+            time: "O(n) - Visit each node once",
+            space: "O(n) - Call stack depth",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -853,6 +1018,87 @@ console.log("After deleting at position 1:", list.print()); // "1 -> 2"
 
 console.log("Reversed list:", list.reverse().print()); // "2 -> 1"`}
         explanation="Implement a class with head pointer and size counter. Include methods for insertion, deletion, searching, and traversal. Time: O(1) for head operations, O(n) for tail operations."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Implement a complete linked list class",
+                "Support insertion, deletion, search, traversal",
+                "Maintain head pointer and size",
+                "Input: Operations on list, Output: Modified list",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "linked list",
+                "class",
+                "implementation",
+                "operations",
+              ],
+              details: [
+                "Keywords: 'implement', 'linked list' → Class-based structure",
+                "Pattern: Node class + LinkedList class",
+                "This is a 'data structure implementation' problem",
+                "Similar to: Stack, Queue implementations",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Node class: data + next pointer",
+                "LinkedList class: head pointer + size",
+                "O(1) space per node",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Class-based Implementation",
+                "  - Node class: data, next",
+                "  - LinkedList class: head, size",
+                "  - Methods: insert, delete, search, traverse",
+                "  - Time: O(1) head ops, O(n) tail ops",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: head == null",
+                "  • Single node: head.next == null",
+                "  • Invalid positions: Validate before operations",
+                "",
+                "Optimization:",
+                "  • Maintain size counter: O(1) size()",
+                "  • Head operations: O(1)",
+                "  • Tail operations: O(n) - can optimize with tail pointer",
+                "",
+                "Implementation:",
+                "  1. Define Node class",
+                "  2. Define LinkedList class with head, size",
+                "  3. Implement insert/delete/search methods",
+                "  4. Handle edge cases",
+              ],
+            },
+          ],
+          pattern: "Data Structure Implementation (Class-Based)",
+          complexity: {
+            time: "O(1) head ops, O(n) tail ops",
+            space: "O(n) - n nodes",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1202,6 +1448,86 @@ poly.addTerm(1, 0); // 1
 console.log("Polynomial:", poly.display()); // "3x^2 + 2x + 1"
 console.log("Value at x=2:", poly.evaluate(2)); // 17`}
         explanation="Linked lists are used in stacks, queues, LRU cache, playlists, undo/redo systems, and polynomial representation due to their dynamic size and efficient insertion/deletion."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Understand real-world applications of linked lists",
+                "Identify use cases where linked lists excel",
+                "Compare with arrays for different scenarios",
+                "Input: Use cases, Output: Applications",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "applications",
+                "use cases",
+                "real-world",
+                "scenarios",
+              ],
+              details: [
+                "Keywords: 'applications', 'use cases' → Practical examples",
+                "Pattern: Dynamic size + O(1) insertion/deletion",
+                "This is a 'conceptual understanding' problem",
+                "Similar to: Data structure comparisons",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Linked List: For dynamic size operations",
+                "Stack/Queue: Built using linked lists",
+                "No additional structures needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Conceptual Understanding",
+                "  - Stack: LIFO with O(1) push/pop",
+                "  - Queue: FIFO with O(1) enqueue/dequeue",
+                "  - Playlist: Circular navigation",
+                "  - Undo/Redo: History management",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list operations",
+                "  • Single node operations",
+                "",
+                "Optimization:",
+                "  • O(1) insertion at head",
+                "  • O(1) deletion at head",
+                "  • Dynamic size allocation",
+                "",
+                "Implementation:",
+                "  1. Stack: Push/pop at head",
+                "  2. Queue: Enqueue at tail, dequeue at head",
+                "  3. Playlist: Circular linked list",
+                "  4. Undo/Redo: Maintain history list",
+              ],
+            },
+          ],
+          pattern: "Conceptual Understanding (Applications)",
+          complexity: {
+            time: "Varies by application",
+            space: "O(n) - n nodes",
+          },
+        }}
       />
     </div>
   );
@@ -1323,6 +1649,80 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Create new node, point its next to current head, return new node as head. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert new node at the beginning (head) of list",
+                "New node becomes the new head",
+                "Original head becomes second node",
+                "Input: Head of list, data, Output: New head",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["insert", "beginning", "head", "O(1)"],
+              details: [
+                "Keywords: 'insert at beginning' → Head insertion",
+                "Pattern: Create node → Point to head → Return new node",
+                "This is a 'head insertion' problem",
+                "Similar to: Stack push, prepend operations",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "New node: data + next pointer",
+                "O(1) space for new node",
+                "No traversal needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Head Insertion",
+                "  - Create newNode with data",
+                "  - newNode.next = head",
+                "  - Return newNode as new head",
+                "  - Time: O(1), Space: O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: newNode becomes head",
+                "  • Single node: Works correctly",
+                "",
+                "Optimization:",
+                "  • O(1) time - no traversal",
+                "  • O(1) space - single node",
+                "  • Most efficient insertion",
+                "",
+                "Implementation:",
+                "  1. Create newNode(data)",
+                "  2. newNode.next = head",
+                "  3. Return newNode",
+              ],
+            },
+          ],
+          pattern: "Head Insertion (O(1) Operation)",
+          complexity: {
+            time: "O(1) - Constant time",
+            space: "O(1) - Single node",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1492,6 +1892,83 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="If list is empty, new node becomes head. Otherwise, traverse to last node and link new node. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert new node at the end (tail) of list",
+                "New node becomes the last node",
+                "Last node's next points to new node",
+                "Input: Head of list, data, Output: Head (may change if empty)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["insert", "end", "tail", "traverse"],
+              details: [
+                "Keywords: 'insert at end' → Tail insertion",
+                "Pattern: Traverse to end → Append node",
+                "This is a 'tail insertion' problem",
+                "Similar to: Queue enqueue, append operations",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Pointer: To traverse to last node",
+                "New node: data + next pointer",
+                "O(1) space for new node",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Tail Insertion",
+                "  - If head == null: return newNode",
+                "  - Traverse to last node (current.next == null)",
+                "  - current.next = newNode",
+                "  - Return head",
+                "  - Time: O(n), Space: O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: newNode becomes head",
+                "  • Single node: Works correctly",
+                "",
+                "Optimization:",
+                "  • O(n) time - must traverse to end",
+                "  • O(1) space - single node",
+                "  • Can optimize with tail pointer: O(1)",
+                "",
+                "Implementation:",
+                "  1. If head == null: return newNode",
+                "  2. current = head",
+                "  3. While current.next != null: current = current.next",
+                "  4. current.next = newNode",
+                "  5. Return head",
+              ],
+            },
+          ],
+          pattern: "Tail Insertion (Traversal Required)",
+          complexity: {
+            time: "O(n) - Traverse to end",
+            space: "O(1) - Single node",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1723,6 +2200,85 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Handle edge cases (position 0, empty list, invalid position). Traverse to position-1, insert new node. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert new node at specific position (0-indexed)",
+                "Position 0: Insert at head",
+                "Position n: Insert after nth node",
+                "Input: Head, data, position, Output: New head",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["insert", "position", "traverse", "index"],
+              details: [
+                "Keywords: 'insert at position' → Indexed insertion",
+                "Pattern: Traverse to position-1 → Insert node",
+                "This is a 'position-based insertion' problem",
+                "Similar to: Array insertion, indexed operations",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Pointer: To traverse to position-1",
+                "New node: data + next pointer",
+                "O(1) space for new node",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Position-Based Insertion",
+                "  - If position == 0: Insert at head",
+                "  - Traverse to position-1",
+                "  - newNode.next = current.next",
+                "  - current.next = newNode",
+                "  - Time: O(n), Space: O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Position 0: Insert at head",
+                "  • Empty list + position 0: newNode becomes head",
+                "  • Invalid position: Validate before insertion",
+                "",
+                "Optimization:",
+                "  • O(n) time - traverse to position",
+                "  • O(1) space - single node",
+                "  • Validate position bounds",
+                "",
+                "Implementation:",
+                "  1. If position == 0: return insertAtHead()",
+                "  2. current = head, count = 0",
+                "  3. While count < position-1: current = current.next, count++",
+                "  4. newNode.next = current.next",
+                "  5. current.next = newNode",
+                "  6. Return head",
+              ],
+            },
+          ],
+          pattern: "Position-Based Insertion (Indexed)",
+          complexity: {
+            time: "O(n) - Traverse to position",
+            space: "O(1) - Single node",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1967,6 +2523,95 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Iterative: traverse with pointer, return position when found. Recursive: check current node, recurse on rest. Time: O(n), Space: O(1) iterative, O(n) recursive."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Search for target value in linked list",
+                "Return position/index if found, -1 if not found",
+                "Support both iterative and recursive approaches",
+                "Input: Head, target, Output: Position or -1",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "search",
+                "find",
+                "traverse",
+                "iterative",
+                "recursive",
+              ],
+              details: [
+                "Keywords: 'search', 'find' → Linear search",
+                "Pattern: Traverse list → Check each node",
+                "This is a 'linear search' problem",
+                "Similar to: Array search, list operations",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Pointer: To traverse list",
+                "O(1) space for iterative",
+                "Call stack: O(n) space for recursive",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Linear Search",
+                "  - Iterative: While loop, check each node",
+                "  - Recursive: Base case null, check current, recurse",
+                "  - Time: O(n), Space: O(1) iterative, O(n) recursive",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: Return -1",
+                "  • Target at head: Return 0",
+                "  • Target not found: Return -1",
+                "",
+                "Optimization:",
+                "  • O(n) time - worst case traverse all nodes",
+                "  • O(1) space iterative, O(n) recursive",
+                "  • Early termination when found",
+                "",
+                "Implementation:",
+                "  Iterative:",
+                "  1. current = head, position = 0",
+                "  2. While current != null:",
+                "     - If current.data == target: return position",
+                "     - current = current.next, position++",
+                "  3. Return -1",
+                "",
+                "  Recursive:",
+                "  1. If head == null: return -1",
+                "  2. If head.data == target: return 0",
+                "  3. result = search(head.next, target)",
+                "  4. Return result == -1 ? -1 : result + 1",
+              ],
+            },
+          ],
+          pattern: "Linear Search (Traversal + Comparison)",
+          complexity: {
+            time: "O(n) - Worst case traverse all nodes",
+            space: "O(1) iterative, O(n) recursive",
+          },
+        }}
       />
     </div>
   );
@@ -2156,6 +2801,81 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Simply return head.next as new head. Handle empty list case. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Delete the first node (head) from linked list",
+                "Second node becomes new head",
+                "Return new head (or null if list becomes empty)",
+                "Input: Head of list, Output: New head",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["delete", "first", "head", "O(1)"],
+              details: [
+                "Keywords: 'delete first', 'delete head' → Head deletion",
+                "Pattern: Return head.next as new head",
+                "This is a 'head deletion' problem",
+                "Similar to: Stack pop, queue dequeue",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "No additional structures needed",
+                "O(1) space operation",
+                "Simple pointer update",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Head Deletion",
+                "  - If head == null: return null",
+                "  - Return head.next as new head",
+                "  - Time: O(1), Space: O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: Return null",
+                "  • Single node: Return null (list becomes empty)",
+                "  • Multiple nodes: Return second node",
+                "",
+                "Optimization:",
+                "  • O(1) time - no traversal",
+                "  • O(1) space - no extra memory",
+                "  • Most efficient deletion",
+                "",
+                "Implementation:",
+                "  1. If head == null: return null",
+                "  2. newHead = head.next",
+                "  3. Optionally: head.next = null (cleanup)",
+                "  4. Return newHead",
+              ],
+            },
+          ],
+          pattern: "Head Deletion (O(1) Operation)",
+          complexity: {
+            time: "O(1) - Constant time",
+            space: "O(1) - No extra space",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -2396,6 +3116,84 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Find second-to-last node, set its next to null. Handle single node and empty list cases. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Delete the last node (tail) from linked list",
+                "Second-to-last node becomes new tail",
+                "Return head (may change if list becomes empty)",
+                "Input: Head of list, Output: Head",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["delete", "last", "tail", "traverse"],
+              details: [
+                "Keywords: 'delete last', 'delete tail' → Tail deletion",
+                "Pattern: Traverse to second-to-last → Set next to null",
+                "This is a 'tail deletion' problem",
+                "Similar to: Queue operations, list cleanup",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Pointer: To traverse to second-to-last node",
+                "O(1) space operation",
+                "No additional structures needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Tail Deletion",
+                "  - If head == null or head.next == null: return null",
+                "  - Traverse to second-to-last node",
+                "  - Set current.next = null",
+                "  - Return head",
+                "  - Time: O(n), Space: O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list: Return null",
+                "  • Single node: Return null (list becomes empty)",
+                "  • Two nodes: Second node becomes tail",
+                "",
+                "Optimization:",
+                "  • O(n) time - must traverse to end",
+                "  • O(1) space - no extra memory",
+                "  • Can optimize with tail pointer: O(1)",
+                "",
+                "Implementation:",
+                "  1. If head == null or head.next == null: return null",
+                "  2. current = head",
+                "  3. While current.next.next != null: current = current.next",
+                "  4. current.next = null",
+                "  5. Return head",
+              ],
+            },
+          ],
+          pattern: "Tail Deletion (Traversal Required)",
+          complexity: {
+            time: "O(n) - Traverse to second-to-last",
+            space: "O(1) - No extra space",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -2705,6 +3503,91 @@ function demonstrateBothTypes() {
 compareLinkedListTypes();
 demonstrateBothTypes();`}
         explanation="Singly: 1 pointer per node, O(n) for many operations. Doubly: 2 pointers per node, O(1) for deletion of given node, bidirectional traversal. Choose based on memory constraints and operation requirements."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Compare singly and doubly linked lists",
+                "Understand advantages and disadvantages of each",
+                "Know when to use which type",
+                "Input: Comparison criteria, Output: Analysis",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "compare",
+                "singly",
+                "doubly",
+                "advantages",
+                "disadvantages",
+              ],
+              details: [
+                "Keywords: 'compare', 'vs', 'advantages' → Comparison analysis",
+                "Pattern: Feature comparison + use case analysis",
+                "This is a 'conceptual comparison' problem",
+                "Similar to: Data structure comparisons",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly: One pointer (next)",
+                "Doubly: Two pointers (next, prev)",
+                "Choose based on requirements",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Conceptual Comparison",
+                "  - Singly: Less memory, simpler, forward-only",
+                "  - Doubly: More memory, bidirectional, O(1) deletion",
+                "  - Choose based on traversal needs",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list operations",
+                "  • Single node operations",
+                "",
+                "Optimization:",
+                "  • Singly: O(1) head ops, O(n) tail ops",
+                "  • Doubly: O(1) both ends with tail pointer",
+                "  • Memory: Singly uses less",
+                "",
+                "Implementation:",
+                "  Use Singly when:",
+                "  - Forward-only traversal needed",
+                "  - Memory is constrained",
+                "  - Simple operations",
+                "",
+                "  Use Doubly when:",
+                "  - Bidirectional traversal needed",
+                "  - O(1) deletion of given node",
+                "  - LRU cache, undo/redo",
+              ],
+            },
+          ],
+          pattern: "Conceptual Comparison (Data Structure Analysis)",
+          complexity: {
+            time: "Varies by operation",
+            space: "Singly: O(n), Doubly: O(2n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -2821,6 +3704,85 @@ function printDoublyBackward(tail) {
   return result.join(' <- ');
 }`}
         explanation="Create new node, link it to current head, update head's prev pointer, return new node as head. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert a new node at the beginning of a doubly linked list",
+                "Handle empty list (new node becomes head & tail)",
+                "Maintain both next and prev pointers correctly",
+                "Input: head, tail, data → Output: updated head/tail",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "insert",
+                "beginning",
+                "doubly",
+                "prev pointer",
+                "O(1)",
+              ],
+              details: [
+                "Keywords: 'insert at begin', 'doubly' → head insertion with prev pointer",
+                "Pattern: Create node → Hook before head → Update prev pointers",
+                "Linked list mutation with constant-time pointer updates",
+                "Similar to stack push on DLL / deque push_front",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Doubly linked node: value + next + prev",
+                "Track both head and tail references",
+                "No auxiliary DS needed (O(1) extra space)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: DLL head insertion",
+                "  - Create newNode(data)",
+                "  - If list empty → head = tail = newNode",
+                "  - Else: newNode.next = head, head.prev = newNode",
+                "  - Update head = newNode, keep tail same",
+                "  - Time O(1), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list → new node as both head & tail",
+                "  • Single node behaves same as general case",
+                "  • Null inputs: guard before dereferencing",
+                "",
+                "Implementation Tips:",
+                "  • Update both directions: newNode.next + head.prev",
+                "  • Return both head & tail so caller keeps references",
+                "  • Avoid memory leaks: optional cleanup of old head.prev",
+                "",
+                "Optimization: Operation already O(1) time & space",
+              ],
+            },
+          ],
+          pattern: "Head Insertion on Doubly Linked List",
+          complexity: {
+            time: "O(1) - constant pointer updates",
+            space: "O(1) - new node only",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -2943,6 +3905,79 @@ function printDoublyBackward(tail) {
   return result.join(' <- ');
 }`}
         explanation="Create new node, link current tail to it, set new node's prev to current tail, return new node as tail. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert a new node at the end (tail) of a doubly linked list",
+                "Handle empty list (new node becomes head & tail)",
+                "Preserve both next and prev links",
+                "Input: head, tail, data → Output: updated head/tail",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["insert", "end", "tail", "doubly", "O(1)"],
+              details: [
+                "Keywords: 'insert at end', 'doubly' → tail insertion with prev pointer",
+                "Pattern: Append node after current tail → Update pointers",
+                "Same as deque push_back or queue enqueue on DLL",
+                "Requires constant-time pointer rewiring",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "DLL node storing data + next + prev",
+                "Keep references to both head and tail",
+                "No auxiliary storage required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: DLL tail insertion",
+                "  - Create newNode(data)",
+                "  - If list empty: head = tail = newNode",
+                "  - Else: tail.next = newNode, newNode.prev = tail",
+                "  - Update tail = newNode",
+                "  - Time O(1), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list → new node becomes both head & tail",
+                "  • Tail pointer null? ensure consistent state",
+                "  • Large insert batches: reuse helper to avoid duplication",
+                "",
+                "Implementation Tips:",
+                "  • Update both forward and backward links",
+                "  • Return both head & tail for caller",
+                "  • Optional size++ tracking for O(1) length retrieval",
+                "",
+                "Optimization: Already optimal O(1) time/space",
+              ],
+            },
+          ],
+          pattern: "Tail Insertion on Doubly Linked List",
+          complexity: {
+            time: "O(1) - constant time append",
+            space: "O(1) - new node only",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -3120,6 +4155,85 @@ function printDoublyBackward(tail) {
   return result.join(' <- ');
 }`}
         explanation="Swap next and prev pointers for each node, then swap head and tail. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Reverse a doubly linked list in-place",
+                "Reversal means head ↔ tail, next/prev swapped for every node",
+                "Maintain ability to traverse both directions after reversal",
+                "Input: head & tail pointers, Output: new head/tail",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "reverse",
+                "doubly",
+                "swap pointers",
+                "in-place",
+                "two pointers",
+              ],
+              details: [
+                "Keywords: 'reverse DLL' → swap next & prev",
+                "Pattern: Iterate once, swap links, then swap head/tail",
+                "Identical to reversing edges in a bidirectional list",
+                "Avoid extra storage → treat as pointer manipulation problem",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Existing doubly linked list nodes",
+                "Need head & tail references for final swap",
+                "No additional DS required (O(1) space)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Single pass pointer swap",
+                "  - current = head",
+                "  - For each node: swap current.next & current.prev",
+                "  - Move current = previous next (stored before swap)",
+                "  - After loop: swap head & tail references",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list or single node → no-op",
+                "  • Ensure head/tail not null before dereferencing",
+                "  • Maintain referential integrity when list reused elsewhere",
+                "",
+                "Implementation Tips:",
+                "  • Store temp = current.next before swap",
+                "  • After swapping, move to temp (original next)",
+                "  • At end return { head: oldTail, tail: oldHead }",
+                "",
+                "Optimization: Iterative O(n) is optimal; recursion adds stack cost",
+              ],
+            },
+          ],
+          pattern: "In-Place Pointer Swap (DLL Reversal)",
+          complexity: {
+            time: "O(n) - visit each node once",
+            space: "O(1) - in-place",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -3298,6 +4412,85 @@ function printDoublyBackward(tail) {
   return result.join(' <- ');
 }`}
         explanation="Update new head's prev pointer to null, return head.next as new head. Handle single node and empty list cases. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Delete the head node of a doubly linked list",
+                "If list empty → remain empty; if size 1 → list becomes empty",
+                "Need to update new head and maintain tail reference",
+                "Input: head, tail → Output: updated head/tail",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "delete",
+                "head",
+                "doubly linked list",
+                "prev pointer",
+                "O(1)",
+              ],
+              details: [
+                "Keywords: 'delete head' → constant-time pointer update",
+                "Pattern: Move head to head.next, nullify prev pointer",
+                "Same as deque pop_front on a DLL",
+                "Need to guard against empty / single-node condition",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "DLL nodes: data + next + prev",
+                "Head & tail references to update boundaries",
+                "No auxiliary DS needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Remove head in O(1)",
+                "  - If head == null → return { null, null }",
+                "  - If head == tail → list becomes empty",
+                "  - Else: newHead = head.next, newHead.prev = null",
+                "  - Keep tail unchanged",
+                "  - Time O(1), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list / single node list",
+                "  • Ensure new head exists before accessing prev",
+                "  • Optional: return deleted data for callers",
+                "",
+                "Implementation Tips:",
+                "  • Detach old head to avoid memory leaks (head.next = head.prev = null)",
+                "  • Return updated head & tail",
+                "  • Consider helper for deleting multiple nodes",
+                "",
+                "Optimization: Already optimal constant time + space",
+              ],
+            },
+          ],
+          pattern: "Head Deletion on Doubly Linked List",
+          complexity: {
+            time: "O(1) - constant pointer fix",
+            space: "O(1) - no extra space",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -3490,6 +4683,79 @@ function printDoublyBackward(tail) {
   return result.join(' <- ');
 }`}
         explanation="Update new tail's next pointer to null, return tail.prev as new tail. Handle single node and empty list cases. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Delete the last node (tail) from a doubly linked list",
+                "If list empty → remain empty; if size 1 → list becomes empty",
+                "Need to update tail reference and break link from new tail",
+                "Input: head & tail → Output: updated head/tail",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["delete", "last", "tail", "doubly", "O(1)"],
+              details: [
+                "Keywords: 'delete last', 'tail' → constant time removal when DLL has tail pointer",
+                "Pattern: Move tail backward via prev pointer, nullify next link",
+                "Same as deque pop_back or stack pop on DLL tail",
+                "Guard for empty / single-node conditions",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "DLL nodes with prev + next pointers",
+                "Need both head and tail references",
+                "No auxiliary structures required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Tail removal",
+                "  - If head == null → return empty list",
+                "  - If head == tail → list becomes empty",
+                "  - Else: newTail = tail.prev, newTail.next = null",
+                "  - Keep head same, update tail reference",
+                "  - Time O(1), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty & single-node lists",
+                "  • Ensure tail.prev exists before dereferencing",
+                "  • Optionally return deleted value",
+                "",
+                "Implementation Tips:",
+                "  • Detach old tail (tail.prev = tail.next = null) if managing memory",
+                "  • Provide helper for deleting k nodes from end",
+                "  • Keep size counter in sync if maintained",
+                "",
+                "Optimization: Already optimal constant-time operation",
+              ],
+            },
+          ],
+          pattern: "Tail Deletion on Doubly Linked List",
+          complexity: {
+            time: "O(1) - pointer reassignment",
+            space: "O(1) - no aux memory",
+          },
+        }}
       />
     </div>
   );
@@ -3812,6 +5078,82 @@ function ListNode(data) {
   this.next = null;
 }`}
         explanation="Circular linked lists have the last node pointing to the first. Advantages: round-robin scheduling, no null pointers. Disadvantages: infinite loop risk, complex deletion. Time: O(n) for most operations."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Explain what circular linked lists are",
+                "List benefits, drawbacks, and real-world uses",
+                "Contrast with singly/doubly linear lists",
+                "Input: conceptual question, Output: structured analysis",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "circular",
+                "last node points to first",
+                "round-robin",
+                "infinite",
+                "wrap-around",
+              ],
+              details: [
+                "Keywords: 'advantages', 'disadvantages' → comparison response",
+                "Pattern: highlight structural difference (tail.next = head)",
+                "Focus on scenarios needing continuous looping",
+                "Mention trade-offs: complexity vs benefits",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly list (tail.next points to head)",
+                "Circular doubly list (head.prev = tail & tail.next = head)",
+                "Optionally maintain tail pointer for O(1) append",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Conceptual evaluation",
+                "  - Explain how traversal works via do-while",
+                "  - Discuss use cases: round-robin, buffering, playlist loops",
+                "  - Highlight drawbacks: infinite loops, complex deletes",
+                "  - Provide complexity summary (O(n) traversal, O(1) insert/delete with tail)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases / Risks:",
+                "  • Need explicit termination to avoid infinite loops",
+                "  • Harder to detect list end or empty state",
+                "  • Deleting head/tail requires extra bookkeeping",
+                "",
+                "Optimization / Best Practices:",
+                "  • Maintain tail pointer for O(1) insert at end",
+                "  • Use dummy node or length counter for easier traversal",
+                "  • When debugging, break the circle temporarily to reuse linear logic",
+              ],
+            },
+          ],
+          pattern: "Conceptual Comparison (Circular vs Linear Lists)",
+          complexity: {
+            time: "Varies (operations typically O(1) insert/delete, O(n) traversal)",
+            space: "O(n) nodes; uses one extra pointer per node vs singly",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -4050,6 +5392,85 @@ function CircularListNode(data) {
 // Run tests
 testCircularTraversal();`}
         explanation="Use do-while loop to traverse circular list. Start from head, visit each node, continue until back to head. Always check for empty list first. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Traverse every node in a circular linked list exactly once",
+                "Prevent infinite looping by stopping when we come back to head",
+                "Handle empty list safely",
+                "Input: head pointer, Output: list/array of visited values or actions executed",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "circular",
+                "traverse",
+                "loop",
+                "do-while",
+                "wrap-around",
+              ],
+              details: [
+                "Keywords: 'circular traversal' → use do-while or sentinel",
+                "Pattern: Start at head, continue until pointer returns to head",
+                "Need termination condition referencing starting node",
+                "Also consider safe guards (max steps) for corrupted lists",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly linked list nodes (data + next)",
+                "Keep pointer to head (and optionally tail)",
+                "Optional: visited count or maxSteps guard for robustness",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm: Do-while traversal",
+                "  - If head == null → return []",
+                "  - current = head",
+                "  - do { process current; current = current.next; } while (current !== head)",
+                "  - For custom actions, pass callback or accumulate result",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list (head null)",
+                "  • Single node (loop still executes once)",
+                "  • Corrupted list where next never equals head",
+                "",
+                "Implementation Tips:",
+                "  • Use do-while to guarantee first node is processed",
+                "  • Optionally track steps and break if they exceed list size",
+                "  • Provide helper variations (custom action, early termination)",
+                "",
+                "Optimization: Keep traversal O(n); avoid extra memory unless storing results",
+              ],
+            },
+          ],
+          pattern: "Do-While Traversal of Circular List",
+          complexity: {
+            time: "O(n) - visit each node once",
+            space: "O(1) - iterative traversal",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -4242,6 +5663,83 @@ function countCircularNodes(head) {
 // Run tests
 testInsertAtBeginCircular();`}
         explanation="Find last node, link new node to current head, update last node's next to new node. Handle empty list case. Time: O(n) to find last node, Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert a node at the beginning of a circular singly linked list",
+                "Need new node to become head and still maintain circular linkage",
+                "Must update last node's next pointer to new head",
+                "Handle empty list separately (node points to itself)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "insert",
+                "beginning",
+                "circular",
+                "last pointer",
+                "wrap-around",
+              ],
+              details: [
+                "Keywords: 'insert at begin', 'circular' → need tail reference update",
+                "Pattern: Find last node (tail) so we can rewire tail.next",
+                "Essentially same as prepend in circular queue/list",
+                "If tail pointer maintained externally, operation becomes O(1)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly linked list nodes (data + next)",
+                "Head pointer (returned) and optionally tail pointer for optimization",
+                "No extra storage needed beyond new node",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm (without stored tail):",
+                "  - If head == null: newNode.next = newNode, return newNode",
+                "  - Else: traverse to last node (node whose next == head)",
+                "  - Set newNode.next = head & last.next = newNode",
+                "  - Return newNode as new head",
+                "  - Time O(n) due to traversal, Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list (head null)",
+                "  • Single node (last is head itself)",
+                "  • Duplicate values allowed",
+                "",
+                "Optimization:",
+                "  • Maintain tail pointer so insertion becomes O(1)",
+                "  • Provide helper returning both head and size for bookkeeping",
+                "  • Validate input data if needed",
+              ],
+            },
+          ],
+          pattern: "Circular List Head Insertion",
+          complexity: {
+            time: "O(n) without stored tail, O(1) with tail pointer",
+            space: "O(1) extra",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -4458,6 +5956,77 @@ function countCircularNodes(head) {
 // Run tests
 testInsertAtEndCircular();`}
         explanation="Find last node, link it to new node, link new node back to head. Handle empty list case. Time: O(n) to find last node, Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert a node at the end of a circular singly linked list",
+                "Head stays same; last node should point to new node",
+                "New node must point back to head to maintain circular property",
+                "Handle empty list (node points to itself)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["insert", "end", "circular", "last node", "tail"],
+              details: [
+                "Keywords: 'insert end', 'circular' → need to find tail",
+                "Pattern: Traverse until node.next == head",
+                "Essentially queue enqueue on circular list",
+                "Opportunity to optimize if tail pointer is kept",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly linked list nodes",
+                "Head pointer always available; optional tail pointer for O(1)",
+                "No extra storage beyond new node",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm (without stored tail):",
+                "  - If head == null: newNode.next = newNode; return newNode",
+                "  - Traverse last node whose next == head",
+                "  - last.next = newNode; newNode.next = head",
+                "  - Return original head",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases:",
+                "  • Empty list (new head)",
+                "  • Single node list (last == head)",
+                "  • Large lists: traversal cost O(n)",
+                "",
+                "Optimization:",
+                "  • Maintain tail pointer/reference for O(1) append",
+                "  • Return both head and tail if caller tracks them",
+                "  • Validate data/null inputs when required",
+              ],
+            },
+          ],
+          pattern: "Circular List Tail Insertion",
+          complexity: {
+            time: "O(n) w/out tail pointer, O(1) with tail pointer",
+            space: "O(1) extra",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -4697,6 +6266,79 @@ function countCircularNodes(head) {
 // Run tests
 testDeleteHeadCircular();`}
         explanation="Find last node, update its next to point to head.next, return head.next as new head. Handle single node and empty list cases. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Delete the head node from a circular singly linked list",
+                "Ensure the circular structure remains intact",
+                "Handle empty list and single node scenarios explicitly",
+                "Input: head pointer, Output: new head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "delete",
+                "head",
+                "circular",
+                "tail update",
+                "wrap-around",
+              ],
+              details: [
+                "Keywords: 'delete head', 'circular' → must locate tail (node pointing to head)",
+                "Pattern: Move tail.next to the node after head",
+                "Single node → deletion empties the list",
+                "Same idea as deque pop_front on circular buffer",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly linked list nodes (data + next)",
+                "If tail pointer maintained externally → O(1); else traverse",
+                "Optionally return deleted value/size for bookkeeping",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm without tail pointer:",
+                "  - If head == null → return null",
+                "  - If head.next == head → return null (single node)",
+                "  - Traverse to last node where node.next == head",
+                "  - last.next = head.next",
+                "  - Return head.next as new head",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge Cases: repeated deletions, k deletions, null head",
+                "Detach old head to avoid leaks if manual memory management",
+                "Optimization: store tail pointer to skip traversal",
+                "Provide variants that return deleted data or track size",
+              ],
+            },
+          ],
+          pattern: "Head Deletion in Circular Linked List",
+          complexity: {
+            time: "O(n) without tail pointer, O(1) with tail pointer",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5060,6 +6702,73 @@ function countCircularNodes(head) {
 // Run tests
 testDeleteKthCircular();`}
         explanation="Find kth node by traversing, delete it by linking previous to next. Handle edge cases: k=1 (head), k beyond list length, empty list. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Remove the kth node from a circular singly linked list",
+                "If k == 1, this becomes delete-head operation",
+                "Need to handle invalid k and empty list",
+                "Input: head pointer, integer k (1-indexed)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["delete", "kth", "circular", "position", "traverse"],
+              details: [
+                "Keywords: 'kth', 'circular' → traverse counting nodes until returning to head",
+                "Pattern: Maintain prev pointer to reconnect links after deletion",
+                "When k exceeds length, report error/ignore per spec",
+                "Same as removing node at index in circular queue",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Circular singly linked list representation",
+                "Pointers for current and previous nodes",
+                "Optional: track size to validate k quickly",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - If head == null → return null",
+                "  - If k == 1 → call deleteHeadCircular",
+                "  - Traverse list with counter until position == k",
+                "  - Relink prev.next = current.next; return head",
+                "  - If traversal loops back to head before k reached → invalid k",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: k<=0, k>length, empty list, repeated deletions",
+                "Reusable helper for delete head for clarity",
+                "To optimize, store length or use slow pointer (k mod n)",
+                "Return deleted value or new size if needed by caller",
+              ],
+            },
+          ],
+          pattern: "Position-Based Deletion in Circular List",
+          complexity: {
+            time: "O(n) - traverse up to full list once",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5467,6 +7176,77 @@ function CircularListNode(data) {
   this.next = null;
 }`}
         explanation="Circular doubly linked list has both next and prev pointers, with last node's next pointing to head and head's prev pointing to last. Offers O(1) operations at both ends and bidirectional traversal."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Implement/understand circular doubly linked lists (CDLL)",
+                "Each node has next and prev pointers, and tail connects back to head",
+                "Need to support insertion, deletion, traversal, search, size, etc.",
+                "Input: sequence of operations, Output: working CDLL behaviors",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "circular",
+                "doubly",
+                "prev pointer",
+                "bidirectional",
+                "O(1) ends",
+              ],
+              details: [
+                "Keywords: 'circular doubly' → maintain both next and prev plus wrap-around",
+                "Pattern: last.next = head and head.prev = last keep structure closed",
+                "CDLL enables O(1) insert/delete at both ends with tail pointer",
+                "Useful for round-robin buffers, music playlists, caches",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Node storing data, next, and prev references",
+                "Keep head pointer plus optional size counter",
+                "Tail pointer accessible as head.prev to avoid extra field",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Implementation essentials:",
+                "  - Insert at beginning/end: update four pointers (new node, head, tail)",
+                "  - Delete head/last: relink neighbors and update head",
+                "  - Traversal: forward/backward loops until returning to head",
+                "  - Search: standard O(n) scan following next pointers",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node, repeated insert/delete",
+                "Encapsulate pointer updates in helpers to avoid mistakes",
+                "Track size for quick emptiness/length checks",
+                "Benchmark vs singly/doubly/circular singly for trade-offs",
+              ],
+            },
+          ],
+          pattern: "Circular Doubly Linked Structure (Bidirectional Ring)",
+          complexity: {
+            time: "Insert/delete O(1), traversal/search O(n)",
+            space: "O(n) nodes with 2 pointers each",
+          },
+        }}
       />
     </div>
   );
@@ -5521,6 +7301,73 @@ let head = null;
 });
 console.log("Sorted list:", printList(head));`}
         explanation="Traverse until finding correct position where current.next.data >= data, then insert. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Insert a value into a singly linked list that is already sorted (ascending)",
+                "Must keep final list sorted",
+                "Need to handle insertion at head, middle, or tail",
+                "Input: head pointer + value to insert",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["sorted", "insert", "order", "traverse", "compare"],
+              details: [
+                "Keyword 'sorted' → traverse until correct position based on comparisons",
+                "Pattern: find first node whose value >= new value",
+                "Edge case when new value is smallest → insert at head",
+                "Equivalent to insertion step of insertion sort",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes (data + next)",
+                "Pointers: current for traversal, newNode for insertion",
+                "No extra structures needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Create new node with value",
+                "  - If list empty or value <= head.data → insert at head",
+                "  - Else traverse while current.next.data < value",
+                "  - Insert node between current and current.next",
+                "  - Return original (possibly new) head",
+                "  - Time O(n) worst case, Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, duplicates, inserting at tail",
+                "Use dummy node to simplify head insertion if desired",
+                "If many inserts, consider maintaining tail pointers or skip-lists for faster search",
+                "Testing: random inserts to ensure sorted property maintained",
+              ],
+            },
+          ],
+          pattern: "Insertion into Sorted Singly Linked List",
+          complexity: {
+            time: "O(n) - traverse to insertion point",
+            space: "O(1) extra",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5548,6 +7395,77 @@ function findMiddle(head) {
 const head = createList([1, 2, 3, 4, 5]);
 console.log("Middle node:", findMiddle(head).data); // 3`}
         explanation="Use slow and fast pointers. Fast moves 2 steps, slow moves 1 step. When fast reaches end, slow is at middle. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Find middle node of singly linked list",
+                "If even length, return second middle (fast/slow standard)",
+                "List can be empty → return null",
+                "Input: head pointer, Output: reference to middle node/value",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "middle",
+                "two pointers",
+                "slow",
+                "fast",
+                "tortoise hare",
+              ],
+              details: [
+                "Keywords: 'middle node' → fast/slow pointer technique",
+                "Pattern: fast pointer takes 2 steps, slow takes 1",
+                "When fast hits end, slow sits at mid",
+                "Avoid counting length separately",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes with next pointer",
+                "Two pointers referencing nodes (slow & fast)",
+                "No additional storage required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - slow = head, fast = head",
+                "  - while fast && fast.next: slow = slow.next, fast = fast.next.next",
+                "  - return slow when loop finishes",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list (return null), single node (middle is head)",
+                "If need first middle for even length, tweak loop condition",
+                "Technique extends to other problems (palindrome check, cycle detection)",
+                "Add tests for even/odd lengths to verify behavior",
+              ],
+            },
+          ],
+          pattern: "Two-Pointer (Fast & Slow) Middle Finder",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5581,6 +7499,77 @@ function nthFromEnd(head, n) {
 const head = createList([1, 2, 3, 4, 5]);
 console.log("2nd from end:", nthFromEnd(head, 2).data); // 4`}
         explanation="Use two pointers. Move first pointer n steps ahead, then move both until first reaches end. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Return nth node from end (1-indexed) of singly linked list",
+                "If n > length, return null",
+                "Must do it in single pass if possible",
+                "Input: head pointer + integer n",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "nth from end",
+                "two pointers",
+                "offset",
+                "single pass",
+              ],
+              details: [
+                "Keywords: 'nth from end' → use fast/slow pointer with offset",
+                "Pattern: advance fast pointer n steps first",
+                "Then move both pointers until fast hits null",
+                "Avoid counting length separately",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Two pointers referencing nodes",
+                "No additional memory needed",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - first = head, second = head",
+                "  - Move first forward n steps; if null before n steps → n > length",
+                "  - Move both pointers until first reaches null",
+                "  - second now points to nth from end",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: n <= 0, empty list, n equals length (return head)",
+                "Wrap logic into reusable helper for removal operations",
+                "For frequent queries, consider storing length but invalidates on updates",
+                "Add tests for n=1 (last node) and n=length",
+              ],
+            },
+          ],
+          pattern: "Two-Pointer Offset Technique",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5608,6 +7597,73 @@ const head = createList([1, 2, 3, 4, 5]);
 console.log("Original:", printList(head));
 console.log("Reversed:", printList(reverseIterative(head)));`}
         explanation="Use three pointers: prev, current, next. Iteratively reverse links. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Reverse entire singly linked list iteratively",
+                "Must do it in-place with O(1) extra space",
+                "Handle empty list and single node gracefully",
+                "Input: head pointer, Output: new head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["reverse", "iterative", "three pointers", "in-place"],
+              details: [
+                "Keywords: 'reverse list' → classic pointer flipping problem",
+                "Pattern: maintain prev/current/next to rewire links one by one",
+                "Similar to reversing array but pointer-based",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Temporary pointers prev/current/next (O(1) extra space)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - prev = null, current = head",
+                "  - while current != null:",
+                "      next = current.next",
+                "      current.next = prev",
+                "      prev = current",
+                "      current = next",
+                "  - return prev as new head",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list returns null, single node unaffected",
+                "Optional iterative tail recursion elimination already handled",
+                "Re-use snippet for other problems (k-group reverse, palindrome checks)",
+                "Test with odd/even length lists to ensure correctness",
+              ],
+            },
+          ],
+          pattern: "Iterative Linked List Reversal",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5635,6 +7691,71 @@ const head = createList([1, 2, 3, 4, 5]);
 console.log("Original:", printList(head));
 console.log("Recursive reverse:", printList(reverseRecursive(head)));`}
         explanation="Recursively reverse rest of list, then fix current node's links. Time: O(n), Space: O(n) for call stack."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Reverse linked list using recursion (no loops)",
+                "Need to return new head after reversal",
+                "Ensure stack unwinds correctly to avoid cycles",
+                "Input: head pointer, Output: new head",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["recursive", "reverse", "call stack", "backtracking"],
+              details: [
+                "Keywords: 'recursive reverse' → break problem into head + rest",
+                "Pattern: reverse sublist head.next recursively, then attach head at end",
+                "Base case when node null or single node",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Call stack implicitly stores previous context",
+                "No additional explicit data structures",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Base: if head == null or head.next == null → return head",
+                "  - newHead = reverseRecursive(head.next)",
+                "  - head.next.next = head; head.next = null",
+                "  - return newHead",
+                "  - Time O(n), Space O(n) due to recursion depth",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node, very deep list (stack overflow)",
+                "Compare with iterative approach for large inputs",
+                "Tail recursion not easily applicable due to pointer rewiring",
+                "Add tests to ensure no node still points forward after reversal",
+              ],
+            },
+          ],
+          pattern: "Recursive Backtracking Reversal",
+          complexity: {
+            time: "O(n)",
+            space: "O(n) call stack",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5664,6 +7785,73 @@ const head = createList([1, 1, 2, 3, 3, 4]);
 console.log("Original:", printList(head));
 console.log("After removing duplicates:", printList(removeDuplicates(head)));`}
         explanation="Compare current node with next node. If same, skip next node. Otherwise move forward. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "List is sorted ascending; remove duplicate values in-place",
+                "Need to keep first occurrence, remove subsequent duplicates",
+                "Return head of deduplicated list",
+                "Input: head pointer, Output: head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: ["sorted", "duplicate", "adjacent", "single pass"],
+              details: [
+                "Sorted property implies duplicates are adjacent",
+                "Pattern: Compare current node with current.next",
+                "When equal, skip nodes by rewiring next pointer",
+                "No hash set needed because order is sorted",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Pointer `current` iterating through list",
+                "No additional space beyond constant pointer",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - current = head",
+                "  - while current && current.next:",
+                "      if current.data == current.next.data → current.next = current.next.next",
+                "      else current = current.next",
+                "  - return head",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node, long run of duplicates",
+                "If duplicates extremely frequent, ensure loops skip quickly",
+                "Extend idea to unsorted list using hash set (different problem)",
+                "Add tests for duplicates at head/tail/middle",
+              ],
+            },
+          ],
+          pattern: "Adjacent Duplicate Removal in Sorted List",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5702,6 +7890,78 @@ const head = createList([1, 2, 3, 4, 5, 6, 7, 8]);
 console.log("Original:", printList(head));
 console.log("Reversed in groups of 3:", printList(reverseInGroups(head, 3)));`}
         explanation="Reverse first k nodes iteratively, then recursively reverse remaining groups. Time: O(n), Space: O(n/k) for recursion."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Reverse list in blocks of exactly k nodes",
+                "When nodes remaining < k, leave them unchanged",
+                "Return new head of modified list",
+                "Inputs: head pointer and integer k (>0)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "reverse",
+                "k-group",
+                "segmented",
+                "recursion",
+                "iteration",
+              ],
+              details: [
+                "Pattern: treat list as sequence of segments length k",
+                "Within each segment, perform standard reversal",
+                "Need to connect tail of reversed block to next block's head",
+                "Recursion/iteration gives divide-and-conquer flavor",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Pointers: current, prev, next, plus counters",
+                "Optional stack if converting recursion to iteration",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm outline (recursive):",
+                "  - Reverse first k nodes using iterative pointer flip",
+                "  - Keep track of next pointer after block",
+                "  - head becomes tail; set head.next = reverseInGroups(next, k)",
+                "  - Return prev (new head of this block)",
+                "  - Time O(n), Space O(n/k) recursion (or O(1) iterative stack)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: k==1 (no change), k<=0 invalid, list shorter than k",
+                "Iterative approach using dummy node avoids recursion depth issues",
+                "For performance, count nodes beforehand if needed to skip recursion when <k",
+                "Extensively test with multiples/non-multiples of k",
+              ],
+            },
+          ],
+          pattern: "Block-wise Reversal (k-Group)",
+          complexity: {
+            time: "O(n)",
+            space: "O(1) iterative, O(n/k) recursion stack recursively",
+          },
+        }}
       />
     </div>
   );
@@ -5751,6 +8011,80 @@ const head = createList([1, 2, 3, 4, 5]);
 head.next.next.next.next.next = head.next;
 console.log("Has loop:", detectLoop(head)); // true`}
         explanation="Use Floyd's cycle detection: slow moves 1 step, fast moves 2 steps. If they meet, there's a loop. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Determine whether a singly linked list contains a cycle",
+                "Return true/false (or location) depending on requirements",
+                "Must run in O(n) time and O(1) space",
+                "Input: head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "loop",
+                "cycle",
+                "Floyd",
+                "tortoise hare",
+                "two pointers",
+              ],
+              details: [
+                "Keywords: 'detect loop' → use fast & slow pointer (Floyd's algorithm)",
+                "Pattern: slow advances 1 node, fast advances 2 nodes",
+                "If they ever meet, loop exists; if fast hits null, no loop",
+                "Avoid using hash set unless extra space allowed",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes only",
+                "Pointers slow and fast maintaining positions",
+                "Optional: pointer references to identify meeting point for later use",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm (Floyd):",
+                "  - slow = head, fast = head",
+                "  - while fast && fast.next:",
+                "      slow = slow.next",
+                "      fast = fast.next.next",
+                "      if slow == fast → loop found",
+                "  - Else return false",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node pointing to itself",
+                "If need entry point, run second phase resetting one pointer to head",
+                "Testing: create loops at different positions + no-loop scenario",
+                "Instrument logging or counters only in debug builds",
+              ],
+            },
+          ],
+          pattern: "Floyd's Cycle Detection",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5795,6 +8129,78 @@ const head = createList([1, 2, 3, 4, 5]);
 head.next.next.next.next.next = head.next; // Create loop
 floydCycleDetection(head);`}
         explanation="Floyd's algorithm: tortoise and hare approach. If there's a cycle, fast pointer will eventually catch up to slow pointer."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Provide detailed Floyd's cycle detection implementation",
+                "Need diagnostic output explaining each step",
+                "Return boolean indicating presence of loop",
+                "Input: head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "Floyd",
+                "cycle detection",
+                "tortoise",
+                "hare",
+                "two pointers",
+              ],
+              details: [
+                "Same tortoise-hare pattern as standard loop detection",
+                "Detailed logging just elaborates on each iteration",
+                "Stop when pointers meet or fast pointer hits null",
+                "Complexity remains O(n)/O(1)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Two moving pointers plus counters for instrumentation",
+                "No auxiliary containers required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm identical to Floyd's loop detection:",
+                "  - slow=head, fast=head",
+                "  - Iterate while fast && fast.next, moving slow 1 step, fast 2 steps",
+                "  - If slow == fast → cycle detected",
+                "  - Else if loop exits, no cycle",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node, large loops",
+                "Use logging only in debug to avoid performance issues",
+                "Extend algorithm to find loop start or length if needed",
+                "For deterministic tests, create loops at different positions",
+              ],
+            },
+          ],
+          pattern: "Floyd's Cycle Detection (Instrumented)",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5840,6 +8246,78 @@ const head = createList([1, 2, 3, 4, 5]);
 head.next.next.next.next.next = head.next; // Create loop
 console.log("Loop removed:", detectAndRemoveLoop(head));`}
         explanation="1) Detect loop with Floyd's algorithm 2) Find loop start by moving one pointer to head 3) Remove loop by setting last node's next to null. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Detect whether a loop exists and remove it without losing nodes",
+                "Return head of linearized list",
+                "Must run in O(n) time and O(1) space",
+                "Input: head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "detect",
+                "remove loop",
+                "Floyd",
+                "entry point",
+                "two pointers",
+              ],
+              details: [
+                "Use Floyd's cycle detection to confirm presence of loop",
+                "Once meeting point found, locate loop start by resetting one pointer to head",
+                "Finally fix node prior to start to break cycle",
+                "Pattern widely used in interview questions",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Pointers slow/fast for detection, additional pointer to break loop",
+                "No external storage",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Detect loop via Floyd; if no loop, return head",
+                "  - Reset slow=head, move slow and fast one step until slow.next == fast.next",
+                "  - fast currently at loop tail; set fast.next = null",
+                "  - Return head",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: loop starting at head, loop covering entire list, single node loop",
+                "If need loop length, count steps while moving pointers",
+                "Ensure algorithm terminates even when pointers coincide immediately",
+                "Add tests verifying list remains intact post-removal",
+              ],
+            },
+          ],
+          pattern: "Loop Detection + Removal (Floyd + Entry Search)",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
     </div>
   );
@@ -5884,6 +8362,76 @@ console.log("Before deletion:", printList(head));
 deleteNode(nodeToDelete);
 console.log("After deletion:", printList(head));`}
         explanation="Copy data from next node to current node, then delete next node. Cannot delete last node with this method. Time: O(1), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Given pointer to node (not head) in singly list, delete that node",
+                "Cannot access previous node, so must overwrite data",
+                "Last node cannot be removed this way",
+                "Input: pointer to node to remove",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "delete node",
+                "without head",
+                "copy data",
+                "in-place",
+              ],
+              details: [
+                "Classic trick: copy next node's data into current node",
+                "Then bypass next node effectively removing it",
+                "Fails if node is tail (no next node)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes with next pointer",
+                "Pointer to node that must be deleted plus its next node",
+                "No extra storage required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Check node and node.next not null",
+                "  - node.data = node.next.data",
+                "  - node.next = node.next.next",
+                "  - Optional: free deleted node if manual memory management",
+                "  - Time O(1), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: node null, last node (throw error), single element list",
+                "Use this technique carefully; modifies node identity",
+                "For doubly/circular lists, better to access prev pointer",
+                "Unit tests should verify structure remains valid",
+              ],
+            },
+          ],
+          pattern: "Copy-Overwrite Deletion",
+          complexity: {
+            time: "O(1)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5938,6 +8486,77 @@ const head = createList([1, 2, 3, 4, 5, 6]);
 console.log("Original:", printList(head));
 console.log("Segregated:", printList(segregateEvenOdd(head)));`}
         explanation="Create separate lists for even and odd nodes, then connect them. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Rearrange nodes so all even-valued nodes come before odd-valued nodes",
+                "Relative order within even group and odd group should remain",
+                "Do it in-place without creating new nodes",
+                "Input: head pointer, Output: head of rearranged list",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "segregate",
+                "even",
+                "odd",
+                "stable partition",
+                "two lists",
+              ],
+              details: [
+                "Pattern: build two separate chains (even and odd) while traversing once",
+                "Stable partition ensures ordering preserved within each group",
+                "Finally link even chain to odd chain",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Pointers evenStart/evenEnd and oddStart/oddEnd",
+                "No extra arrays or lists required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Traverse list once",
+                "  - Append current node to even or odd list based on value parity",
+                "  - After traversal, connect evenEnd.next = oddStart, set oddEnd.next = null",
+                "  - Return evenStart if exists, else oddStart",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: all even or all odd nodes, empty list",
+                "Ensure tail pointers updated to avoid cycles",
+                "Extendable: segregate by other predicates (>= pivot, colors, etc.)",
+                "Test with alternating values and long runs of each parity",
+              ],
+            },
+          ],
+          pattern: "Stable Partition via Two Auxiliary Pointers",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -5969,6 +8588,77 @@ list1.next.next = common;
 list2.next.next.next = common;
 console.log("Intersection node:", getIntersectionNode(list1, list2).data);`}
         explanation="Use two pointers, when one reaches end switch to other list. They'll meet at intersection point. Time: O(m+n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Find first common node shared by two singly linked lists",
+                "Lists may differ in length and may not intersect",
+                "Return node reference (or null) without modifying lists",
+                "Inputs: headA and headB",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "intersection",
+                "two pointers",
+                "head switch",
+                "equalize length",
+              ],
+              details: [
+                "Pattern: pointer switching ensures both traverse same total distance",
+                "After m+n steps, pointers align at intersection or null",
+                "Avoids computing lengths or using extra space",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Two pointer variables reused during traversal",
+                "No auxiliary storage required",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - a = headA, b = headB",
+                "  - while a != b:",
+                "      a = (a == null) ? headB : a.next",
+                "      b = (b == null) ? headA : b.next",
+                "  - return a (intersection node or null)",
+                "  - Time O(m+n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: one list empty, intersection at head, no intersection",
+                "Alternate approach: compute lengths and advance longer list",
+                "Ensure loop terminates (after at most m+n steps, pointers align)",
+                "Test with shared tails of different sizes",
+              ],
+            },
+          ],
+          pattern: "Two-Pointer Head-Switching Intersection",
+          complexity: {
+            time: "O(m+n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -6009,6 +8699,79 @@ const head = createList([1, 2, 3, 4, 5]);
 console.log("Original:", printList(head));
 console.log("Pairwise swapped:", printList(pairwiseSwap(head)));`}
         explanation="Use dummy node to handle edge cases. Swap pairs iteratively by updating pointers. Time: O(n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Swap every adjacent pair of nodes (1↔2, 3↔4, ...)",
+                "Do not modify node values; swap actual links",
+                "Return new head (which may change)",
+                "Input: head pointer",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "pairwise swap",
+                "adjacent",
+                "dummy node",
+                "pointer manipulation",
+              ],
+              details: [
+                "Pattern: use dummy node plus prev/current pointers to swap pairs",
+                "Each iteration rewires two nodes and advances by two",
+                "Handles odd-length list by leaving last node untouched",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Singly linked list nodes",
+                "Pointers: dummy, prev, current, next, nextNext",
+                "No additional data structures necessary",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm:",
+                "  - Create dummy pointing to head",
+                "  - prev = dummy, current = head",
+                "  - while current && current.next:",
+                "      next = current.next, nextNext = next.next",
+                "      prev.next = next; next.next = current; current.next = nextNext",
+                "      prev = current; current = nextNext",
+                "  - return dummy.next",
+                "  - Time O(n), Space O(1)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, single node, odd number of nodes",
+                "Recursive approach possible but increases stack usage",
+                "Ensure no cycles introduced; update prev correctly",
+                "Add tests verifying values when list length even and odd",
+              ],
+            },
+          ],
+          pattern: "Pairwise Pointer Swap with Dummy Node",
+          complexity: {
+            time: "O(n)",
+            space: "O(1)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -6061,6 +8824,77 @@ node3.random = node2;
 
 console.log("Original list cloned with random pointers");`}
         explanation="Use hash map to store original-to-clone mapping. Two passes: first create nodes, second set pointers. Time: O(n), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Read the problem carefully and identify what is being asked.",
+              details: [
+                "Clone linked list where each node has next and random pointers",
+                "New list must be deep copy (no shared nodes)",
+                "Return cloned head",
+                "Input: head of original random list",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Recognize keywords and patterns that hint at the solution approach.",
+              keywords: [
+                "clone",
+                "random pointer",
+                "hash map",
+                "deep copy",
+                "two pass",
+              ],
+              details: [
+                "Typical solution uses hash map to map originals to clones",
+                "Alternative interleaving technique exists for O(1) extra space",
+                "Need two passes: create nodes then wire pointers",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Select appropriate data structure based on problem requirements.",
+              details: [
+                "Map<OriginalNode, CloneNode> to find clones quickly",
+                "RandomListNode class storing data, next, random",
+                "Optional: visited set for debugging",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Choose the algorithm that best fits the problem constraints.",
+              details: [
+                "Algorithm (hash map approach):",
+                "  - Pass 1: iterate original list, create clone for each node, store mapping",
+                "  - Pass 2: for each original, set clone.next = map.get(orig.next), clone.random = map.get(orig.random)",
+                "  - Return map.get(head)",
+                "  - Time O(n), Space O(n)",
+                "Alternative O(1) space method interleaves clone nodes and then splits lists",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Write the solution and consider optimizations and edge cases.",
+              details: [
+                "Edge cases: empty list, nodes with null random, random pointing to self",
+                "Use WeakMap in JS to avoid leaks if GC concerns",
+                "For memory-sensitive cases, implement interleaving approach",
+                "Add tests verifying cloned random pointers reference cloned nodes",
+              ],
+            },
+          ],
+          pattern: "Hash-Map Deep Copy of Random Pointer List",
+          complexity: {
+            time: "O(n)",
+            space: "O(n) extra (O(1) if using interleaving)",
+          },
+        }}
       />
     </div>
   );
@@ -6122,8 +8956,10 @@ function ProblemBlock({
   description,
   solution,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
 
   const difficultyColors = {
     Easy: "bg-green-500/20 text-green-400",
@@ -6151,23 +8987,151 @@ function ProblemBlock({
         {showSolution ? "Hide Solution" : "Show Solution"}
       </button>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4">
-            <h4 className="text-lg font-medium text-white mb-2">
-              JavaScript Solution:
-            </h4>
-            <pre className="whitespace-pre-wrap text-sm text-gray-200">
-              <code>{solution}</code>
-            </pre>
+      {showSolution && solution && (
+        <div>
+          {/* Tabs */}
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-indigo-400 border-b-2 border-indigo-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-indigo-400 border-b-2 border-indigo-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {/* Tab Content */}
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <div className="bg-gray-900 rounded-lg p-4">
+                <h4 className="text-lg font-medium text-white mb-2">
+                  JavaScript Solution:
+                </h4>
+                <pre className="whitespace-pre-wrap text-sm text-gray-200">
+                  <code>{solution}</code>
+                </pre>
+              </div>
+              <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
+                <p className="text-blue-200">
+                  <strong>💡 Explanation:</strong>
+                  <br />
+                  {explanation}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Approach Tab Component
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-xl p-6 border border-blue-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework to solve this problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
-            <p className="text-blue-200">
-              <strong>💡 Explanation:</strong>
-              <br />
-              {explanation}
-            </p>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
           </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
         </div>
       )}
     </div>

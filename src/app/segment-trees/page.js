@@ -58,14 +58,150 @@ export default function SegmentTreesPage() {
   );
 }
 
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-purple-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
+      <pre className="text-green-400 text-sm">
+        <code>{displayedCode}</code>
+      </pre>
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 rounded-xl p-6 border border-blue-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework to solve this problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProblemBlock({
   title,
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -94,17 +230,50 @@ function ProblemBlock({
 
       <p className="text-gray-300 mb-4">{description}</p>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{solution}</code>
-            </pre>
-          </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <h4 className="text-blue-200 font-semibold mb-2">Explanation:</h4>
-            <p className="text-blue-100 text-sm">{explanation}</p>
-          </div>
+      {showSolution && codeData && (
+        <div>
+          {/* Tabs */}
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-purple-400 border-b-2 border-purple-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {/* Tab Content */}
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <CodeBlock code={codeData} defaultLanguage="JavaScript" />
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-200 font-semibold mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-100 text-sm">{explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
         </div>
       )}
     </div>
@@ -241,7 +410,8 @@ function IntroductionSection() {
         title="Segment Tree Introduction"
         difficulty="Medium"
         description="Basic implementation of Segment Tree for range sum queries and point updates."
-        solution={`// Segment Tree - Introduction
+        solutions={{
+          JavaScript: `// Segment Tree - Introduction
 
 class SegmentTree {
   constructor(arr) {
@@ -382,8 +552,237 @@ st.pointUpdate(1, 10);
 console.log("Sum [1, 3] after update:", st.rangeQuery(1, 3));
 
 st.pointUpdate(3, 15);
-console.log("Sum [2, 4] after update:", st.rangeQuery(2, 4));`}
+console.log("Sum [2, 4] after update:", st.rangeQuery(2, 4));`,
+          Java: `// Segment Tree - Introduction
+
+class SegmentTree {
+    private int[] tree;
+    private int[] arr;
+    private int n;
+    
+    public SegmentTree(int[] arr) {
+        this.n = arr.length;
+        this.tree = new int[4 * n];
+        this.arr = arr.clone();
+        
+        System.out.println("=== Building Segment Tree ===");
+        System.out.print("Array: ");
+        printArray(this.arr);
+        
+        build(1, 0, n - 1);
+        
+        System.out.print("Segment Tree: ");
+        printArray(this.tree);
+    }
+    
+    // Build the segment tree
+    private void build(int node, int start, int end) {
+        System.out.println("\\nBuilding node " + node + " for range [" + start + ", " + end + "]");
+        
+        if (start == end) {
+            // Leaf node
+            tree[node] = arr[start];
+            System.out.println("  Leaf node: tree[" + node + "] = " + tree[node]);
+        } else {
+            int mid = (start + end) / 2;
+            System.out.println("  Internal node: mid = " + mid);
+            
+            // Build left and right subtrees
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            
+            // Merge the results
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            System.out.println("  tree[" + node + "] = tree[" + (2 * node) + "] + tree[" + (2 * node + 1) + "] = " + tree[node]);
+        }
+    }
+    
+    // Query range sum
+    private int query(int node, int start, int end, int left, int right) {
+        System.out.println("\\nQuerying node " + node + " for range [" + start + ", " + end + "] with query [" + left + ", " + right + "]");
+        
+        // No overlap
+        if (right < start || left > end) {
+            System.out.println("  No overlap, returning 0");
+            return 0;
+        }
+        
+        // Complete overlap
+        if (left <= start && end <= right) {
+            System.out.println("  Complete overlap, returning tree[" + node + "] = " + tree[node]);
+            return tree[node];
+        }
+        
+        // Partial overlap
+        int mid = (start + end) / 2;
+        System.out.println("  Partial overlap, splitting at mid = " + mid);
+        
+        int leftSum = query(2 * node, start, mid, left, right);
+        int rightSum = query(2 * node + 1, mid + 1, end, left, right);
+        
+        int result = leftSum + rightSum;
+        System.out.println("  Result: " + leftSum + " + " + rightSum + " = " + result);
+        return result;
+    }
+    
+    // Update a single element
+    private void update(int node, int start, int end, int index, int value) {
+        System.out.println("\\nUpdating node " + node + " for range [" + start + ", " + end + "] at index " + index + " with value " + value);
+        
+        if (start == end) {
+            // Leaf node
+            arr[index] = value;
+            tree[node] = value;
+            System.out.println("  Updated leaf: tree[" + node + "] = " + value);
+        } else {
+            int mid = (start + end) / 2;
+            System.out.println("  Internal node: mid = " + mid);
+            
+            if (index <= mid) {
+                System.out.println("  Updating left subtree");
+                update(2 * node, start, mid, index, value);
+            } else {
+                System.out.println("  Updating right subtree");
+                update(2 * node + 1, mid + 1, end, index, value);
+            }
+            
+            // Update current node
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            System.out.println("  Updated tree[" + node + "] = " + tree[node]);
+        }
+    }
+    
+    // Public methods
+    public int rangeQuery(int left, int right) {
+        System.out.println("\\n=== Range Query [" + left + ", " + right + "] ===");
+        return query(1, 0, n - 1, left, right);
+    }
+    
+    public void pointUpdate(int index, int value) {
+        System.out.println("\\n=== Point Update at index " + index + " with value " + value + " ===");
+        update(1, 0, n - 1, index, value);
+        System.out.print("Updated array: ");
+        printArray(arr);
+    }
+    
+    // Print tree structure
+    public void printTree() {
+        System.out.println("\\n=== Segment Tree Structure ===");
+        printTreeHelper(1, 0, n - 1, 0);
+    }
+    
+    private void printTreeHelper(int node, int start, int end, int level) {
+        String indent = "  ".repeat(level);
+        String range = "[" + start + ", " + end + "]";
+        int value = tree[node];
+        System.out.println(indent + "Node " + node + " " + range + ": " + value);
+        
+        if (start != end) {
+            int mid = (start + end) / 2;
+            printTreeHelper(2 * node, start, mid, level + 1);
+            printTreeHelper(2 * node + 1, mid + 1, end, level + 1);
+        }
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Test the Segment Tree
+public class SegmentTreeTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Segment Tree ===");
+        int[] arr = {1, 3, 5, 7, 9, 11};
+        SegmentTree st = new SegmentTree(arr);
+        
+        st.printTree();
+        
+        // Test range queries
+        System.out.println("\\n=== Testing Range Queries ===");
+        System.out.println("Sum [1, 3]: " + st.rangeQuery(1, 3));
+        System.out.println("Sum [0, 5]: " + st.rangeQuery(0, 5));
+        System.out.println("Sum [2, 4]: " + st.rangeQuery(2, 4));
+        
+        // Test point updates
+        System.out.println("\\n=== Testing Point Updates ===");
+        st.pointUpdate(1, 10);
+        System.out.println("Sum [1, 3] after update: " + st.rangeQuery(1, 3));
+        
+        st.pointUpdate(3, 15);
+        System.out.println("Sum [2, 4] after update: " + st.rangeQuery(2, 4));
+    }
+}`,
+        }}
         explanation="Segment Tree is a binary tree where each node represents a range of the array. It allows efficient range queries and point updates in O(log n) time. The tree is built bottom-up, with leaf nodes containing array elements and internal nodes containing the result of their children."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Segment Tree data structure for range sum queries and point updates. Each node stores sum of a range.",
+              details: [
+                "Support range queries: get sum of range [l, r]",
+                "Support point updates: update value at index i",
+                "Both operations in O(log n) time",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Binary tree structure: root represents entire array, children represent halves. Build bottom-up: leaf nodes = array elements, internal nodes = sum of children.",
+              keywords: [
+                "segment tree",
+                "binary tree",
+                "range queries",
+                "divide and conquer",
+              ],
+              details: [
+                "Tree structure: array-based representation (4n size)",
+                "Build: recursive bottom-up construction",
+                "Query: traverse tree, combine overlapping ranges",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Array tree[4*n] to store segment tree. Root at index 1. Left child: 2*i, right child: 2*i+1. Each node stores sum of its range.",
+              details: [
+                "1-based indexing for easier parent-child calculation",
+                "4n size ensures enough space for all nodes",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Build: recursively build left and right subtrees, merge results. Query: if current range completely inside query range, return node value. If completely outside, return 0. Otherwise recurse on both children and merge. Update: update leaf, propagate up.",
+              details: [
+                "Build: O(n) time",
+                "Query: O(log n) time - traverse height of tree",
+                "Update: O(log n) time - update path to root",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(n) build, O(log n) query/update. Space O(4n) for tree array. Can optimize space to O(2n) with careful indexing. Lazy propagation for range updates.",
+              details: [
+                "Efficient for range queries with updates",
+                "Better than O(n) naive approach for multiple queries",
+              ],
+            },
+          ],
+          pattern: "Segment Tree (Range Sum)",
+          complexity: {
+            time: "O(n) build, O(log n) query/update",
+            space: "O(4n)",
+          },
+        }}
       />
     </div>
   );
@@ -398,7 +797,8 @@ function SegmentTreesSection() {
         title="Range Sum Query - Immutable"
         difficulty="Easy"
         description="Given an integer array nums, find the sum of the elements between indices left and right inclusive."
-        solution={`// Range Sum Query - Immutable
+        solutions={{
+          JavaScript: `// Range Sum Query - Immutable
 
 class NumArray {
   constructor(nums) {
@@ -486,15 +886,199 @@ console.log("\\n--- Test Case 2: Prefix Sum Approach ---");
 const numArrayPrefix = new NumArrayPrefixSum(nums);
 console.log("sumRange(0, 2):", numArrayPrefix.sumRange(0, 2));
 console.log("sumRange(2, 5):", numArrayPrefix.sumRange(2, 5));
-console.log("sumRange(0, 5):", numArrayPrefix.sumRange(0, 5));`}
+console.log("sumRange(0, 5):", numArrayPrefix.sumRange(0, 5));`,
+          Java: `// Range Sum Query - Immutable
+
+class NumArray {
+    private int[] tree;
+    private int[] arr;
+    private int n;
+    
+    public NumArray(int[] nums) {
+        this.n = nums.length;
+        this.tree = new int[4 * n];
+        this.arr = nums.clone();
+        
+        System.out.println("=== Building Segment Tree for Range Sum ===");
+        System.out.print("Array: ");
+        printArray(this.arr);
+        
+        build(1, 0, n - 1);
+    }
+    
+    private void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+        }
+    }
+    
+    private int query(int node, int start, int end, int left, int right) {
+        // No overlap
+        if (right < start || left > end) {
+            return 0;
+        }
+        
+        // Complete overlap
+        if (left <= start && end <= right) {
+            return tree[node];
+        }
+        
+        // Partial overlap
+        int mid = (start + end) / 2;
+        int leftSum = query(2 * node, start, mid, left, right);
+        int rightSum = query(2 * node + 1, mid + 1, end, left, right);
+        return leftSum + rightSum;
+    }
+    
+    public int sumRange(int left, int right) {
+        System.out.println("\\n=== Range Sum Query [" + left + ", " + right + "] ===");
+        int result = query(1, 0, n - 1, left, right);
+        System.out.println("Sum of range [" + left + ", " + right + "]: " + result);
+        return result;
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Alternative: Prefix Sum approach (simpler for immutable arrays)
+class NumArrayPrefixSum {
+    private int[] prefixSum;
+    
+    public NumArrayPrefixSum(int[] nums) {
+        prefixSum = new int[nums.length + 1];
+        prefixSum[0] = 0;
+        
+        System.out.println("=== Building Prefix Sum Array ===");
+        System.out.print("Original array: ");
+        printArray(nums);
+        
+        for (int i = 0; i < nums.length; i++) {
+            prefixSum[i + 1] = prefixSum[i] + nums[i];
+            System.out.println("prefixSum[" + (i + 1) + "] = " + prefixSum[i + 1]);
+        }
+        
+        System.out.print("Prefix sum array: ");
+        printArray(prefixSum);
+    }
+    
+    public int sumRange(int left, int right) {
+        System.out.println("\\n=== Prefix Sum Query [" + left + ", " + right + "] ===");
+        int result = prefixSum[right + 1] - prefixSum[left];
+        System.out.println("Sum = prefixSum[" + (right + 1) + "] - prefixSum[" + left + "] = " + prefixSum[right + 1] + " - " + prefixSum[left] + " = " + result);
+        return result;
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Test cases
+public class RangeSumQueryTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Range Sum Query ===");
+        
+        int[] nums = {-2, 0, 3, -5, 2, -1};
+        System.out.println("\\n--- Test Case 1: Segment Tree Approach ---");
+        NumArray numArray = new NumArray(nums);
+        System.out.println("sumRange(0, 2): " + numArray.sumRange(0, 2));
+        System.out.println("sumRange(2, 5): " + numArray.sumRange(2, 5));
+        System.out.println("sumRange(0, 5): " + numArray.sumRange(0, 5));
+        
+        System.out.println("\\n--- Test Case 2: Prefix Sum Approach ---");
+        NumArrayPrefixSum numArrayPrefix = new NumArrayPrefixSum(nums);
+        System.out.println("sumRange(0, 2): " + numArrayPrefix.sumRange(0, 2));
+        System.out.println("sumRange(2, 5): " + numArrayPrefix.sumRange(2, 5));
+        System.out.println("sumRange(0, 5): " + numArrayPrefix.sumRange(0, 5));
+    }
+}`,
+        }}
         explanation="For immutable arrays, prefix sum is more efficient (O(1) query, O(n) space). Segment tree is useful when updates are needed. Time: O(log n) for segment tree, O(1) for prefix sum. Space: O(n) for both."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Range sum query on immutable array. No updates allowed. Need efficient range sum queries.",
+              details: [
+                "Example: array=[1,3,5,7,9], query(0,2) → 9",
+                "Array doesn't change after initialization",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Two approaches: Prefix Sum (O(1) query) or Segment Tree (O(log n) query). For immutable arrays, prefix sum is optimal.",
+              keywords: [
+                "prefix sum",
+                "segment tree",
+                "range query",
+                "immutable array",
+              ],
+              details: [
+                "Prefix sum: precompute cumulative sums",
+                "Query: sum[l..r] = prefix[r+1] - prefix[l]",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Prefix sum array: prefix[i] = sum of arr[0..i-1]. Initialize prefix[0]=0, prefix[i]=prefix[i-1]+arr[i-1].",
+              details: [
+                "Prefix sum: O(1) query, O(n) space",
+                "Segment tree: O(log n) query, O(4n) space (overkill for immutable)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Build prefix sum: for i from 1 to n, prefix[i]=prefix[i-1]+arr[i-1]. Query: return prefix[right+1]-prefix[left].",
+              details: [
+                "Prefix sum: simple and efficient",
+                "Segment tree: unnecessary complexity for immutable array",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Prefix sum: Time O(n) build, O(1) query. Space O(n). Segment tree: Time O(n) build, O(log n) query. Space O(4n). Prefix sum is optimal for immutable arrays.",
+              details: [
+                "Use prefix sum for immutable arrays",
+                "Use segment tree only if updates are needed",
+              ],
+            },
+          ],
+          pattern: "Prefix Sum (Immutable Array)",
+          complexity: {
+            time: "O(n) build, O(1) query",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Range Sum Query - Mutable"
         difficulty="Medium"
         description="Given an integer array nums, find the sum of the elements between indices left and right inclusive, with support for updates."
-        solution={`// Range Sum Query - Mutable
+        solutions={{
+          JavaScript: `// Range Sum Query - Mutable
 
 class NumArrayMutable {
   constructor(nums) {
@@ -621,15 +1205,227 @@ console.log("sumRange(0, 2):", numArray.sumRange(0, 2));
 console.log("\\n--- Another Update ---");
 numArray.updateVal(2, 10);
 console.log("sumRange(0, 2):", numArray.sumRange(0, 2));
-console.log("sumRange(1, 2):", numArray.sumRange(1, 2));`}
+console.log("sumRange(1, 2):", numArray.sumRange(1, 2));`,
+          Java: `// Range Sum Query - Mutable
+
+class NumArrayMutable {
+    private int[] tree;
+    private int[] arr;
+    private int n;
+    
+    public NumArrayMutable(int[] nums) {
+        this.n = nums.length;
+        this.tree = new int[4 * n];
+        this.arr = nums.clone();
+        
+        System.out.println("=== Building Mutable Segment Tree ===");
+        System.out.print("Array: ");
+        printArray(this.arr);
+        
+        build(1, 0, n - 1);
+        printTree();
+    }
+    
+    private void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+        }
+    }
+    
+    private int query(int node, int start, int end, int left, int right) {
+        System.out.println("\\nQuerying node " + node + " for range [" + start + ", " + end + "] with query [" + left + ", " + right + "]");
+        
+        // No overlap
+        if (right < start || left > end) {
+            System.out.println("  No overlap, returning 0");
+            return 0;
+        }
+        
+        // Complete overlap
+        if (left <= start && end <= right) {
+            System.out.println("  Complete overlap, returning tree[" + node + "] = " + tree[node]);
+            return tree[node];
+        }
+        
+        // Partial overlap
+        int mid = (start + end) / 2;
+        System.out.println("  Partial overlap, splitting at mid = " + mid);
+        
+        int leftSum = query(2 * node, start, mid, left, right);
+        int rightSum = query(2 * node + 1, mid + 1, end, left, right);
+        
+        int result = leftSum + rightSum;
+        System.out.println("  Result: " + leftSum + " + " + rightSum + " = " + result);
+        return result;
+    }
+    
+    private void update(int node, int start, int end, int index, int value) {
+        System.out.println("\\nUpdating node " + node + " for range [" + start + ", " + end + "] at index " + index + " with value " + value);
+        
+        if (start == end) {
+            // Leaf node
+            arr[index] = value;
+            tree[node] = value;
+            System.out.println("  Updated leaf: tree[" + node + "] = " + value);
+        } else {
+            int mid = (start + end) / 2;
+            System.out.println("  Internal node: mid = " + mid);
+            
+            if (index <= mid) {
+                System.out.println("  Updating left subtree");
+                update(2 * node, start, mid, index, value);
+            } else {
+                System.out.println("  Updating right subtree");
+                update(2 * node + 1, mid + 1, end, index, value);
+            }
+            
+            // Update current node
+            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            System.out.println("  Updated tree[" + node + "] = " + tree[node]);
+        }
+    }
+    
+    // Public methods
+    public int sumRange(int left, int right) {
+        System.out.println("\\n=== Range Sum Query [" + left + ", " + right + "] ===");
+        int result = query(1, 0, n - 1, left, right);
+        System.out.println("Sum of range [" + left + ", " + right + "]: " + result);
+        return result;
+    }
+    
+    public void updateVal(int index, int value) {
+        System.out.println("\\n=== Point Update at index " + index + " with value " + value + " ===");
+        update(1, 0, n - 1, index, value);
+        System.out.print("Updated array: ");
+        printArray(arr);
+        printTree();
+    }
+    
+    public void printTree() {
+        System.out.println("\\n=== Segment Tree Structure ===");
+        printTreeHelper(1, 0, n - 1, 0);
+    }
+    
+    private void printTreeHelper(int node, int start, int end, int level) {
+        String indent = "  ".repeat(level);
+        String range = "[" + start + ", " + end + "]";
+        int value = tree[node];
+        System.out.println(indent + "Node " + node + " " + range + ": " + value);
+        
+        if (start != end) {
+            int mid = (start + end) / 2;
+            printTreeHelper(2 * node, start, mid, level + 1);
+            printTreeHelper(2 * node + 1, mid + 1, end, level + 1);
+        }
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Test cases
+public class MutableRangeSumQueryTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Mutable Range Sum Query ===");
+        
+        int[] nums = {1, 3, 5};
+        NumArrayMutable numArray = new NumArrayMutable(nums);
+        
+        System.out.println("\\n--- Initial Queries ---");
+        System.out.println("sumRange(0, 2): " + numArray.sumRange(0, 2));
+        
+        System.out.println("\\n--- After Update ---");
+        numArray.updateVal(1, 2);
+        System.out.println("sumRange(0, 2): " + numArray.sumRange(0, 2));
+        
+        System.out.println("\\n--- Another Update ---");
+        numArray.updateVal(2, 10);
+        System.out.println("sumRange(0, 2): " + numArray.sumRange(0, 2));
+        System.out.println("sumRange(1, 2): " + numArray.sumRange(1, 2));
+    }
+}`,
+        }}
         explanation="Mutable segment tree supports both range queries and point updates in O(log n) time. Each update propagates up the tree, maintaining the sum property. Space complexity is O(4n) for the tree structure."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Range sum query on mutable array. Support both range queries and point updates efficiently.",
+              details: [
+                "Example: array=[1,3,5,7,9], update(2,10), query(0,2) → 14",
+                "Array can be updated after initialization",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Segment Tree is optimal for mutable arrays. Prefix sum doesn't work well with updates (O(n) per update). Segment tree supports O(log n) updates.",
+              keywords: [
+                "segment tree",
+                "mutable array",
+                "range query",
+                "point update",
+              ],
+              details: [
+                "Segment tree: O(log n) for both query and update",
+                "Prefix sum: O(1) query but O(n) update (not suitable)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Segment tree array tree[4*n]. Each node stores sum of its range. Root at index 1.",
+              details: [
+                "Tree structure: array-based representation",
+                "Update propagates from leaf to root",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Build: recursively build left/right, merge with sum. Query: traverse tree, combine overlapping ranges. Update: update leaf node, propagate change up to root.",
+              details: [
+                "Build: O(n) time",
+                "Query: O(log n) - traverse tree height",
+                "Update: O(log n) - update path to root",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(n) build, O(log n) query/update. Space O(4n) for tree. Optimal for mutable arrays with range queries.",
+              details: [
+                "Much better than O(n) naive update approach",
+                "Efficient for multiple queries and updates",
+              ],
+            },
+          ],
+          pattern: "Segment Tree (Mutable Array)",
+          complexity: {
+            time: "O(n) build, O(log n) query/update",
+            space: "O(4n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Range Minimum Query (RMQ)"
         difficulty="Medium"
         description="Find the minimum element in a range [L, R] of an array with support for updates."
-        solution={`// Range Minimum Query (RMQ)
+        solutions={{
+          JavaScript: `// Range Minimum Query (RMQ)
 
 class RMQSegmentTree {
   constructor(arr) {
@@ -754,8 +1550,218 @@ console.log("RMQ(0, 5):", rmq.rangeMinQuery(0, 5));
 console.log("\\n--- After Update ---");
 rmq.updateVal(2, 0);
 console.log("RMQ(0, 2):", rmq.rangeMinQuery(0, 2));
-console.log("RMQ(1, 4):", rmq.rangeMinQuery(1, 4));`}
+console.log("RMQ(1, 4):", rmq.rangeMinQuery(1, 4));`,
+          Java: `// Range Minimum Query (RMQ)
+
+class RMQSegmentTree {
+    private int[] tree;
+    private int[] arr;
+    private int n;
+    private static final int INF = Integer.MAX_VALUE;
+    
+    public RMQSegmentTree(int[] arr) {
+        this.n = arr.length;
+        this.tree = new int[4 * n];
+        this.arr = arr.clone();
+        
+        System.out.println("=== Building RMQ Segment Tree ===");
+        System.out.print("Array: ");
+        printArray(this.arr);
+        
+        build(1, 0, n - 1);
+        printTree();
+    }
+    
+    private void build(int node, int start, int end) {
+        if (start == end) {
+            tree[node] = arr[start];
+        } else {
+            int mid = (start + end) / 2;
+            build(2 * node, start, mid);
+            build(2 * node + 1, mid + 1, end);
+            tree[node] = Math.min(tree[2 * node], tree[2 * node + 1]);
+        }
+    }
+    
+    private int query(int node, int start, int end, int left, int right) {
+        System.out.println("\\nRMQ Querying node " + node + " for range [" + start + ", " + end + "] with query [" + left + ", " + right + "]");
+        
+        // No overlap
+        if (right < start || left > end) {
+            System.out.println("  No overlap, returning INF");
+            return INF;
+        }
+        
+        // Complete overlap
+        if (left <= start && end <= right) {
+            System.out.println("  Complete overlap, returning tree[" + node + "] = " + tree[node]);
+            return tree[node];
+        }
+        
+        // Partial overlap
+        int mid = (start + end) / 2;
+        System.out.println("  Partial overlap, splitting at mid = " + mid);
+        
+        int leftMin = query(2 * node, start, mid, left, right);
+        int rightMin = query(2 * node + 1, mid + 1, end, left, right);
+        
+        int result = Math.min(leftMin, rightMin);
+        System.out.println("  Result: min(" + leftMin + ", " + rightMin + ") = " + result);
+        return result;
+    }
+    
+    private void update(int node, int start, int end, int index, int value) {
+        System.out.println("\\nRMQ Updating node " + node + " for range [" + start + ", " + end + "] at index " + index + " with value " + value);
+        
+        if (start == end) {
+            // Leaf node
+            arr[index] = value;
+            tree[node] = value;
+            System.out.println("  Updated leaf: tree[" + node + "] = " + value);
+        } else {
+            int mid = (start + end) / 2;
+            System.out.println("  Internal node: mid = " + mid);
+            
+            if (index <= mid) {
+                System.out.println("  Updating left subtree");
+                update(2 * node, start, mid, index, value);
+            } else {
+                System.out.println("  Updating right subtree");
+                update(2 * node + 1, mid + 1, end, index, value);
+            }
+            
+            // Update current node
+            tree[node] = Math.min(tree[2 * node], tree[2 * node + 1]);
+            System.out.println("  Updated tree[" + node + "] = " + tree[node]);
+        }
+    }
+    
+    // Public methods
+    public int rangeMinQuery(int left, int right) {
+        System.out.println("\\n=== RMQ [" + left + ", " + right + "] ===");
+        int result = query(1, 0, n - 1, left, right);
+        System.out.println("Minimum in range [" + left + ", " + right + "]: " + result);
+        return result;
+    }
+    
+    public void updateVal(int index, int value) {
+        System.out.println("\\n=== RMQ Update at index " + index + " with value " + value + " ===");
+        update(1, 0, n - 1, index, value);
+        System.out.print("Updated array: ");
+        printArray(arr);
+        printTree();
+    }
+    
+    public void printTree() {
+        System.out.println("\\n=== RMQ Segment Tree Structure ===");
+        printTreeHelper(1, 0, n - 1, 0);
+    }
+    
+    private void printTreeHelper(int node, int start, int end, int level) {
+        String indent = "  ".repeat(level);
+        String range = "[" + start + ", " + end + "]";
+        int value = tree[node];
+        System.out.println(indent + "Node " + node + " " + range + ": " + value);
+        
+        if (start != end) {
+            int mid = (start + end) / 2;
+            printTreeHelper(2 * node, start, mid, level + 1);
+            printTreeHelper(2 * node + 1, mid + 1, end, level + 1);
+        }
+    }
+    
+    private void printArray(int[] arr) {
+        System.out.print("[");
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i]);
+            if (i < arr.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+    }
+}
+
+// Test cases
+public class RMQTest {
+    public static void main(String[] args) {
+        System.out.println("=== Testing Range Minimum Query ===");
+        
+        int[] arr = {2, 5, 1, 4, 9, 3};
+        RMQSegmentTree rmq = new RMQSegmentTree(arr);
+        
+        System.out.println("\\n--- Initial Queries ---");
+        System.out.println("RMQ(0, 2): " + rmq.rangeMinQuery(0, 2));
+        System.out.println("RMQ(1, 4): " + rmq.rangeMinQuery(1, 4));
+        System.out.println("RMQ(0, 5): " + rmq.rangeMinQuery(0, 5));
+        
+        System.out.println("\\n--- After Update ---");
+        rmq.updateVal(2, 0);
+        System.out.println("RMQ(0, 2): " + rmq.rangeMinQuery(0, 2));
+        System.out.println("RMQ(1, 4): " + rmq.rangeMinQuery(1, 4));
+    }
+}`,
+        }}
         explanation="RMQ segment tree stores minimum values instead of sums. The merge operation uses Math.min instead of addition. Time complexity remains O(log n) for both queries and updates."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Range Minimum Query: find minimum value in range [l, r]. Support both queries and point updates.",
+              details: [
+                "Example: array=[1,3,5,2,4], query(0,3) → 1",
+                "Similar to range sum, but find minimum instead",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Segment Tree with minimum operation. Same structure as sum tree, but merge operation uses min instead of addition.",
+              keywords: [
+                "segment tree",
+                "range minimum query",
+                "RMQ",
+                "minimum operation",
+              ],
+              details: [
+                "Tree structure: same as sum tree",
+                "Merge: min(left, right) instead of left + right",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Segment tree array tree[4*n]. Each node stores minimum of its range. Initialize with Infinity for empty ranges.",
+              details: [
+                "Same structure as sum tree",
+                "Use Infinity as identity for minimum",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Build: recursively build, merge with min. Query: traverse tree, return min of overlapping ranges. Update: update leaf, propagate min up to root.",
+              details: [
+                "Build: O(n) time",
+                "Query: O(log n) - return minimum of ranges",
+                "Update: O(log n) - update path to root",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(n) build, O(log n) query/update. Space O(4n). Can extend to range maximum query (RMQ) by using max operation.",
+              details: [
+                "Efficient for range minimum/maximum queries",
+                "Same complexity as range sum tree",
+              ],
+            },
+          ],
+          pattern: "Segment Tree (Range Minimum Query)",
+          complexity: {
+            time: "O(n) build, O(log n) query/update",
+            space: "O(4n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -927,6 +1933,67 @@ console.log("After range update [1, 3] += 1:");
 console.log("Range [0, 2]:", lazyST.rangeQuery(0, 2));
 console.log("Range [1, 4]:", lazyST.rangeQuery(1, 4));`}
         explanation="Lazy propagation defers range updates by storing them in a lazy array. Updates are applied only when needed during queries. This reduces time complexity from O(n log n) to O(log n) for range updates."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Support range updates (add value to entire range) efficiently. Without lazy propagation, range update takes O(n log n). With lazy propagation, it's O(log n).",
+              details: [
+                "Example: update range [0,2] by adding 5",
+                "Need to update all elements in range efficiently",
+                "Lazy propagation defers updates until needed",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Lazy array stores pending updates. Instead of updating all nodes immediately, store update in lazy array. Apply lazy updates only when querying or updating overlapping ranges.",
+              keywords: [
+                "lazy propagation",
+                "range update",
+                "deferred update",
+                "segment tree",
+              ],
+              details: [
+                "Lazy array: lazy[i] = pending update for node i",
+                "Push lazy: apply lazy update to children when needed",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Segment tree array tree[4*n] and lazy array lazy[4*n]. Lazy array stores pending updates to be applied later.",
+              details: [
+                "Tree array: stores actual values",
+                "Lazy array: stores pending updates",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Range update: if current range completely inside update range, update lazy value and tree value, return. If partially overlapping, push lazy to children, recurse on both children. Query: push lazy before querying, then query normally.",
+              details: [
+                "Push lazy: apply lazy[node] to tree[node] and children's lazy",
+                "Update: mark lazy instead of updating all nodes",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(log n) for range update and query. Space O(4n) for tree and lazy arrays. Reduces from O(n log n) to O(log n) for range updates.",
+              details: [
+                "Lazy propagation is key optimization",
+                "Essential for efficient range updates",
+              ],
+            },
+          ],
+          pattern: "Segment Tree with Lazy Propagation",
+          complexity: {
+            time: "O(log n) for range update and query",
+            space: "O(4n)",
+          },
+        }}
       />
     </div>
   );
@@ -1052,6 +2119,68 @@ console.log("Range [1, 3] after update:", bit.rangeQuery(1, 3));
 bit.updateVal(3, 15);
 console.log("Range [2, 4] after update:", bit.rangeQuery(2, 4));`}
         explanation="Binary Indexed Tree uses 1-based indexing and stores prefix sums. Each node at index i stores sum of elements from (i - LSB(i) + 1) to i. LSB(i) = i & (-i) gives the least significant bit. Time: O(log n) for both queries and updates."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement Binary Indexed Tree (Fenwick Tree) for prefix sum queries and point updates. More space-efficient than Segment Tree.",
+              details: [
+                "BIT uses 1-based indexing",
+                "Each node stores sum of range based on LSB",
+                "More space-efficient: O(n) vs O(4n) for segment tree",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "BIT structure: tree[i] stores sum of range [i-LSB(i)+1, i]. Update: add delta to all nodes that include index. Query: sum prefix by traversing backwards using LSB.",
+              keywords: [
+                "binary indexed tree",
+                "fenwick tree",
+                "LSB",
+                "prefix sum",
+              ],
+              details: [
+                "LSB(i) = i & (-i) gives least significant bit",
+                "Update: add to tree[i], then i += LSB(i)",
+                "Query: sum tree[i], then i -= LSB(i)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Array tree[n+1] with 1-based indexing. LSB function to calculate least significant bit.",
+              details: [
+                "1-based indexing for easier LSB calculation",
+                "Size n+1 (index 0 unused)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Update: index++ (1-based), while index<=n: tree[index]+=delta, index+=LSB(index). Query: sum=0, while index>0: sum+=tree[index], index-=LSB(index). Return sum.",
+              details: [
+                "Update: propagate forward using LSB",
+                "Query: accumulate backwards using LSB",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(log n) for both query and update. Space O(n) - more efficient than segment tree. BIT is simpler and uses less space.",
+              details: [
+                "More space-efficient than segment tree",
+                "Easier to implement for prefix sum queries",
+              ],
+            },
+          ],
+          pattern: "Binary Indexed Tree (Fenwick Tree)",
+          complexity: {
+            time: "O(log n) for query and update",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1182,6 +2311,67 @@ console.log("sumRange(0, 2):", rangeSumPrefix.sumRange(0, 2));
 console.log("sumRange(2, 5):", rangeSumPrefix.sumRange(2, 5));
 console.log("sumRange(0, 5):", rangeSumPrefix.sumRange(0, 5));`}
         explanation="BIT is efficient for range sum queries when updates are needed. For immutable arrays, prefix sum array is simpler and faster (O(1) query). BIT supports point updates in O(log n) time."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Range sum query with point updates using BIT. Compare with prefix sum approach for immutable arrays.",
+              details: [
+                "BIT: O(log n) query, O(log n) update",
+                "Prefix sum: O(1) query, but O(n) update (not suitable)",
+                "Use BIT when updates are needed",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "BIT for range sum: query(l, r) = prefixSum(r) - prefixSum(l-1). Prefix sum query uses two BIT queries.",
+              keywords: [
+                "binary indexed tree",
+                "range sum",
+                "prefix sum",
+                "point update",
+              ],
+              details: [
+                "Range query = difference of two prefix queries",
+                "BIT efficiently supports prefix queries",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "BIT array tree[n+1] for prefix sums. Range query uses two prefix queries.",
+              details: [
+                "BIT stores prefix sums",
+                "Range query: query(r) - query(l-1)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Range query: return query(right) - query(left-1). Query: prefix sum using BIT (traverse backwards with LSB). Update: point update using BIT (propagate forward with LSB).",
+              details: [
+                "Range query: two prefix queries",
+                "Each prefix query: O(log n)",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(log n) for range query and update. Space O(n). For immutable arrays, prefix sum array is better (O(1) query).",
+              details: [
+                "BIT is optimal for mutable arrays",
+                "Prefix sum is optimal for immutable arrays",
+              ],
+            },
+          ],
+          pattern: "Binary Indexed Tree (Range Sum)",
+          complexity: {
+            time: "O(log n) for query and update",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1306,6 +2496,66 @@ console.log("Range [(2, 1), (4, 3)] after update:", bit2d.rangeSum(2, 1, 4, 3));
 bit2d.updateVal(2, 1, 1);
 console.log("Range [(1, 1), (2, 2)] after update:", bit2d.rangeSum(1, 1, 2, 2));`}
         explanation="2D BIT extends the concept to 2D matrices. Each cell (i,j) stores sum of rectangle from (1,1) to (i,j). Range sum uses inclusion-exclusion principle. Time: O(log m × log n) for both queries and updates."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "2D range sum queries and point updates on matrix. Each query asks for sum of rectangle from (r1,c1) to (r2,c2).",
+              details: [
+                "Example: matrix 5×5, query rectangle from (1,1) to (3,3)",
+                "Support point updates: update value at (i,j)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "2D BIT: tree[i][j] stores sum of rectangle from (1,1) to (i,j). Range query uses inclusion-exclusion: sum(r1,c1,r2,c2) = query(r2,c2) - query(r1-1,c2) - query(r2,c1-1) + query(r1-1,c1-1).",
+              keywords: [
+                "2D binary indexed tree",
+                "2D range query",
+                "inclusion-exclusion",
+                "matrix",
+              ],
+              details: [
+                "2D BIT: nested BIT structure",
+                "Inclusion-exclusion: add/subtract overlapping regions",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "2D array tree[m+1][n+1] with 1-based indexing. Each cell stores sum of rectangle from (1,1) to (i,j).",
+              details: [
+                "1-based indexing for easier LSB calculation",
+                "Size (m+1)×(n+1)",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Update: nested loops with LSB (i loop, j loop). Query: nested loops with LSB. Range query: use inclusion-exclusion with 4 queries.",
+              details: [
+                "Update: O(log m × log n) - nested BIT updates",
+                "Range query: O(log m × log n) - 4 queries with inclusion-exclusion",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(log m × log n) for query and update. Space O(m×n). For immutable matrices, 2D prefix sum is better (O(1) query).",
+              details: [
+                "Efficient for mutable 2D matrices",
+                "Inclusion-exclusion principle is key",
+              ],
+            },
+          ],
+          pattern: "2D Binary Indexed Tree",
+          complexity: {
+            time: "O(log m × log n) for query and update",
+            space: "O(m×n)",
+          },
+        }}
       />
     </div>
   );
@@ -1476,6 +2726,67 @@ console.log("\\n--- Test Case 3 ---");
 console.log("BIT approach:", solution.countSmaller(nums3));
 console.log("Segment Tree approach:", solutionST.countSmaller(nums3));`}
         explanation="Use coordinate compression to map values to ranks, then process from right to left. For each element, query count of smaller elements and update the data structure. BIT is more efficient for this problem."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "For each element, count how many elements to its right are smaller. Return array of counts.",
+              details: [
+                "Example: [5,2,6,1] → [2,1,1,0]",
+                "Process from right to left",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Coordinate compression: map values to ranks (1..n). Process from right to left: for each element, query count of elements with rank < current rank, then update BIT/segment tree.",
+              keywords: [
+                "coordinate compression",
+                "binary indexed tree",
+                "segment tree",
+                "inversion count",
+              ],
+              details: [
+                "Compress values to ranks for efficient indexing",
+                "Query: count of smaller elements seen so far",
+                "Update: increment count for current element",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "BIT or Segment Tree to count frequencies. Coordinate compression maps original values to ranks 1..n.",
+              details: [
+                "BIT: more efficient, O(n) space",
+                "Segment Tree: O(4n) space but same time",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Compress: sort unique values, map to ranks. Process from right to left: for each element, query BIT for count of ranks < current rank, add to result, update BIT at current rank.",
+              details: [
+                "Compression: O(n log n) time",
+                "Query and update: O(log n) per element",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(n log n) - compression + n queries/updates. Space O(n) for BIT. BIT is more efficient than segment tree for this problem.",
+              details: [
+                "BIT is optimal for frequency counting",
+                "Coordinate compression is essential",
+              ],
+            },
+          ],
+          pattern: "BIT/Segment Tree with Coordinate Compression",
+          complexity: {
+            time: "O(n log n)",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
@@ -1620,6 +2931,67 @@ numMatrixMutable.updateVal(3, 2, 2);
 console.log("After update (3,2) = 2:");
 console.log("sumRegion(2, 1, 4, 3):", numMatrixMutable.sumRegion(2, 1, 4, 3));`}
         explanation="For immutable 2D matrices, prefix sum array is most efficient (O(1) query, O(mn) space). For mutable matrices, 2D BIT provides O(log m × log n) queries and updates. Both use inclusion-exclusion principle for range queries."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "2D range sum query on matrix. For immutable matrix, use 2D prefix sum. For mutable matrix, use 2D BIT.",
+              details: [
+                "Query: sum of rectangle from (r1,c1) to (r2,c2)",
+                "Immutable: no updates",
+                "Mutable: support point updates",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "2D prefix sum: precompute prefix[i][j] = sum from (0,0) to (i,j). Range query: inclusion-exclusion with 4 prefix queries. 2D BIT: same inclusion-exclusion but supports updates.",
+              keywords: [
+                "2D prefix sum",
+                "2D binary indexed tree",
+                "inclusion-exclusion",
+                "range query",
+              ],
+              details: [
+                "Prefix sum: O(1) query, O(mn) space",
+                "2D BIT: O(log m × log n) query, O(mn) space",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Immutable: 2D prefix sum array prefix[m+1][n+1]. Mutable: 2D BIT tree[m+1][n+1].",
+              details: [
+                "Prefix sum: simpler for immutable",
+                "2D BIT: necessary for mutable",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Prefix sum: build prefix[i][j] = matrix[i][j] + prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1]. Query: prefix[r2][c2] - prefix[r1-1][c2] - prefix[r2][c1-1] + prefix[r1-1][c1-1]. 2D BIT: same query logic but with BIT operations.",
+              details: [
+                "Inclusion-exclusion: add/subtract overlapping regions",
+                "2D BIT: nested BIT operations",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Prefix sum: Time O(mn) build, O(1) query. Space O(mn). 2D BIT: Time O(log m × log n) query/update. Space O(mn). Use prefix sum for immutable, 2D BIT for mutable.",
+              details: [
+                "Prefix sum is optimal for immutable",
+                "2D BIT is optimal for mutable",
+              ],
+            },
+          ],
+          pattern: "2D Range Sum (Prefix Sum / 2D BIT)",
+          complexity: {
+            time: "O(1) query (prefix), O(log m × log n) query (BIT)",
+            space: "O(mn)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">
@@ -1880,6 +3252,67 @@ console.log("After range update [0, 2] += 2:");
 console.log("Range [0, 2]:", lazyST.queryRange(0, 2));
 console.log("Range [1, 4]:", lazyST.queryRange(1, 4));`}
         explanation="Range updates in BIT use two BITs: one for the update value and one for the weighted update value. This allows O(log n) range updates and point queries. Lazy propagation in segment trees is more intuitive but uses more space."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Support range updates (add value to entire range) and point queries using BIT. BIT normally supports point updates, need technique for range updates.",
+              details: [
+                "Example: update range [0,2] by adding 5",
+                "Query point at index 1 should reflect the update",
+                "BIT needs special technique for range updates",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Use two BITs: BIT1 stores update values, BIT2 stores weighted update values. Range update [l, r] with value v: update BIT1 at l with +v, at r+1 with -v. Update BIT2 at l with +v×l, at r+1 with -v×(r+1). Point query at i: i×query(BIT1, i) - query(BIT2, i).",
+              keywords: [
+                "range update",
+                "binary indexed tree",
+                "two BITs",
+                "weighted updates",
+              ],
+              details: [
+                "Two BITs: one for values, one for weighted values",
+                "Mathematical trick: difference array approach",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Two BIT arrays: bit1[n+1] and bit2[n+1]. Both use 1-based indexing.",
+              details: [
+                "BIT1: stores update deltas",
+                "BIT2: stores weighted update deltas",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Range update [l, r] with v: update BIT1 at l with +v, at r+1 with -v. Update BIT2 at l with +v×l, at r+1 with -v×(r+1). Point query at i: return i×query(BIT1, i) - query(BIT2, i).",
+              details: [
+                "Update: O(log n) - two BIT updates",
+                "Query: O(log n) - two BIT queries",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time O(log n) for range update and point query. Space O(2n) for two BITs. More space-efficient than lazy segment tree (O(4n)), but less intuitive.",
+              details: [
+                "BIT range updates: less intuitive but space-efficient",
+                "Lazy segment tree: more intuitive but uses more space",
+              ],
+            },
+          ],
+          pattern: "BIT Range Updates (Two BITs)",
+          complexity: {
+            time: "O(log n) for range update and point query",
+            space: "O(2n)",
+          },
+        }}
       />
 
       <div className="bg-gray-800 rounded-xl p-8 border border-gray-700">

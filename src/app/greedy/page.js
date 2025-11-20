@@ -56,14 +56,58 @@ export default function GreedyPage() {
   );
 }
 
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
+  return (
+    <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-orange-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
+      <pre className="text-green-400 text-sm">
+        <code>{displayedCode}</code>
+      </pre>
+    </div>
+  );
+}
+
 function ProblemBlock({
   title,
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   return (
     <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
@@ -92,17 +136,140 @@ function ProblemBlock({
 
       <p className="text-gray-300 mb-4">{description}</p>
 
-      {showSolution && (
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-            <pre className="text-green-400 text-sm">
-              <code>{solution}</code>
-            </pre>
+      {showSolution && codeData && (
+        <div>
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-orange-300 border-b-2 border-orange-300"
+                    : "text-gray-400 hover:text-gray-200"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {activeTab === "solution" && (
+            <div className="space-y-4">
+              <CodeBlock code={codeData} defaultLanguage="JavaScript" />
+              <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-200 font-semibold mb-2">
+                  Explanation:
+                </h4>
+                <p className="text-blue-100 text-sm">{explanation}</p>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-orange-900/40 to-red-900/30 rounded-xl p-6 border border-orange-500/30">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Following the systematic 5-step framework for this greedy problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-orange-500 text-gray-900 rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-orange-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-orange-500/20 text-orange-200 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
-            <h4 className="text-blue-200 font-semibold mb-2">Explanation:</h4>
-            <p className="text-blue-100 text-sm">{explanation}</p>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-emerald-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
           </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
         </div>
       )}
     </div>
@@ -190,9 +357,9 @@ function FundamentalsSection() {
           Here&apos;s a general template for implementing greedy algorithms:
         </p>
 
-        <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-          <pre className="text-green-400 text-sm">
-            <code>{`// General Greedy Algorithm Template
+        <CodeBlock
+          code={{
+            JavaScript: `// General Greedy Algorithm Template
 
 function greedyAlgorithm(input) {
   // Step 1: Sort the input based on some criteria
@@ -239,9 +406,82 @@ const activities = [
 
 console.log("Greedy Algorithm Template Example");
 console.log("Input:", activities);
-console.log("Result:", greedyAlgorithm(activities));`}</code>
-          </pre>
-        </div>
+console.log("Result:", greedyAlgorithm(activities));`,
+            Java: `import java.util.*;
+
+// General Greedy Algorithm Template
+public class GreedyAlgorithmTemplate {
+    // General greedy algorithm method
+    public static List<Activity> greedyAlgorithm(List<Activity> input) {
+        // Step 1: Sort the input based on some criteria
+        input.sort((a, b) -> {
+            // Define sorting criteria based on problem
+            return a.criteria - b.criteria; // or b.criteria - a.criteria
+        });
+        
+        // Step 2: Initialize result and current state
+        List<Activity> result = new ArrayList<>();
+        int currentState = 0; // initialValue
+        
+        // Step 3: Make greedy choices
+        for (Activity item : input) {
+            if (isValidChoice(item, currentState)) {
+                result.add(item);
+                currentState = updateState(currentState, item);
+            }
+        }
+        
+        return result;
+    }
+    
+    // Helper functions
+    private static boolean isValidChoice(Activity item, int currentState) {
+        // Check if this choice doesn't violate constraints
+        return true; // Implement based on problem
+    }
+    
+    private static int updateState(int currentState, Activity item) {
+        // Update the current state after making a choice
+        return currentState; // Implement based on problem
+    }
+    
+    // Activity class for example
+    static class Activity {
+        int start;
+        int end;
+        String name;
+        int criteria;
+        
+        Activity(int start, int end, String name) {
+            this.start = start;
+            this.end = end;
+            this.name = name;
+            this.criteria = end; // Example: use end time as criteria
+        }
+        
+        @Override
+        public String toString() {
+            return name + "(" + start + "-" + end + ")";
+        }
+    }
+    
+    // Example usage
+    public static void main(String[] args) {
+        List<Activity> activities = new ArrayList<>();
+        activities.add(new Activity(1, 3, "A"));
+        activities.add(new Activity(2, 5, "B"));
+        activities.add(new Activity(0, 6, "C"));
+        activities.add(new Activity(5, 7, "D"));
+        activities.add(new Activity(8, 9, "E"));
+        activities.add(new Activity(5, 9, "F"));
+        
+        System.out.println("Greedy Algorithm Template Example");
+        System.out.println("Input: " + activities);
+        System.out.println("Result: " + greedyAlgorithm(activities));
+    }
+}`,
+          }}
+        />
       </div>
     </div>
   );
@@ -258,7 +498,8 @@ function ProblemsSection() {
         title="Activity Selection Problem"
         difficulty="Medium"
         description="Select maximum number of non-overlapping activities from a set of activities with start and end times."
-        solution={`// Activity Selection Problem
+        solutions={{
+          JavaScript: `// Activity Selection Problem
 
 // Approach 1: Sort by end time (Greedy)
 function activitySelection(activities) {
@@ -304,15 +545,136 @@ const activities = [
 ];
 
 console.log("=== Testing Activity Selection Problem ===");
-activitySelection([...activities]);`}
+activitySelection([...activities]);`,
+          Java: `import java.util.*;
+
+public class ActivitySelection {
+    // Activity class
+    static class Activity {
+        int start;
+        int end;
+        String name;
+        
+        Activity(int start, int end, String name) {
+            this.start = start;
+            this.end = end;
+            this.name = name;
+        }
+        
+        @Override
+        public String toString() {
+            return name + "(" + start + "-" + end + ")";
+        }
+    }
+    
+    // Approach 1: Sort by end time (Greedy)
+    public static List<Activity> activitySelection(List<Activity> activities) {
+        System.out.println("Activity Selection Problem - Greedy Approach");
+        System.out.println("Original activities: " + activities);
+        
+        // Sort activities by end time
+        activities.sort((a, b) -> Integer.compare(a.end, b.end));
+        System.out.println("Sorted by end time: " + activities);
+        
+        List<Activity> selected = new ArrayList<>();
+        int lastEndTime = 0;
+        
+        for (Activity activity : activities) {
+            System.out.println("\\nChecking activity " + activity.name + 
+                             ": start=" + activity.start + ", end=" + activity.end);
+            System.out.println("Last end time: " + lastEndTime);
+            
+            if (activity.start >= lastEndTime) {
+                selected.add(activity);
+                lastEndTime = activity.end;
+                System.out.println("✓ Selected activity " + activity.name);
+                System.out.println("Updated last end time to: " + lastEndTime);
+            } else {
+                System.out.println("✗ Skipped activity " + activity.name + 
+                                 " (overlaps with previous)");
+            }
+        }
+        
+        System.out.println("\\nSelected activities: " + selected);
+        System.out.println("Total activities selected: " + selected.size());
+        
+        return selected;
+    }
+    
+    public static void main(String[] args) {
+        List<Activity> activities = new ArrayList<>();
+        activities.add(new Activity(1, 3, "A"));
+        activities.add(new Activity(2, 5, "B"));
+        activities.add(new Activity(0, 6, "C"));
+        activities.add(new Activity(5, 7, "D"));
+        activities.add(new Activity(8, 9, "E"));
+        activities.add(new Activity(5, 9, "F"));
+        
+        System.out.println("=== Testing Activity Selection Problem ===");
+        activitySelection(new ArrayList<>(activities));
+    }
+}`,
+        }}
         explanation="Greedy approach: sort by end time, always select the activity with earliest end time that doesn't conflict. This guarantees optimal solution. Time: O(n log n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Single resource can perform one activity at a time; choose max compatible activities based on start/end times.",
+              details: [
+                "Assume activities sorted first by finish time after preprocessing",
+                "Clarify inclusive/exclusive end times to avoid boundary bugs",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Earliest-finish-time greedy. Selecting activity finishing soonest leaves largest room for future activities.",
+              keywords: [
+                "interval scheduling",
+                "earliest finish",
+                "non-overlap",
+              ],
+              details: ["This is classic matroid/interval scheduling problem"],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Array of activity objects with start/end; need sort helper and container for selected activities.",
+              details: [
+                "Maintain variable `lastEnd` to track end time of last chosen activity",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Sort activities by end time, iterate; if `activity.start >= lastEnd`, select and update `lastEnd`.",
+              details: ["Skip otherwise; continue scanning entire list once"],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Time dominated by sort O(n log n); iteration O(n) with constant space.",
+              details: [
+                "No need for extra data structures beyond output array",
+              ],
+            },
+          ],
+          pattern: "Earliest Finish Time Scheduling",
+          complexity: {
+            time: "O(n log n)",
+            space: "O(1) extra (O(n) if storing result)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Fractional Knapsack Problem"
         difficulty="Medium"
         description="Maximize value in knapsack by taking fractions of items. Items can be divided."
-        solution={`// Fractional Knapsack Problem
+        solutions={{
+          JavaScript: `// Fractional Knapsack Problem
 
 function fractionalKnapsack(items, capacity) {
   console.log("Fractional Knapsack Problem");
@@ -410,15 +772,211 @@ const items = [
 const capacity = 50;
 
 console.log("=== Testing Fractional Knapsack ===");
-fractionalKnapsack([...items], capacity);`}
+fractionalKnapsack([...items], capacity);`,
+          Java: `import java.util.*;
+
+public class FractionalKnapsack {
+    // Item class
+    static class Item {
+        String name;
+        double value;
+        double weight;
+        double ratio;
+        
+        Item(String name, double value, double weight) {
+            this.name = name;
+            this.value = value;
+            this.weight = weight;
+            this.ratio = value / weight;
+        }
+    }
+    
+    // Selected item class
+    static class SelectedItem {
+        String name;
+        double fraction;
+        double value;
+        double weight;
+        
+        SelectedItem(String name, double fraction, double value, double weight) {
+            this.name = name;
+            this.fraction = fraction;
+            this.value = value;
+            this.weight = weight;
+        }
+    }
+    
+    // Result class
+    static class KnapsackResult {
+        List<SelectedItem> selectedItems;
+        double totalValue;
+        double totalWeight;
+        
+        KnapsackResult(List<SelectedItem> selectedItems, double totalValue, double totalWeight) {
+            this.selectedItems = selectedItems;
+            this.totalValue = totalValue;
+            this.totalWeight = totalWeight;
+        }
+    }
+    
+    public static KnapsackResult fractionalKnapsack(List<Item> items, double capacity) {
+        System.out.println("Fractional Knapsack Problem");
+        System.out.println("Items: " + items);
+        System.out.println("Knapsack capacity: " + capacity);
+        
+        // Calculate value per unit weight
+        System.out.println("\\nStep 1: Calculate value per unit weight");
+        for (Item item : items) {
+            System.out.println(item.name + ": value=" + item.value + 
+                             ", weight=" + item.weight + 
+                             ", ratio=" + String.format("%.2f", item.ratio));
+        }
+        
+        // Sort by value per unit weight (descending)
+        items.sort((a, b) -> Double.compare(b.ratio, a.ratio));
+        System.out.println("\\nStep 2: Sort by value per unit weight (descending)");
+        System.out.print("Sorted items: ");
+        for (Item item : items) {
+            System.out.print(item.name + "(" + String.format("%.2f", item.ratio) + ") ");
+        }
+        System.out.println();
+        
+        double totalValue = 0;
+        double remainingCapacity = capacity;
+        List<SelectedItem> selectedItems = new ArrayList<>();
+        
+        System.out.println("\\nStep 3: Greedy selection process");
+        
+        for (int i = 0; i < items.size() && remainingCapacity > 0; i++) {
+            Item item = items.get(i);
+            System.out.println("\\n--- Item " + (i + 1) + ": " + item.name + " ---");
+            System.out.println("Value: " + item.value + ", Weight: " + item.weight + 
+                             ", Ratio: " + String.format("%.2f", item.ratio));
+            System.out.println("Remaining capacity: " + remainingCapacity);
+            
+            if (item.weight <= remainingCapacity) {
+                // Take the entire item
+                double fraction = 1;
+                double value = item.value;
+                double weight = item.weight;
+                
+                selectedItems.add(new SelectedItem(item.name, fraction, value, weight));
+                
+                totalValue += value;
+                remainingCapacity -= weight;
+                
+                System.out.println("✓ Took entire item: " + (fraction * 100) + "% of " + item.name);
+                System.out.println("Added value: " + value + ", Added weight: " + weight);
+            } else {
+                // Take fraction of the item
+                double fraction = remainingCapacity / item.weight;
+                double value = fraction * item.value;
+                double weight = remainingCapacity;
+                
+                selectedItems.add(new SelectedItem(item.name, fraction, value, weight));
+                
+                totalValue += value;
+                remainingCapacity = 0;
+                
+                System.out.println("✓ Took fraction: " + String.format("%.1f", fraction * 100) + 
+                                 "% of " + item.name);
+                System.out.println("Added value: " + String.format("%.2f", value) + 
+                                 ", Added weight: " + weight);
+            }
+            
+            System.out.println("Total value so far: " + String.format("%.2f", totalValue));
+            System.out.println("Remaining capacity: " + remainingCapacity);
+        }
+        
+        System.out.println("\\n=== Final Result ===");
+        System.out.println("Selected items:");
+        for (SelectedItem item : selectedItems) {
+            System.out.println("  " + item.name + ": " + 
+                             String.format("%.1f", item.fraction * 100) + "% " +
+                             "(value: " + String.format("%.2f", item.value) + 
+                             ", weight: " + String.format("%.2f", item.weight) + ")");
+        }
+        System.out.println("Total value: " + String.format("%.2f", totalValue));
+        System.out.println("Total weight: " + String.format("%.2f", capacity - remainingCapacity) + 
+                         "/" + capacity);
+        
+        return new KnapsackResult(selectedItems, totalValue, capacity - remainingCapacity);
+    }
+    
+    public static void main(String[] args) {
+        List<Item> items = new ArrayList<>();
+        items.add(new Item("A", 60, 10));
+        items.add(new Item("B", 100, 20));
+        items.add(new Item("C", 120, 30));
+        
+        double capacity = 50;
+        
+        System.out.println("=== Testing Fractional Knapsack ===");
+        fractionalKnapsack(new ArrayList<>(items), capacity);
+    }
+}`,
+        }}
         explanation="Greedy approach: sort by value per unit weight, always take the item with highest value/weight ratio. For fractional knapsack, this guarantees optimal solution. Time: O(n log n), Space: O(1)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Items divisible; objective maximize total value given capacity constraint.",
+              details: [
+                "Clarify units (int/double) and whether capacity can be fractional",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "When fractions allowed, always pick highest value-to-weight ratio first.",
+              keywords: [
+                "value/weight ratio",
+                "greedy choice",
+                "continuous knapsack",
+              ],
+              details: [
+                "This is optimal because marginal gain constant per unit weight",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Array of items plus derived ratio field; optionally min-heap/ sort list.",
+              details: [
+                "Need accumulator for total value, remaining capacity, and selected fractions",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Sort by ratio descending; iterate items, take full item if weight fits else take fraction `remaining/weight`.",
+              details: ["Break loop once capacity zero"],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Sorting dominates runtime; scanning is linear. Space constant besides output list.",
+              details: [
+                "Use doubles for ratio/fractions to avoid integer truncation",
+              ],
+            },
+          ],
+          pattern: "Greedy by Value-to-Weight Ratio",
+          complexity: {
+            time: "O(n log n)",
+            space: "O(1) extra",
+          },
+        }}
       />
 
       <ProblemBlock
         title="Job Sequencing Problem"
         difficulty="Medium"
         description="Schedule jobs to maximize profit with deadline constraints. Each job has a deadline and profit."
-        solution={`// Job Sequencing Problem
+        solutions={{
+          JavaScript: `// Job Sequencing Problem
 
 function jobSequencing(jobs) {
   console.log("Job Sequencing Problem");
@@ -493,8 +1051,179 @@ const jobs = [
 ];
 
 console.log("=== Testing Job Sequencing ===");
-jobSequencing([...jobs]);`}
+jobSequencing([...jobs]);`,
+          Java: `import java.util.*;
+
+public class JobSequencing {
+    // Job class
+    static class Job {
+        String id;
+        int deadline;
+        int profit;
+        
+        Job(String id, int deadline, int profit) {
+            this.id = id;
+            this.deadline = deadline;
+            this.profit = profit;
+        }
+        
+        @Override
+        public String toString() {
+            return id + "(deadline=" + deadline + ", profit=" + profit + ")";
+        }
+    }
+    
+    // Result class
+    static class JobSequencingResult {
+        List<Job> schedule;
+        int totalProfit;
+        int jobsScheduled;
+        
+        JobSequencingResult(List<Job> schedule, int totalProfit, int jobsScheduled) {
+            this.schedule = schedule;
+            this.totalProfit = totalProfit;
+            this.jobsScheduled = jobsScheduled;
+        }
+    }
+    
+    public static JobSequencingResult jobSequencing(List<Job> jobs) {
+        System.out.println("Job Sequencing Problem");
+        System.out.println("Input jobs: " + jobs);
+        
+        // Sort jobs by profit in descending order
+        List<Job> sortedJobs = new ArrayList<>(jobs);
+        sortedJobs.sort((a, b) -> Integer.compare(b.profit, a.profit));
+        System.out.println("\\nStep 1: Sort jobs by profit (descending)");
+        System.out.print("Sorted jobs: ");
+        for (Job job : sortedJobs) {
+            System.out.print(job.id + "(" + job.profit + ") ");
+        }
+        System.out.println();
+        
+        // Find maximum deadline
+        int maxDeadline = jobs.stream().mapToInt(j -> j.deadline).max().orElse(0);
+        System.out.println("\\nStep 2: Maximum deadline = " + maxDeadline);
+        
+        // Initialize result array
+        Job[] result = new Job[maxDeadline];
+        int totalProfit = 0;
+        int jobsScheduled = 0;
+        
+        System.out.println("\\nStep 3: Greedy scheduling process");
+        
+        for (Job job : sortedJobs) {
+            System.out.println("\\n--- Processing Job " + job.id + " ---");
+            System.out.println("Profit: " + job.profit + ", Deadline: " + job.deadline);
+            
+            // Find latest available slot before deadline
+            int slot = job.deadline - 1;
+            while (slot >= 0 && result[slot] != null) {
+                slot--;
+            }
+            
+            if (slot >= 0) {
+                result[slot] = job;
+                totalProfit += job.profit;
+                jobsScheduled++;
+                System.out.println("✓ Scheduled Job " + job.id + " at slot " + slot);
+                System.out.println("Running total: " + jobsScheduled + " jobs, " + 
+                                 totalProfit + " profit");
+            } else {
+                System.out.println("✗ Cannot schedule Job " + job.id + 
+                                 " (no available slot before deadline " + job.deadline + ")");
+            }
+            
+            System.out.print("Current schedule: ");
+            for (int i = 0; i < result.length; i++) {
+                if (result[i] != null) {
+                    System.out.print("Slot " + i + ": Job " + result[i].id + " ");
+                } else {
+                    System.out.print("Slot " + i + ": Empty ");
+                }
+            }
+            System.out.println();
+        }
+        
+        System.out.println("\\n=== Final Result ===");
+        System.out.println("Optimal schedule:");
+        List<Job> schedule = new ArrayList<>();
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] != null) {
+                System.out.println("  Slot " + i + ": Job " + result[i].id + 
+                                 " (profit: " + result[i].profit + ")");
+                schedule.add(result[i]);
+            }
+        }
+        System.out.println("Total jobs scheduled: " + jobsScheduled);
+        System.out.println("Total profit: " + totalProfit);
+        
+        return new JobSequencingResult(schedule, totalProfit, jobsScheduled);
+    }
+    
+    public static void main(String[] args) {
+        List<Job> jobs = new ArrayList<>();
+        jobs.add(new Job("A", 2, 100));
+        jobs.add(new Job("B", 1, 19));
+        jobs.add(new Job("C", 2, 27));
+        jobs.add(new Job("D", 1, 25));
+        jobs.add(new Job("E", 3, 15));
+        
+        System.out.println("=== Testing Job Sequencing ===");
+        jobSequencing(new ArrayList<>(jobs));
+    }
+}`,
+        }}
         explanation="Greedy approach: sort by profit (descending), schedule each job at the latest possible slot before its deadline. This maximizes total profit. Time: O(n²), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Each job takes unit time; need maximize profit respecting deadlines; at most one job per slot.",
+              details: [
+                "Deadlines typically 1-indexed; ensure interpretation when building slots array",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Greedy by profit. Always try to schedule most profitable remaining job as late as possible.",
+              keywords: [
+                "greedy scheduling",
+                "deadline slotting",
+                "profit sorting",
+              ],
+              details: [
+                "Late placement preserves earlier slots for other jobs",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Array of jobs; after computing max deadline allocate slots array of length maxDeadline initialized null.",
+              details: [
+                "Optional DSU / disjoint set for optimization, but array scan sufficient for small constraints",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Sort jobs by profit desc. For each job, find latest empty slot ≤ deadline-1 and place job there.",
+              details: ["If no slot available skip job"],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Naive search per job yields O(n²); DSU can reduce to near O(n log n) if needed.",
+              details: ["Track total profit and scheduled jobs for reporting"],
+            },
+          ],
+          pattern: "Schedule by Profit with Latest Slot",
+          complexity: {
+            time: "O(n²) (or O(n log n) with DSU)",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );
@@ -509,7 +1238,8 @@ function HuffmanSection() {
         title="Huffman Coding Introduction"
         difficulty="Medium"
         description="Introduction to Huffman coding - a lossless data compression algorithm that assigns variable-length codes to characters based on their frequency."
-        solution={`// Huffman Coding Introduction
+        solutions={{
+          JavaScript: `// Huffman Coding Introduction
 
 class HuffmanNode {
   constructor(char = null, freq = 0, left = null, right = null) {
@@ -708,8 +1438,292 @@ console.log("\\n=== Compression Statistics ===");
 console.log("Original size:", stats.originalSize, "bits");
 console.log("Compressed size:", stats.compressedSize, "bits");
 console.log("Compression ratio:", stats.compressionRatio);
-console.log("Space saved:", stats.spaceSaved, "bits");`}
+console.log("Space saved:", stats.spaceSaved, "bits");`,
+          Java: `import java.util.*;
+
+// Huffman Coding Introduction
+class HuffmanNode {
+    Character character;
+    int frequency;
+    HuffmanNode left;
+    HuffmanNode right;
+    
+    HuffmanNode(Character character, int frequency) {
+        this.character = character;
+        this.frequency = frequency;
+        this.left = null;
+        this.right = null;
+    }
+    
+    HuffmanNode(Character character, int frequency, HuffmanNode left, HuffmanNode right) {
+        this.character = character;
+        this.frequency = frequency;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+class HuffmanCoding {
+    private String text;
+    private Map<Character, Integer> frequencies;
+    private HuffmanNode root;
+    private Map<Character, String> codes;
+    
+    public HuffmanCoding(String text) {
+        this.text = text;
+        this.frequencies = calculateFrequencies(text);
+        this.root = null;
+        this.codes = new HashMap<>();
+    }
+    
+    // Calculate character frequencies
+    private Map<Character, Integer> calculateFrequencies(String text) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for (char c : text.toCharArray()) {
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+        return freq;
+    }
+    
+    // Build Huffman tree
+    public HuffmanNode buildTree() {
+        System.out.println("=== Building Huffman Tree ===");
+        System.out.println("Character frequencies: " + frequencies);
+        
+        // Create priority queue (min heap) with all leaf nodes
+        PriorityQueue<HuffmanNode> heap = new PriorityQueue<>(
+            (a, b) -> Integer.compare(a.frequency, b.frequency)
+        );
+        
+        for (Map.Entry<Character, Integer> entry : frequencies.entrySet()) {
+            heap.offer(new HuffmanNode(entry.getKey(), entry.getValue()));
+        }
+        
+        System.out.print("Initial heap: ");
+        for (HuffmanNode node : heap) {
+            System.out.print(node.character + ":" + node.frequency + " ");
+        }
+        System.out.println();
+        
+        // Build tree by combining two nodes with minimum frequency
+        int iteration = 1;
+        while (heap.size() > 1) {
+            System.out.println("\\n--- Iteration " + iteration + " ---");
+            System.out.print("Current heap: ");
+            for (HuffmanNode node : heap) {
+                System.out.print((node.character != null ? node.character : "Internal") + 
+                               ":" + node.frequency + " ");
+            }
+            System.out.println();
+            
+            // Extract two nodes with minimum frequency
+            HuffmanNode left = heap.poll();
+            HuffmanNode right = heap.poll();
+            
+            System.out.println("Combining: " + 
+                             (left.character != null ? left.character : "Internal") + 
+                             ":" + left.frequency + " + " + 
+                             (right.character != null ? right.character : "Internal") + 
+                             ":" + right.frequency);
+            
+            // Create new internal node
+            HuffmanNode internal = new HuffmanNode(
+                null,
+                left.frequency + right.frequency,
+                left,
+                right
+            );
+            
+            // Insert back into heap
+            heap.offer(internal);
+            
+            System.out.println("Created internal node: " + internal.frequency);
+            iteration++;
+        }
+        
+        this.root = heap.poll();
+        System.out.println("\\nHuffman tree built. Root frequency: " + this.root.frequency);
+        return this.root;
+    }
+    
+    // Generate Huffman codes
+    public Map<Character, String> generateCodes() {
+        if (this.root == null) {
+            this.buildTree();
+        }
+        
+        System.out.println("\\n=== Generating Huffman Codes ===");
+        this.codes = new HashMap<>();
+        generateCodesHelper(this.root, "");
+        
+        System.out.println("Huffman codes:");
+        for (Map.Entry<Character, String> entry : codes.entrySet()) {
+            System.out.println("  " + entry.getKey() + ": " + entry.getValue());
+        }
+        
+        return this.codes;
+    }
+    
+    private void generateCodesHelper(HuffmanNode node, String code) {
+        if (node.character != null) {
+            // Leaf node
+            this.codes.put(node.character, code);
+            System.out.println("  " + node.character + ": " + code);
+            return;
+        }
+        
+        // Internal node - traverse left and right
+        if (node.left != null) {
+            generateCodesHelper(node.left, code + "0");
+        }
+        if (node.right != null) {
+            generateCodesHelper(node.right, code + "1");
+        }
+    }
+    
+    // Encode text using Huffman codes
+    public String encode() {
+        if (codes.isEmpty()) {
+            this.generateCodes();
+        }
+        
+        System.out.println("\\n=== Encoding Text ===");
+        System.out.println("Original text: " + text);
+        
+        StringBuilder encoded = new StringBuilder();
+        for (char c : text.toCharArray()) {
+            encoded.append(codes.get(c));
+            System.out.println(c + " -> " + codes.get(c));
+        }
+        
+        System.out.println("Encoded text: " + encoded.toString());
+        System.out.println("Original size: " + (text.length() * 8) + " bits");
+        System.out.println("Encoded size: " + encoded.length() + " bits");
+        System.out.println("Compression ratio: " + 
+                         String.format("%.1f", (double) encoded.length() / (text.length() * 8) * 100) + "%");
+        
+        return encoded.toString();
+    }
+    
+    // Decode text using Huffman tree
+    public String decode(String encoded) {
+        if (this.root == null) {
+            throw new RuntimeException("Huffman tree not built");
+        }
+        
+        System.out.println("\\n=== Decoding Text ===");
+        System.out.println("Encoded text: " + encoded);
+        
+        StringBuilder decoded = new StringBuilder();
+        HuffmanNode current = this.root;
+        
+        for (char bit : encoded.toCharArray()) {
+            if (bit == '0') {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+            
+            if (current.character != null) {
+                decoded.append(current.character);
+                System.out.println(bit + " -> " + current.character);
+                current = this.root; // Reset to root
+            }
+        }
+        
+        System.out.println("Decoded text: " + decoded.toString());
+        return decoded.toString();
+    }
+    
+    // Calculate compression statistics
+    public Map<String, Object> getStats() {
+        int originalSize = text.length() * 8;
+        String encoded = this.encode();
+        int compressedSize = encoded.length();
+        
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("originalSize", originalSize);
+        stats.put("compressedSize", compressedSize);
+        stats.put("compressionRatio", String.format("%.1f", (double) compressedSize / originalSize * 100) + "%");
+        stats.put("spaceSaved", originalSize - compressedSize);
+        
+        return stats;
+    }
+    
+    public static void main(String[] args) {
+        String text = "hello world";
+        System.out.println("=== Huffman Coding Example ===");
+        System.out.println("Text to compress: " + text);
+        
+        HuffmanCoding huffman = new HuffmanCoding(text);
+        huffman.buildTree();
+        huffman.generateCodes();
+        String encoded = huffman.encode();
+        String decoded = huffman.decode(encoded);
+        
+        System.out.println("\\n=== Verification ===");
+        System.out.println("Original: " + text);
+        System.out.println("Decoded: " + decoded);
+        System.out.println("Match: " + text.equals(decoded));
+        
+        Map<String, Object> stats = huffman.getStats();
+        System.out.println("\\n=== Compression Statistics ===");
+        System.out.println("Original size: " + stats.get("originalSize") + " bits");
+        System.out.println("Compressed size: " + stats.get("compressedSize") + " bits");
+        System.out.println("Compression ratio: " + stats.get("compressionRatio"));
+        System.out.println("Space saved: " + stats.get("spaceSaved") + " bits");
+    }
+}`,
+        }}
         explanation="Huffman coding creates variable-length codes based on character frequency. More frequent characters get shorter codes. Uses min heap to build optimal binary tree. Time: O(n log n), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Need optimal prefix-free binary codes minimizing total bits given character frequencies.",
+              details: [
+                "Lossless compression; codes must satisfy prefix property for unique decoding",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Greedy strategy combining two least frequent symbols repeatedly (Huffman tree).",
+              keywords: ["min-heap", "prefix code", "optimal merging"],
+              details: [
+                "Each merge decides relative depths and contributes minimal extra cost",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Priority queue (min-heap) storing nodes {char, freq, left, right}.",
+              details: ["Need map for final codes and tree for decoding"],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Push all chars with frequencies; while heap size > 1 pop two smallest, merge into new internal node and push back. After tree built, DFS to assign 0/1 codes.",
+              details: [
+                "Encoding uses dictionary char→code; decoding walks tree per bit",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Heap operations give O(n log n) runtime; ensure stable tree building and handle single-character edge case.",
+              details: [
+                "Store tree/root for decode; release resources when done",
+              ],
+            },
+          ],
+          pattern: "Greedy Prefix Coding via Huffman Tree",
+          complexity: {
+            time: "O(n log n)",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );

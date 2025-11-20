@@ -88,6 +88,55 @@ export default function Home() {
           </div>
         </Link>
 
+        {/* Problem Solving Approach */}
+        <div className="mt-12">
+          <Link href="/problem-solving-approach">
+            <div className="bg-gradient-to-br from-indigo-900/40 to-blue-900/40 rounded-2xl p-8 border border-indigo-500/30 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 cursor-pointer">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="text-5xl">🎯</div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white">
+                    Problem Solving Approach
+                  </h3>
+                  <p className="text-gray-400">
+                    Master the Art of Choosing Right Data Structures &
+                    Algorithms
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-gray-300 mb-4">
+                Learn how to systematically approach any DSA problem. Identify
+                which data structure and algorithm to use based on problem
+                patterns, keywords, and constraints. Perfect for interview
+                preparation!
+              </p>
+
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2 flex-wrap">
+                  {[
+                    "Problem Analysis",
+                    "Pattern Recognition",
+                    "DS Selection",
+                    "Algorithm Selection",
+                    "Interview Tips",
+                  ].map((topic, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-xs font-semibold"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+                <span className="text-indigo-400 font-semibold">
+                  Start Learning →
+                </span>
+              </div>
+            </div>
+          </Link>
+        </div>
+
         {/* Why Start Here */}
         <div className="mt-12 bg-gray-800/50 rounded-xl p-6 border border-gray-700">
           <h3 className="text-xl font-bold text-white mb-4">

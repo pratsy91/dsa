@@ -124,7 +124,8 @@ function FundamentalsSection() {
 
         <TheoryBlock title="Queue Implementation in JavaScript">
           <CodeBlock
-            code={`// Queue Implementation using Array
+            code={{
+              JavaScript: `// Queue Implementation using Array
 
 class Queue {
   constructor() {
@@ -157,7 +158,7 @@ class Queue {
   }
   
   // Peek at front element without removing
-  front() {
+  getFront() {
     if (this.isEmpty()) {
       return "Queue is empty";
     }
@@ -193,9 +194,93 @@ queue.enqueue(10);
 queue.enqueue(20);
 queue.enqueue(30);
 console.log(queue.display()); // "Queue: 10 20 30"
-console.log(queue.front()); // 10
+console.log(queue.getFront()); // 10
 console.log(queue.dequeue()); // 10
-console.log(queue.display()); // "Queue: 20 30"`}
+console.log(queue.display()); // "Queue: 20 30"`,
+              Java: `import java.util.*;
+
+// Queue Implementation using ArrayList
+class Queue {
+    private List<Integer> items;
+    private int front;
+    private int rear;
+    
+    public Queue() {
+        this.items = new ArrayList<>();
+        this.front = 0;
+        this.rear = -1;
+    }
+    
+    // Add element to rear of queue
+    public void enqueue(int element) {
+        this.rear++;
+        if (rear < items.size()) {
+            items.set(rear, element);
+        } else {
+            items.add(element);
+        }
+    }
+    
+    // Remove element from front of queue
+    public int dequeue() {
+        if (isEmpty()) {
+            throw new RuntimeException("Queue Underflow");
+        }
+        int element = items.get(front);
+        front++;
+        
+        // Reset when queue becomes empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        return element;
+    }
+    
+    // Peek at front element without removing
+    public int getFront() {
+        if (isEmpty()) {
+            throw new RuntimeException("Queue is empty");
+        }
+        return items.get(front);
+    }
+    
+    // Check if queue is empty
+    public boolean isEmpty() {
+        return front > rear;
+    }
+    
+    // Get size of queue
+    public int size() {
+        return isEmpty() ? 0 : rear - front + 1;
+    }
+    
+    // Display queue contents
+    public void display() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return;
+        }
+        System.out.print("Queue: ");
+        for (int i = front; i <= rear; i++) {
+            System.out.print(items.get(i) + " ");
+        }
+        System.out.println();
+    }
+    
+    public static void main(String[] args) {
+        Queue queue = new Queue();
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        queue.display(); // "Queue: 10 20 30"
+        System.out.println("Front: " + queue.getFront()); // 10
+        System.out.println("Dequeued: " + queue.dequeue()); // 10
+        queue.display(); // "Queue: 20 30"
+    }
+}`,
+            }}
           />
         </TheoryBlock>
       </div>
@@ -263,7 +348,8 @@ function BasicSection() {
         title="1. Basic Queue Operations"
         difficulty="Easy"
         description="Implement all basic queue operations: enqueue, dequeue, front, isEmpty, and size."
-        solution={`// Basic Queue Operations
+        solutions={{
+          JavaScript: `// Basic Queue Operations
 
 class Queue {
   constructor() {
@@ -308,15 +394,6 @@ class Queue {
     return this.items[this.front];
   }
   
-  // Get rear element without removing
-  getRear() {
-    if (this.isEmpty()) {
-      console.log("Queue is empty");
-      return null;
-    }
-    return this.items[this.rear];
-  }
-  
   // Check if queue is empty
   isEmpty() {
     return this.front > this.rear;
@@ -326,57 +403,160 @@ class Queue {
   size() {
     return this.isEmpty() ? 0 : this.rear - this.front + 1;
   }
-  
-  // Display queue
-  display() {
-    if (this.isEmpty()) {
-      console.log("Queue is empty");
-      return;
-    }
-    
-    let result = "Queue: ";
-    for (let i = this.front; i <= this.rear; i++) {
-      result += this.items[i] + " ";
-    }
-    console.log(result);
-  }
-  
-  // Clear queue
-  clear() {
-    this.items = [];
-    this.front = 0;
-    this.rear = -1;
-    console.log("Queue cleared");
-  }
 }
 
 // Test cases
 const queue = new Queue();
-
-console.log("=== Testing Basic Queue Operations ===");
 queue.enqueue(10);
 queue.enqueue(20);
 queue.enqueue(30);
-queue.display(); // Queue: 10 20 30
-
-console.log("Front element:", queue.getFront()); // 10
-console.log("Rear element:", queue.getRear()); // 30
+console.log("Front:", queue.getFront()); // 10
 console.log("Size:", queue.size()); // 3
-
 queue.dequeue();
-queue.display(); // Queue: 20 30
+console.log("Size:", queue.size()); // 2`,
+          Java: `import java.util.*;
 
-console.log("Is empty:", queue.isEmpty()); // false
-queue.clear();
-console.log("Is empty:", queue.isEmpty()); // true`}
+public class BasicQueue {
+    private List<Integer> items;
+    private int front;
+    private int rear;
+    
+    public BasicQueue() {
+        this.items = new ArrayList<>();
+        this.front = 0;
+        this.rear = -1;
+    }
+    
+    // Add element to rear
+    public void enqueue(int element) {
+        rear++;
+        if (rear < items.size()) {
+            items.set(rear, element);
+        } else {
+            items.add(element);
+        }
+        System.out.println("Enqueued: " + element);
+    }
+    
+    // Remove element from front
+    public Integer dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue Underflow");
+            return null;
+        }
+        
+        int element = items.get(front);
+        front++;
+        
+        // Reset when queue becomes empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        System.out.println("Dequeued: " + element);
+        return element;
+    }
+    
+    // Get front element without removing
+    public Integer getFront() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return null;
+        }
+        return items.get(front);
+    }
+    
+    // Check if queue is empty
+    public boolean isEmpty() {
+        return front > rear;
+    }
+    
+    // Get size of queue
+    public int size() {
+        return isEmpty() ? 0 : rear - front + 1;
+    }
+    
+    public static void main(String[] args) {
+        BasicQueue queue = new BasicQueue();
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        System.out.println("Front: " + queue.getFront()); // 10
+        System.out.println("Size: " + queue.size()); // 3
+        queue.dequeue();
+        System.out.println("Size: " + queue.size()); // 2
+    }
+}`,
+        }}
         explanation="Implement queue using array with front and rear pointers. Enqueue adds to rear, dequeue removes from front. Reset pointers when queue becomes empty. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement a FIFO container supporting enqueue, dequeue, front, size, and emptiness queries.",
+              details: [
+                "Use contiguous memory so operations stay O(1)",
+                "Clarify whether queue must grow dynamically or has fixed capacity",
+                "Reset indices when queue becomes empty to avoid overflow",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Array-based queue with two moving pointers is the canonical solution.",
+              keywords: ["queue", "front pointer", "rear pointer", "FIFO"],
+              details: [
+                "front points to next element to remove",
+                "rear points to last inserted element",
+                "Queue is empty when front > rear",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description: "Use an array/list plus two integers (front, rear).",
+              details: [
+                "Array stores elements in arrival order",
+                "front and rear track boundaries",
+                "Optional dynamic resizing if you need unbounded queue",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement each operation in constant time.",
+              details: [
+                "enqueue(x): ++rear, arr[rear] = x",
+                "dequeue(): return arr[front++] and reset pointers when empty",
+                "front(): return arr[front] if queue not empty",
+                "size(): rear - front + 1 when queue not empty",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Handle underflow/overflow and keep code simple for consumers.",
+              details: [
+                "Guard against dequeue() on empty queue",
+                "Reset front=0, rear=-1 when queue drains to reuse array from start",
+                "Add helper methods (isEmpty, display) for debugging",
+              ],
+            },
+          ],
+          pattern: "Linear Array Queue with Front/Rear Pointers",
+          complexity: {
+            time: "O(1) per operation (amortized)",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="2. Circular Queue Implementation"
         difficulty="Medium"
         description="Implement a circular queue with fixed size that efficiently uses space."
-        solution={`// Circular Queue Implementation
+        solutions={{
+          JavaScript: `// Circular Queue Implementation
 
 class CircularQueue {
   constructor(size) {
@@ -409,7 +589,6 @@ class CircularQueue {
     
     this.rear = (this.rear + 1) % this.size;
     this.items[this.rear] = element;
-    console.log(\`Enqueued: \${element}\`);
     return true;
   }
   
@@ -430,90 +609,174 @@ class CircularQueue {
       this.front = (this.front + 1) % this.size;
     }
     
-    console.log(\`Dequeued: \${element}\`);
     return element;
   }
   
   // Get front element
   getFront() {
     if (this.isEmpty()) {
-      console.log("Queue is empty");
       return null;
     }
     return this.items[this.front];
-  }
-  
-  // Get rear element
-  getRear() {
-    if (this.isEmpty()) {
-      console.log("Queue is empty");
-      return null;
-    }
-    return this.items[this.rear];
-  }
-  
-  // Display queue
-  display() {
-    if (this.isEmpty()) {
-      console.log("Queue is empty");
-      return;
-    }
-    
-    let result = "Circular Queue: ";
-    let i = this.front;
-    
-    do {
-      result += this.items[i] + " ";
-      i = (i + 1) % this.size;
-    } while (i !== (this.rear + 1) % this.size);
-    
-    console.log(result);
-  }
-  
-  // Get current size
-  getSize() {
-    if (this.isEmpty()) return 0;
-    if (this.front <= this.rear) {
-      return this.rear - this.front + 1;
-    } else {
-      return this.size - this.front + this.rear + 1;
-    }
   }
 }
 
 // Test cases
 const cq = new CircularQueue(5);
-
-console.log("=== Testing Circular Queue ===");
 cq.enqueue(10);
 cq.enqueue(20);
 cq.enqueue(30);
-cq.enqueue(40);
-cq.enqueue(50);
-cq.display(); // Circular Queue: 10 20 30 40 50
-
-console.log("Trying to enqueue when full:");
-cq.enqueue(60); // Queue is full
-
+console.log("Front:", cq.getFront()); // 10
 cq.dequeue();
-cq.dequeue();
-cq.display(); // Circular Queue: 30 40 50
-
-cq.enqueue(60);
-cq.enqueue(70);
-cq.display(); // Circular Queue: 30 40 50 60 70
-
-console.log("Front:", cq.getFront()); // 30
-console.log("Rear:", cq.getRear()); // 70
-console.log("Size:", cq.getSize()); // 5`}
+console.log("Front:", cq.getFront()); // 20`,
+          Java: `public class CircularQueue {
+    private int size;
+    private int[] items;
+    private int front;
+    private int rear;
+    
+    public CircularQueue(int size) {
+        this.size = size;
+        this.items = new int[size];
+        this.front = -1;
+        this.rear = -1;
+    }
+    
+    // Check if queue is full
+    public boolean isFull() {
+        return (rear + 1) % size == front;
+    }
+    
+    // Check if queue is empty
+    public boolean isEmpty() {
+        return front == -1;
+    }
+    
+    // Add element to rear
+    public boolean enqueue(int element) {
+        if (isFull()) {
+            System.out.println("Queue is full");
+            return false;
+        }
+        
+        if (isEmpty()) {
+            front = 0;
+        }
+        
+        rear = (rear + 1) % size;
+        items[rear] = element;
+        return true;
+    }
+    
+    // Remove element from front
+    public Integer dequeue() {
+        if (isEmpty()) {
+            System.out.println("Queue is empty");
+            return null;
+        }
+        
+        int element = items[front];
+        
+        if (front == rear) {
+            // Only one element
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % size;
+        }
+        
+        return element;
+    }
+    
+    // Get front element
+    public Integer getFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items[front];
+    }
+    
+    public static void main(String[] args) {
+        CircularQueue cq = new CircularQueue(5);
+        cq.enqueue(10);
+        cq.enqueue(20);
+        cq.enqueue(30);
+        System.out.println("Front: " + cq.getFront()); // 10
+        cq.dequeue();
+        System.out.println("Front: " + cq.getFront()); // 20
+    }
+}`,
+        }}
         explanation="Use modulo arithmetic for circular behavior. Front and rear wrap around using (index + 1) % size. Check full condition: (rear + 1) % size === front. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Need fixed-size queue that reuses freed slots instead of shifting elements.",
+              details: [
+                "Indices must wrap around once they reach array end",
+                "Define full vs empty conditions precisely",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Circular buffer pattern using modulo arithmetic for wrap-around.",
+              keywords: [
+                "circular queue",
+                "ring buffer",
+                "modulo",
+                "wrap around",
+              ],
+              details: [
+                "front and rear advance mod size",
+                "Queue full when advancing rear would collide with front",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description: "Fixed-length array and two integer pointers.",
+              details: [
+                "front = index of current head (-1 when empty)",
+                "rear = index of last inserted",
+                "All updates happen modulo size",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement enqueue/dequeue using wrap logic.",
+              details: [
+                "enqueue: if full return error; if empty set front=0; rear = (rear+1)%size; arr[rear]=x",
+                "dequeue: if empty error; save arr[front]; if single element reset to -1, else front = (front+1)%size",
+                "isFull: (rear+1)%size === front; isEmpty: front === -1",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Keep helper methods for readability and consider using count if that simplifies checks.",
+              details: [
+                "Optional size counter removes ambiguity between full/empty",
+                "Wrap pointer arithmetic in utility functions",
+                "Great for buffering, scheduling, rate limiting",
+              ],
+            },
+          ],
+          pattern: "Circular Buffer Queue",
+          complexity: {
+            time: "O(1) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="3. Priority Queue Implementation"
         difficulty="Medium"
         description="Implement a priority queue where elements are served based on their priority."
-        solution={`// Priority Queue Implementation
+        solutions={{
+          JavaScript: `// Priority Queue Implementation
 
 class PriorityQueue {
   constructor() {
@@ -708,8 +971,138 @@ maxPQ.enqueue("Highest Priority", 15);
 
 while (!maxPQ.isEmpty()) {
   maxPQ.dequeue();
-}`}
+}`,
+          Java: `import java.util.*;
+
+public class PriorityQueue {
+    private List<QueueElement> items;
+    
+    private static class QueueElement {
+        String element;
+        int priority;
+        
+        QueueElement(String element, int priority) {
+            this.element = element;
+            this.priority = priority;
+        }
+    }
+    
+    public PriorityQueue() {
+        this.items = new ArrayList<>();
+    }
+    
+    // Queue element with priority
+    public void enqueue(String element, int priority) {
+        QueueElement queueElement = new QueueElement(element, priority);
+        boolean added = false;
+        
+        // Find correct position based on priority
+        for (int i = 0; i < items.size(); i++) {
+            if (queueElement.priority < items.get(i).priority) {
+                items.add(i, queueElement);
+                added = true;
+                break;
+            }
+        }
+        
+        // If not added, add to end
+        if (!added) {
+            items.add(queueElement);
+        }
+    }
+    
+    // Remove highest priority element
+    public String dequeue() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.remove(0).element;
+    }
+    
+    // Get highest priority element
+    public String front() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.get(0).element;
+    }
+    
+    public boolean isEmpty() {
+        return items.isEmpty();
+    }
+    
+    public static void main(String[] args) {
+        PriorityQueue pq = new PriorityQueue();
+        pq.enqueue("Task A", 3);
+        pq.enqueue("Task B", 1);
+        pq.enqueue("Task C", 2);
+        System.out.println(pq.dequeue()); // Task B
+        System.out.println(pq.dequeue()); // Task C
+    }
+}`,
+        }}
         explanation="Maintain elements in priority order. Lower numbers = higher priority. Use array insertion or heap for efficient implementation. Time: O(n) for array, O(log n) for heap, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Queue orders elements by priority rather than arrival. Decide min-heap vs max-heap convention.",
+              details: [
+                "Clarify whether lower number means higher priority",
+                "Operations: insert with priority, remove / peek highest priority, size/isEmpty",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Priority queues map naturally to heaps; sorted arrays/lists are alternatives with different trade-offs.",
+              keywords: [
+                "priority queue",
+                "heap",
+                "ordered insertion",
+                "scheduling",
+              ],
+              details: [
+                "Array+insertion is simple but O(n) per enqueue",
+                "Binary heap maintains order in O(log n)",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Pick between dynamic array with insertion or binary heap based on performance needs.",
+              details: [
+                "items[] + splice keeps queue sorted (good for small N)",
+                "heap[] with heapifyUp/Down for scalable solution",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement core operations with chosen DS.",
+              details: [
+                "enqueue: insert in correct position (array) or push + heapifyUp (heap)",
+                "dequeue/front: remove / peek first element (array[0] or heap[0], then heapifyDown)",
+                "isEmpty/size just inspect array length",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Abstract comparison logic and support both min/max flavors.",
+              details: [
+                "Use comparator function to switch ordering easily",
+                "Avoid resorting entire array on every enqueue—only local adjustments",
+                "Document complexity so callers understand trade-offs",
+              ],
+            },
+          ],
+          pattern: "Priority Scheduling via Ordered Structure / Heap",
+          complexity: {
+            time: "O(n) insert for ordered array, O(log n) insert/remove for heap",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );
@@ -733,7 +1126,8 @@ function AdvancedSection() {
         title="4. Implementing Stack using Queue"
         difficulty="Medium"
         description="Implement a stack data structure using only queue operations."
-        solution={`// Implementing Stack using Queue
+        solutions={{
+          JavaScript: `// Implementing Stack using Queue
 
 class StackUsingQueue {
   constructor() {
@@ -895,15 +1289,154 @@ stack2.display(); // Stack (top to bottom): [30, 20, 10]
 
 console.log("Top element:", stack2.top()); // 30
 stack2.pop(); // 30
-stack2.display(); // Stack (top to bottom): [20, 10]`}
+stack2.display(); // Stack (top to bottom): [20, 10]`,
+          Java: `import java.util.*;
+
+public class StackUsingQueue {
+    private Queue<Integer> q1;
+    private Queue<Integer> q2;
+    
+    public StackUsingQueue() {
+        this.q1 = new LinkedList<>();
+        this.q2 = new LinkedList<>();
+    }
+    
+    // Push element to stack
+    public void push(int element) {
+        q1.offer(element);
+    }
+    
+    // Pop element from stack
+    public Integer pop() {
+        if (q1.isEmpty()) {
+            return null;
+        }
+        
+        // Move all elements except last from q1 to q2
+        while (q1.size() > 1) {
+            q2.offer(q1.poll());
+        }
+        
+        // Get the last element (top of stack)
+        int element = q1.poll();
+        
+        // Swap q1 and q2
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+        
+        return element;
+    }
+    
+    // Get top element without removing
+    public Integer top() {
+        if (q1.isEmpty()) {
+            return null;
+        }
+        
+        // Move all elements except last from q1 to q2
+        while (q1.size() > 1) {
+            q2.offer(q1.poll());
+        }
+        
+        int element = q1.peek();
+        
+        // Move element back to q1
+        q2.offer(q1.poll());
+        
+        // Swap q1 and q2
+        Queue<Integer> temp = q1;
+        q1 = q2;
+        q2 = temp;
+        
+        return element;
+    }
+    
+    public boolean isEmpty() {
+        return q1.isEmpty();
+    }
+    
+    public static void main(String[] args) {
+        StackUsingQueue stack = new StackUsingQueue();
+        stack.push(10);
+        stack.push(20);
+        stack.push(30);
+        System.out.println("Top: " + stack.top()); // 30
+        System.out.println("Pop: " + stack.pop()); // 30
+        System.out.println("Top: " + stack.top()); // 20
+    }
+}`,
+        }}
         explanation="Use two queues: move all elements except last from q1 to q2, pop last element, swap queues. For single queue: rotate queue after each push to maintain stack order. Time: O(n) for push, O(1) for pop, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Build a LIFO stack API using only queue operations (enqueue/dequeue).",
+              details: [
+                "Decide which operation (push or pop) can be O(n)",
+                "Need top(), size(), isEmpty() as well",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Simulate stack order by rotating queues so the newest element appears at the front.",
+              keywords: [
+                "simulate stack",
+                "two queues",
+                "single queue rotation",
+                "LIFO via FIFO",
+              ],
+              details: [
+                "Two-queue method: transfer all but last to auxiliary queue to pop",
+                "Single-queue method: after each push, rotate queue size-1 times",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use either two standard queues or one queue plus rotation.",
+              details: [
+                "q1 holds current elements in stack order",
+                "q2 (if used) is temporary for moving items",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Pick trade-off between push vs pop cost.",
+              details: [
+                "Two-queue pop-heavy: push O(1), pop O(n) by moving elements",
+                "Single-queue push-heavy: push O(n) via rotation, pop O(1)",
+                "top() uses same idea as pop but reinserts element",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Encapsulate queue swaps/rotations and guard edge cases.",
+              details: [
+                "Check emptiness before pop/top",
+                "Reuse helper to move n-1 elements between queues",
+                "Document complexity trade-offs for interview discussion",
+              ],
+            },
+          ],
+          pattern: "Queue Rotation to Emulate Stack Order",
+          complexity: {
+            time: "Either push O(n)/pop O(1) (single queue) or push O(1)/pop O(n) (two queues)",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="5. Reversing a Queue"
         difficulty="Medium"
         description="Reverse a queue using only queue operations and a stack."
-        solution={`// Reversing a Queue
+        solutions={{
+          JavaScript: `// Reversing a Queue
 
 function reverseQueue(queue) {
   const stack = [];
@@ -1045,15 +1578,120 @@ console.log("Reversed queue:", queue2.display()); // 40 -> 30 -> 20 -> 10
 // Test detailed approach
 const queue3 = new Queue();
 [100, 200, 300].forEach(el => queue3.enqueue(el));
-reverseQueueDetailed(queue3);`}
+reverseQueueDetailed(queue3);`,
+          Java: `import java.util.*;
+
+public class ReverseQueue {
+    // Using stack
+    public static void reverseQueue(Queue<Integer> queue) {
+        Stack<Integer> stack = new Stack<>();
+        
+        // Push all elements from queue to stack
+        while (!queue.isEmpty()) {
+            stack.push(queue.poll());
+        }
+        
+        // Pop all elements from stack back to queue
+        while (!stack.isEmpty()) {
+            queue.offer(stack.pop());
+        }
+    }
+    
+    // Using recursion
+    public static void reverseQueueRecursive(Queue<Integer> queue) {
+        if (queue.isEmpty()) {
+            return;
+        }
+        
+        // Remove front element
+        int element = queue.poll();
+        
+        // Recursively reverse remaining queue
+        reverseQueueRecursive(queue);
+        
+        // Add element to rear
+        queue.offer(element);
+    }
+    
+    public static void main(String[] args) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(1);
+        queue.offer(2);
+        queue.offer(3);
+        queue.offer(4);
+        queue.offer(5);
+        
+        System.out.println("Original: " + queue); // [1, 2, 3, 4, 5]
+        reverseQueue(queue);
+        System.out.println("Reversed: " + queue); // [5, 4, 3, 2, 1]
+    }
+}`,
+        }}
         explanation="Use stack as intermediate storage: dequeue all elements to stack, then pop from stack back to queue. Recursive approach: dequeue one element, reverse remaining queue, enqueue element. Time: O(n), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Reverse the order of all elements in a queue using permitted auxiliary structures.",
+              details: [
+                "Allowed tools: stack or recursion (call stack acts as stack)",
+                "Need to preserve queue API—no random access",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Reversal is naturally solved by stack/recursion because they invert order.",
+              keywords: ["queue reversal", "stack helper", "recursion"],
+              details: [
+                "Dequeue all items into stack to reverse order",
+                "Or recursively remove one element and enqueue after reversing rest",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use auxiliary stack (iterative) or call stack (recursive).",
+              details: [
+                "Stack ensures O(n) extra space but iterative logic is simple",
+                "Recursion avoids explicit stack but uses implicit O(n) call stack",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement iterative (stack) method.",
+              details: [
+                "While queue not empty → push dequeue() onto stack",
+                "While stack not empty → enqueue stack.pop()",
+                "Queue now reversed because stack reversed order twice",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Encapsulate helper queue class methods and consider streaming constraints.",
+              details: [
+                "For recursion ensure base case when queue empty",
+                "If queue is linked-list based, operations stay O(1)",
+                "Time complexity remains O(n); space O(n) due to stack",
+              ],
+            },
+          ],
+          pattern: "Reverse via Stack / Recursive Backtracking",
+          complexity: {
+            time: "O(n)",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="6. Generate Numbers with Given Digits"
         difficulty="Medium"
         description="Generate numbers using only given digits in sorted order using queue."
-        solution={`// Generate Numbers with Given Digits
+        solutions={{
+          JavaScript: `// Generate Numbers with Given Digits
 
 function generateNumbersWithDigits(digits, n) {
   const queue = [];
@@ -1204,8 +1842,101 @@ console.log("Result:", result4);
 console.log("\\nTest 5: Even numbers using digits [1, 2, 3, 4]");
 const evenPattern = /^[1-4]*[24]$/; // Ends with 2 or 4
 const result5 = generateNumbersWithPattern([1, 2, 3, 4], evenPattern);
-console.log("Result:", result5.slice(0, 20)); // First 20 even numbers`}
+console.log("Result:", result5.slice(0, 20)); // First 20 even numbers`,
+          Java: `import java.util.*;
+
+public class GenerateNumbersWithDigits {
+    public static List<Integer> generateNumbersWithDigits(int[] digits, int n) {
+        Queue<Integer> queue = new LinkedList<>();
+        List<Integer> result = new ArrayList<>();
+        
+        // Add all single-digit numbers to queue
+        for (int digit : digits) {
+            queue.offer(digit);
+        }
+        
+        int count = 0;
+        
+        while (!queue.isEmpty() && count < n) {
+            int current = queue.poll();
+            result.add(current);
+            count++;
+            
+            // Generate numbers by appending each digit
+            for (int digit : digits) {
+                int newNumber = current * 10 + digit;
+                queue.offer(newNumber);
+            }
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args) {
+        int[] digits1 = {1, 2, 3};
+        List<Integer> result = generateNumbersWithDigits(digits1, 10);
+        System.out.println("First 10 numbers: " + result); 
+        // [1, 2, 3, 11, 12, 13, 21, 22, 23, 31]
+    }
+}`,
+        }}
         explanation="Use BFS approach with queue. Start with single digits, for each number append all possible digits to generate next level. Maintains sorted order naturally. Time: O(n), Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Generate the first n numbers whose digits belong to a given set (e.g., {5,6}).",
+              details: [
+                "Numbers must appear in increasing order by construction, not sorting later",
+                "Stop once n numbers generated (or until max value reached)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Breadth-first traversal (BFS) of a conceptual tree where each node appends allowed digits.",
+              keywords: ["BFS", "digit generation", "queue", "level order"],
+              details: [
+                "Queue ensures we expand shorter numbers before longer ones",
+                "Each level corresponds to numbers with same number of digits",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Queue storing generated numbers awaiting expansion.",
+              details: [
+                "Initialize with all single-digit seeds",
+                "For each number dequeued, append each digit and enqueue new numbers",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Standard BFS loop until we collect n results.",
+              details: [
+                "while queue not empty and result length < n:",
+                "  current = dequeue; push to result",
+                "  for digit in digits: enqueue current*10 + digit",
+                "Optionally guard against overflow / upper bounds",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description: "Handle digit ordering and duplicates cleanly.",
+              details: [
+                "Sort digits to guarantee lexicographic order",
+                "Use numbers or strings depending on requirement (avoid integer overflow if digits large)",
+                "Reuse same logic to generate until maxValue by breaking when newNumber>limit",
+              ],
+            },
+          ],
+          pattern: "BFS Number Generation via Queue",
+          complexity: {
+            time: "O(n)",
+            space: "O(n)",
+          },
+        }}
       />
     </div>
   );
@@ -1228,7 +1959,8 @@ function ImplementationSection() {
         title="7. Queue using Linked List"
         difficulty="Medium"
         description="Implement queue using linked list for dynamic size and efficient operations."
-        solution={`// Queue using Linked List
+        solutions={{
+          JavaScript: `// Queue using Linked List
 
 class QueueNode {
   constructor(data) {
@@ -1354,15 +2086,161 @@ queue.display(); // Queue: 20 -> 30 -> null
 
 console.log("Is empty:", queue.isEmpty()); // false
 queue.clear();
-console.log("Is empty:", queue.isEmpty()); // true`}
+console.log("Is empty:", queue.isEmpty()); // true`,
+          Java: `class QueueNode {
+    int data;
+    QueueNode next;
+    
+    QueueNode(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+public class QueueLinkedList {
+    private QueueNode front;
+    private QueueNode rear;
+    private int size;
+    
+    public QueueLinkedList() {
+        this.front = null;
+        this.rear = null;
+        this.size = 0;
+    }
+    
+    // Add element to rear
+    public void enqueue(int element) {
+        QueueNode newNode = new QueueNode(element);
+        
+        if (rear == null) {
+            // First element
+            front = rear = newNode;
+        } else {
+            rear.next = newNode;
+            rear = newNode;
+        }
+        
+        size++;
+    }
+    
+    // Remove element from front
+    public Integer dequeue() {
+        if (isEmpty()) {
+            return null;
+        }
+        
+        int element = front.data;
+        front = front.next;
+        
+        // If queue becomes empty
+        if (front == null) {
+            rear = null;
+        }
+        
+        size--;
+        return element;
+    }
+    
+    // Get front element
+    public Integer getFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        return front.data;
+    }
+    
+    // Get rear element
+    public Integer getRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        return rear.data;
+    }
+    
+    public boolean isEmpty() {
+        return front == null;
+    }
+    
+    public int getSize() {
+        return size;
+    }
+    
+    public static void main(String[] args) {
+        QueueLinkedList queue = new QueueLinkedList();
+        queue.enqueue(10);
+        queue.enqueue(20);
+        queue.enqueue(30);
+        System.out.println("Front: " + queue.getFront()); // 10
+        System.out.println("Rear: " + queue.getRear()); // 30
+        System.out.println("Dequeued: " + queue.dequeue()); // 10
+        System.out.println("Front: " + queue.getFront()); // 20
+    }
+}`,
+        }}
         explanation="Use two pointers: front and rear. Enqueue adds to rear, dequeue removes from front. Dynamic size, no memory waste. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Implement queue with dynamic size and O(1) operations using linked list nodes.",
+              details: [
+                "Need enqueue, dequeue, front/rear peek, size/isEmpty",
+                "Optional operations: display, clear",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Linked list queue uses two pointers (front & rear) referencing first/last nodes.",
+              keywords: ["linked list queue", "front pointer", "rear pointer"],
+              details: [
+                "Enqueue attaches new node to rear.next and updates rear",
+                "Dequeue removes node at front and advances pointer",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Node structure with data + next pointer; queue keeps `front`, `rear`, and optionally `size`.",
+              details: [
+                "When queue empty both front and rear should be null",
+                "size counter simplifies metrics",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description: "Implement each operation in constant time.",
+              details: [
+                "enqueue(x): create node; if empty front=rear=new node else rear.next=new node then rear=new node",
+                "dequeue(): if empty return; store front.data; front=front.next; if front null set rear null",
+                "getFront/getRear just read pointers",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description: "Handle memory management and convenience helpers.",
+              details: [
+                "Reset front/rear when queue cleared",
+                "Display by traversing nodes (O(n) debug only)",
+                "Linked list avoids wasted capacity and suits unpredictable workloads",
+              ],
+            },
+          ],
+          pattern: "Linked List Based Queue",
+          complexity: {
+            time: "O(1) enqueue/dequeue",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="8. Deque (Double-ended Queue)"
         difficulty="Medium"
         description="Implement a deque that allows insertion and deletion at both ends."
-        solution={`// Deque (Double-ended Queue) Implementation
+        solutions={{
+          JavaScript: `// Deque (Double-ended Queue) Implementation
 
 class Deque {
   constructor() {
@@ -1608,15 +2486,185 @@ cDeque.display(); // Circular Deque: 3 1 2 4
 
 cDeque.removeFront();
 cDeque.removeRear();
-cDeque.display(); // Circular Deque: 1 2`}
+cDeque.display(); // Circular Deque: 1 2`,
+          Java: `import java.util.*;
+
+public class Deque {
+    private List<Integer> items;
+    private int front;
+    private int rear;
+    
+    public Deque() {
+        this.items = new ArrayList<>();
+        this.front = 0;
+        this.rear = -1;
+    }
+    
+    // Add element to front
+    public void addFront(int element) {
+        if (front > 0) {
+            front--;
+            if (front < items.size()) {
+                items.set(front, element);
+            } else {
+                items.add(0, element);
+            }
+        } else {
+            items.add(0, element);
+            rear++;
+        }
+    }
+    
+    // Add element to rear
+    public void addRear(int element) {
+        rear++;
+        if (rear < items.size()) {
+            items.set(rear, element);
+        } else {
+            items.add(element);
+        }
+    }
+    
+    // Remove element from front
+    public Integer removeFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        
+        int element = items.get(front);
+        front++;
+        
+        // Reset if empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        return element;
+    }
+    
+    // Remove element from rear
+    public Integer removeRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        
+        int element = items.get(rear);
+        rear--;
+        
+        // Reset if empty
+        if (front > rear) {
+            front = 0;
+            rear = -1;
+        }
+        
+        return element;
+    }
+    
+    // Get front element
+    public Integer getFront() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.get(front);
+    }
+    
+    // Get rear element
+    public Integer getRear() {
+        if (isEmpty()) {
+            return null;
+        }
+        return items.get(rear);
+    }
+    
+    public boolean isEmpty() {
+        return front > rear;
+    }
+    
+    public static void main(String[] args) {
+        Deque deque = new Deque();
+        deque.addRear(10);
+        deque.addRear(20);
+        deque.addFront(5);
+        System.out.println("Front: " + deque.getFront()); // 5
+        System.out.println("Rear: " + deque.getRear()); // 20
+        deque.removeFront();
+        System.out.println("Front: " + deque.getFront()); // 10
+    }
+}`,
+        }}
         explanation="Deque allows insertion/deletion at both ends. Use array with front/rear pointers or circular array for efficiency. Time: O(1) for all operations, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Deque supports insertion/removal at both front and rear. Need add/remove/peek on both sides plus size/isEmpty.",
+              details: [
+                "Clarify whether capacity is fixed or dynamic",
+                "Operations should be O(1)",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "Circular array or linked list with two pointers works well for deques.",
+              keywords: [
+                "deque",
+                "double-ended queue",
+                "circular buffer",
+                "front/rear operations",
+              ],
+              details: [
+                "Using array requires wrap-around arithmetic",
+                "Linked list alternative uses head/tail pointers",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description:
+                "Use circular array for predictable capacity or doubly linked list for dynamic sizing.",
+              details: [
+                "Maintain front/rear indices and optionally size counter",
+                "Check for overflow and underflow separately",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Implement add/remove on both ends using pointer arithmetic.",
+              details: [
+                "addFront: decrement front (with wrap), write value",
+                "addRear: increment rear (with wrap), write value",
+                "removeFront/removeRear adjust pointers and return values",
+                "isEmpty when size==0; isFull when size==capacity",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description:
+                "Expose helper methods and guard states for easier reuse.",
+              details: [
+                "Provide getFront/getRear for peeking",
+                "Ensure consistent reset when deque becomes empty",
+                "For shifting-array version, consider using linked list to avoid O(n) shifts",
+              ],
+            },
+          ],
+          pattern: "Circular Buffer Deque",
+          complexity: {
+            time: "O(1) per operation",
+            space: "O(n)",
+          },
+        }}
       />
 
       <ProblemBlock
         title="9. Queue Applications in Real-world"
         difficulty="Easy"
         description="Common real-world applications of queues and their implementations."
-        solution={`// Queue Applications in Real-world
+        solutions={{
+          JavaScript: `// Queue Applications in Real-world
 
 // 1. Task Scheduler
 class TaskScheduler {
@@ -1840,8 +2888,163 @@ callCenter.addCall("VIP Caller", 10);
 callCenter.addCall("Caller2", 0);
 
 console.log("Call center stats:", callCenter.getQueueStats());
-callCenter.assignAgent("Agent1"); // VIP Caller`}
+callCenter.assignAgent("Agent1"); // VIP Caller`,
+          Java: `import java.util.*;
+
+// Queue Applications in Real-world
+
+// 1. Task Scheduler
+class TaskScheduler {
+    private Queue<String> taskQueue;
+    private PriorityQueue<Task> priorityQueue;
+    
+    private static class Task implements Comparable<Task> {
+        String task;
+        int priority;
+        
+        Task(String task, int priority) {
+            this.task = task;
+            this.priority = priority;
+        }
+        
+        @Override
+        public int compareTo(Task other) {
+            return Integer.compare(other.priority, this.priority);
+        }
+    }
+    
+    public TaskScheduler() {
+        this.taskQueue = new LinkedList<>();
+        this.priorityQueue = new PriorityQueue<>();
+    }
+    
+    public void addTask(String task, int priority) {
+        if (priority > 0) {
+            priorityQueue.offer(new Task(task, priority));
+        } else {
+            taskQueue.offer(task);
+        }
+    }
+    
+    public String executeNext() {
+        if (!priorityQueue.isEmpty()) {
+            return priorityQueue.poll().task;
+        } else if (!taskQueue.isEmpty()) {
+            return taskQueue.poll();
+        }
+        return null;
+    }
+}
+
+// 2. BFS (Breadth-First Search) using Queue
+class BFS {
+    public static List<String> bfs(Map<String, List<String>> graph, String start) {
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        List<String> result = new ArrayList<>();
+        
+        visited.add(start);
+        queue.offer(start);
+        
+        while (!queue.isEmpty()) {
+            String current = queue.poll();
+            result.add(current);
+            
+            for (String neighbor : graph.getOrDefault(current, new ArrayList<>())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        
+        return result;
+    }
+}
+
+public class QueueApplications {
+    public static void main(String[] args) {
+        // Test Task Scheduler
+        TaskScheduler scheduler = new TaskScheduler();
+        scheduler.addTask("Backup database", 0);
+        scheduler.addTask("Critical update", 10);
+        scheduler.addTask("Send email", 0);
+        System.out.println("Executed: " + scheduler.executeNext()); // Critical update
+        
+        // Test BFS
+        Map<String, List<String>> graph = new HashMap<>();
+        graph.put("A", Arrays.asList("B", "C"));
+        graph.put("B", Arrays.asList("D", "E"));
+        graph.put("C", Arrays.asList("F"));
+        
+        List<String> bfsResult = BFS.bfs(graph, "A");
+        System.out.println("BFS traversal: " + bfsResult); // [A, B, C, D, E, F]
+    }
+}`,
+        }}
         explanation="Queues are used in task scheduling, print spooling, BFS traversal, call centers, and many other real-world applications where FIFO processing is required. Time: O(1) for enqueue/dequeue, Space: O(n)."
+        approach={{
+          steps: [
+            {
+              title: "Step 1: Understand & Clarify",
+              description:
+                "Identify the workflow: producers add work items, consumers handle them in arrival order (possibly with priorities).",
+              details: [
+                "Examples: CPU scheduling, customer support, printer jobs, message brokers",
+                "Clarify throughput/latency requirements and fairness constraints",
+              ],
+            },
+            {
+              title: "Step 2: Identify Pattern",
+              description:
+                "All these scenarios share the producer-consumer decoupling pattern.",
+              keywords: [
+                "producer-consumer",
+                "load leveling",
+                "task scheduling",
+                "FIFO fairness",
+              ],
+              details: [
+                "Queues buffer bursts and smooth processing",
+                "Variants: simple FIFO, priority queues, delay queues, multi-level feedback queues",
+              ],
+            },
+            {
+              title: "Step 3: Choose Data Structure",
+              description: "Pick queue flavor that matches the domain needs.",
+              details: [
+                "Array/circular buffer for embedded/real-time systems",
+                "Linked list or persistent store for unbounded messaging",
+                "Heap-based priority queue when urgency differs per job",
+              ],
+            },
+            {
+              title: "Step 4: Select Algorithm",
+              description:
+                "Model enqueue/dequeue semantics for each application type.",
+              details: [
+                "Task scheduler: push jobs with priority metadata, pop highest priority first",
+                "Print spooler: maintain FIFO but allow expedited jobs",
+                "BFS traversal: enqueue neighbors as we explore graph layers",
+                "Call center: split between VIP and regular queues, assign agents accordingly",
+              ],
+            },
+            {
+              title: "Step 5: Implement & Optimize",
+              description: "Add observability, persistence, and scaling hooks.",
+              details: [
+                "Expose queue depth, wait time, throughput metrics",
+                "Persist jobs to disk or distributed log for reliability",
+                "Shard or prioritize queues to meet SLAs",
+              ],
+            },
+          ],
+          pattern: "Producer-Consumer Decoupling with FIFO/Priority Queues",
+          complexity: {
+            time: "Typically O(1) enqueue/dequeue; depends on priority strategy",
+            space: "O(number of queued items)",
+          },
+        }}
       />
     </div>
   );
@@ -1857,11 +3060,35 @@ function TheoryBlock({ title, children }) {
   );
 }
 
-function CodeBlock({ code }) {
+function CodeBlock({ code, defaultLanguage = "JavaScript" }) {
+  const isMultiLanguage = typeof code === "object" && code !== null;
+  const languageKeys = isMultiLanguage ? Object.keys(code) : [];
+  const [activeLanguage, setActiveLanguage] = useState(
+    isMultiLanguage ? languageKeys[0] : defaultLanguage
+  );
+  const displayedCode = isMultiLanguage ? code[activeLanguage] : code;
+
   return (
     <div className="bg-gray-950 rounded-lg p-4 overflow-x-auto">
+      {isMultiLanguage && (
+        <div className="flex gap-2 mb-4">
+          {languageKeys.map((language) => (
+            <button
+              key={language}
+              onClick={() => setActiveLanguage(language)}
+              className={`px-3 py-1 rounded text-sm font-semibold transition-colors ${
+                activeLanguage === language
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              }`}
+            >
+              {language}
+            </button>
+          ))}
+        </div>
+      )}
       <pre className="text-sm text-green-400">
-        <code>{code}</code>
+        <code>{displayedCode}</code>
       </pre>
     </div>
   );
@@ -1872,9 +3099,19 @@ function ProblemBlock({
   difficulty,
   description,
   solution,
+  solutions,
   explanation,
+  approach,
 }) {
   const [showSolution, setShowSolution] = useState(false);
+  const [activeTab, setActiveTab] = useState("solution");
+  const codeData =
+    solutions ||
+    (solution
+      ? {
+          JavaScript: solution,
+        }
+      : null);
 
   const difficultyColors = {
     Easy: "bg-green-500/20 text-green-400",
@@ -1902,16 +3139,36 @@ function ProblemBlock({
         {showSolution ? "Hide Solution" : "Show Solution"}
       </button>
 
-      {showSolution && (
+      {showSolution && codeData && (
+        <div>
+          {approach && (
+            <div className="flex gap-2 mb-4 border-b border-gray-700">
+              <button
+                onClick={() => setActiveTab("solution")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "solution"
+                    ? "text-blue-400 border-b-2 border-blue-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Solution
+              </button>
+              <button
+                onClick={() => setActiveTab("approach")}
+                className={`px-4 py-2 font-semibold transition-colors ${
+                  activeTab === "approach"
+                    ? "text-blue-400 border-b-2 border-blue-400"
+                    : "text-gray-400 hover:text-gray-300"
+                }`}
+              >
+                Approach
+              </button>
+            </div>
+          )}
+
+          {activeTab === "solution" && (
         <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4">
-            <h4 className="text-lg font-medium text-white mb-2">
-              JavaScript Solution:
-            </h4>
-            <pre className="whitespace-pre-wrap text-sm text-gray-200">
-              <code>{solution}</code>
-            </pre>
-          </div>
+          <CodeBlock code={codeData} defaultLanguage="JavaScript" />
           <div className="bg-blue-900/30 border border-blue-500/30 rounded-lg p-4">
             <p className="text-blue-200">
               <strong>💡 Explanation:</strong>
@@ -1919,6 +3176,104 @@ function ProblemBlock({
               {explanation}
             </p>
           </div>
+            </div>
+          )}
+
+          {activeTab === "approach" && approach && (
+            <ApproachTab approach={approach} />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ApproachTab({ approach }) {
+  return (
+    <div className="space-y-6">
+      <div className="bg-gradient-to-r from-blue-900/30 to-cyan-900/30 rounded-xl p-6 border border-blue-500/40">
+        <h3 className="text-2xl font-bold text-white mb-2">
+          🎯 Problem Solving Approach
+        </h3>
+        <p className="text-gray-300 text-sm">
+          Applying the systematic 5-step framework to master this queue problem
+        </p>
+      </div>
+
+      {approach.steps?.map((step, index) => (
+        <div
+          key={index}
+          className="bg-gray-800 rounded-lg p-5 border border-gray-700"
+        >
+          <div className="flex items-start gap-4">
+            <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold flex-shrink-0">
+              {index + 1}
+            </div>
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {step.title}
+              </h4>
+              <p className="text-gray-300 mb-3">{step.description}</p>
+              {step.details && (
+                <div className="bg-gray-900 rounded p-3 mt-3">
+                  <ul className="space-y-2">
+                    {step.details.map((detail, i) => (
+                      <li
+                        key={i}
+                        className="text-sm text-gray-300 flex items-start gap-2"
+                      >
+                        <span className="text-blue-400 mt-1">•</span>
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {step.keywords && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {step.keywords.map((keyword, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-blue-500/20 text-blue-200 rounded text-xs"
+                    >
+                      {keyword}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+      {approach.complexity && (
+        <div className="bg-green-900/30 border border-green-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-green-200 mb-2">
+            ⏱️ Complexity Analysis
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-400">Time Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.time}
+              </span>
+            </div>
+            <div>
+              <span className="text-gray-400">Space Complexity:</span>
+              <span className="text-white font-mono ml-2">
+                {approach.complexity.space}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {approach.pattern && (
+        <div className="bg-purple-900/30 border border-purple-500/30 rounded-lg p-4">
+          <h4 className="text-lg font-semibold text-purple-200 mb-2">
+            🎨 Pattern Identified
+          </h4>
+          <p className="text-gray-300">{approach.pattern}</p>
         </div>
       )}
     </div>
